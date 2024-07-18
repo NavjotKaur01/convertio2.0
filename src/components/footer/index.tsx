@@ -1,7 +1,9 @@
 const Footer = () => {
   return (
     <>
-      <footer>Hello Footer</footer>
+      <footer>
+      <div className="py-6 bg-black text-secondary text-center">All rights reserved (2024)</div>
+      </footer>
     </>
   );
 };
