@@ -1,4 +1,3 @@
-import React from "react";
 import {
   TEDropdown,
   TEDropdownToggle,
@@ -27,7 +26,7 @@ function Home(): JSX.Element {
                   {" "}
                   <span>
                     <img
-                    className="mr-1"
+                      className="mr-1"
                       src="../../static/img/ic-add-green.svg"
                       style={{ marginBottom: "4px" }}
                     />
