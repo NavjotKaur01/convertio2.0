@@ -1,5 +1,5 @@
 {
-  "name": "nubble-big-one",
+  "name": "conversion file",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -37,5 +37,8 @@
     "tailwindcss": "^3.4.3",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.6.1"
   }
 }
