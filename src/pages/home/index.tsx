@@ -229,7 +229,7 @@ function Home(): JSX.Element {
                 <div>
                   {uploadedFileList.map((file: any, index: number) => (
                     <div
-                      className="grid flex justify-between items-center file-list-main"
+                      className="flex md:grid flex-wrap justify-between items-center file-list-main"
                       key={index}
                     >
                       <div className="flex items-center file-list-item">
@@ -343,10 +343,10 @@ function Home(): JSX.Element {
                   ))}
                 </div>
 
-                <div className="flex justify-between items-center added-files">
-                  <div className="p-3 flex items-center">
+                <div className="flex justify-between items-center added-files flex-wrap">
+                  <div className="p-3 flex items-center conversion">
                     {isFileExtension ? (
-                      <div className="flex items-center">
+                      <div className="flex items-center justify-between conversion-inside">
                         <p className="mb-0">
                           Convert All ({uploadedFileList.length} ) to:{" "}
                         </p>
