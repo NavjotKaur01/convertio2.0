@@ -8,7 +8,7 @@ import {
   TERipple,
 } from "tw-elements-react";
 import axios from "axios";
-import possibleFormat from "../../utilities/convertedFileFormat.json";
+import possibleFormat from "../../utilities/possibleFileFormat.json";
 
 function Home(): JSX.Element {
   const [activeElement, setActiveElement] = useState("");
@@ -187,6 +187,11 @@ function Home(): JSX.Element {
       setConversionFormat(updatedConversionFormat);
     }
   };
+
+  // Uploaded file is not converted to another format
+  const isNotPossibleFormat = (fileExtension: string): boolean => {
+    return Object.keys(possibleFormat).includes(fileExtension);
+  };
   return (
     <>
       <div className="lg:container mx-auto grid grid-cols-1 lg:grid-cols-5 mb-8 mt-24">
@@ -229,14 +234,14 @@ function Home(): JSX.Element {
                 <div>
                   {uploadedFileList.map((file: any, index: number) => (
                     <div
-                      className="flex md:grid flex-wrap justify-between items-center file-list-main"
+                      className="flex md:grid flex-wrap justify-between items-center file-list-main rounded-lg"
                       key={index}
                     >
                       <div className="flex items-center file-list-item">
-                        <img
+                        {/* <img
                           src="../../static/img/picture.svg"
                           className="me-1"
-                        />
+                        /> */}
                         <div className="">{file.fileName}</div>
                       </div>
 
@@ -244,7 +249,13 @@ function Home(): JSX.Element {
                       <div className="file-list-item">
                         <TEDropdown className="flex justify-center">
                           <TERipple rippleColor="light">
-                            <TEDropdownToggle className="flex items-center whitespace-nowrap rounded px-3 pb-1 pt-1 border small-btn">
+                            <TEDropdownToggle
+                              className={`flex items-center whitespace-nowrap rounded-lg px-3 pb-1 pt-1 border ${
+                                isNotPossibleFormat(file.fileExtension)
+                                  ? "small-btn"
+                                  : "error-btn"
+                              }`}
+                            >
                               {conversionFormat &&
                               conversionFormat.length > 0 &&
                               conversionFormat.some(
@@ -276,27 +287,28 @@ function Home(): JSX.Element {
                             <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none">
                               <p>Choose File Type</p>
                               <div className="format-grid flex flex-wrap gap-3 mt-3">
-                                {!!possibleFormat &&
-                                  !!possibleFormat.image_formats &&
-                                  !!possibleFormat.image_formats.length &&
-                                  possibleFormat.image_formats.map(
-                                    (format: string, index: number) =>
-                                      format != file.fileExtension && (
-                                        <button
-                                          type="button"
-                                          className="btn px-2 py-1 btn-custom"
-                                          key={index}
-                                          onClick={() =>
-                                            handleChooseConversion(
-                                              format,
-                                              file.fileName
-                                            )
-                                          }
-                                        >
-                                          {format.toUpperCase()}
-                                        </button>
-                                      )
-                                  )}
+                                {Object.entries(possibleFormat).map(
+                                  ([key, formats]) =>
+                                    file.fileExtension === key &&
+                                    formats.map(
+                                      (format: string, index: number) =>
+                                        format !== file.fileExtension && (
+                                          <button
+                                            type="button"
+                                            className="btn px-2 py-1 btn-custom"
+                                            key={index}
+                                            onClick={() =>
+                                              handleChooseConversion(
+                                                format,
+                                                file.fileName
+                                              )
+                                            }
+                                          >
+                                            {format.toUpperCase()}
+                                          </button>
+                                        )
+                                    )
+                                )}
                               </div>
                             </TEDropdownItem>
                           </TEDropdownMenu>
@@ -354,7 +366,7 @@ function Home(): JSX.Element {
                         <TEDropdown className="flex justify-center ms-2">
                           <TERipple rippleColor="light">
                             <TEDropdownToggle
-                              className={`flex items-center whitespace-nowrap rounded px-3 pb-1 pt-1 border ${
+                              className={`flex items-center whitespace-nowrap rounded-lg px-3 pb-1 pt-1 border ${
                                 isErrorShow ? "error-btn" : "small-btn"
                               }`}
                             >
@@ -382,27 +394,28 @@ function Home(): JSX.Element {
                               <p>Choose file type</p>
 
                               <div className="format-grid flex flex-wrap gap-3 mt-2">
-                                {!!possibleFormat &&
-                                  !!possibleFormat.image_formats &&
-                                  !!possibleFormat.image_formats.length &&
-                                  possibleFormat.image_formats.map(
-                                    (format: string, index: number) =>
-                                      format !=
-                                        uploadedFileList[0].fileExtension && (
-                                        <button
-                                          type="button"
-                                          className="btn px-2 py-1 btn-custom"
-                                          key={index}
-                                          onClick={() =>
-                                            handleSameFileExtensionConversion(
-                                              format
-                                            )
-                                          }
-                                        >
-                                          {format.toUpperCase()}
-                                        </button>
-                                      )
-                                  )}
+                                {Object.entries(possibleFormat).map(
+                                  ([key, formats]) =>
+                                    uploadedFileList[0].fileExtension === key &&
+                                    formats.map(
+                                      (format: string, index: number) =>
+                                        format !==
+                                          uploadedFileList[0].fileExtension && (
+                                          <button
+                                            type="button"
+                                            className="btn px-2 py-1 btn-custom"
+                                            key={index}
+                                            onClick={() =>
+                                              handleSameFileExtensionConversion(
+                                                format
+                                              )
+                                            }
+                                          >
+                                            {format.toUpperCase()}
+                                          </button>
+                                        )
+                                    )
+                                )}
                               </div>
                             </TEDropdownItem>
                           </TEDropdownMenu>
@@ -412,8 +425,8 @@ function Home(): JSX.Element {
                       <p> Added {uploadedFileList.length} files</p>
                     )}
                   </div>
-                  <div className="text-white flex items-center convert-btn">
-                    Convert{" "}
+                  <div className="text-xl font-bold text-white flex items-center convert-btn cursor-pointer rounded-lg">
+                    Convert
                     <img
                       src="../../static/img/ic-right-arrow.svg"
                       className="ms-2"
@@ -457,7 +470,7 @@ function Home(): JSX.Element {
           )}
 
           {/* cards section */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 card-box p-6 my-6 ">
+          <div className="grid grid-cols-1 lg:grid-cols-3 card-box p-6 my-6  rounded-lg">
             {/* card-1 */}
             <div className="text-center px-2 py-3 lg-py-0">
               <svg
@@ -527,7 +540,7 @@ function Home(): JSX.Element {
             </div>
           </div>
           {/* accordion */}
-          <div className="card-box p-6 my-6">
+          <div className="card-box p-6 my-6 rounded-lg">
             <div id="accordionExample">
               <div className="rounded-none border-neutral-200 bg-white dark:border-neutral-600 dark:bg-neutral-800 ">
                 <h2 className="mb-0 " id="headingOne">

@@ -1,0 +1,146 @@
+{
+    "png": [
+        "jpg",
+        "jpeg",
+        "bmp",
+        "eps",
+        "gif",
+        "ico",
+        "odd",
+        "psd",
+        "svg",
+        "tga",
+        "tiff",
+        "webp"
+    ],
+    "svg": [
+        "png",
+        "jpg",
+        "jpeg",
+        "svg",
+        "tiff",
+        "webp",
+        "odd",
+        "bmp",
+        "gif",
+        "ico"
+    ],
+    "jpg": [
+        "png",
+        "svg",
+        "jpeg",
+        "bmp",
+        "eps",
+        "gif",
+        "ico",
+        "odd",
+        "psd",
+        "tga",
+        "tiff",
+        "webp"
+    ],
+    "jpeg": [
+        "png",
+        "svg",
+        "jpg",
+        "bmp",
+        "gif",
+        "ico",
+        "odd",
+        "psd",
+        "tiff",
+        "webp"
+    ],
+    "pdf": [
+        "doc",
+        "docx",
+        "excel",
+        "html",
+        "odt",
+        "ppt",
+        "pptx",
+        "ps",
+        "rtf",
+        "text",
+        "txt",
+        "word",
+        "xls",
+        "xlsx"
+    ],
+    "text": [
+        "doc",
+        "docx",
+        "excel",
+        "html",
+        "odt",
+        "ppt",
+        "pptx",
+        "ps",
+        "rtf",
+        "txt",
+        "word",
+        "xls",
+        "xlsx"
+    ],
+    "txt": [
+        "doc",
+        "docx",
+        "excel",
+        "html",
+        "odt",
+        "ppt",
+        "pptx",
+        "ps",
+        "rtf",
+        "text",
+        "word",
+        "xls",
+        "xlsx"
+    ],
+    "docx": [
+        "doc",
+        "html",
+        "odt",
+        "pdf",
+        "rtf",
+        "text",
+        "txt"
+    ],
+    "doc": [
+        "docx",
+        "html",
+        "odt",
+        "pdf",
+        "rtf",
+        "text",
+        "txt"
+    ],
+    "xml": [
+        "pdf",
+        "text",
+        "txt",
+        "html"
+    ],
+    "zip": [
+        "7z",
+        "Gz",
+        "rar",
+        "tar",
+        "targz",
+        "tgz"
+    ],
+    "xlsx": [
+        "pdf",
+        "csv",
+        "ods",
+        "xls",
+        "xml"
+    ],
+    "xls": [
+        "pdf",
+        "csv",
+        "ods",
+        "xlsx",
+        "xml"
+    ]
+}

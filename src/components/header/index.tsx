@@ -56,7 +56,8 @@ function Header(): JSX.Element {
                 <Link to="#">Heif JPG </Link>
               </li>
               <li>
-              <Link to="#">Heif Converter </Link></li>
+                <Link to="#">Heif Converter </Link>
+              </li>
               <li>
                 <Link to="#">Image Converter</Link>
               </li>
@@ -168,13 +169,14 @@ function Header(): JSX.Element {
           <ul className="gap-10 flex-col flex">
             <li className=""></li>
             <li>
-                <Link to="#">Heif JPG </Link>
-              </li>
-              <li>
-              <Link to="#">Heif Converter </Link></li>
-              <li>
-                <Link to="#">Image Converter</Link>
-              </li>
+              <Link to="#">Heif JPG </Link>
+            </li>
+            <li>
+              <Link to="#">Heif Converter </Link>
+            </li>
+            <li>
+              <Link to="#">Image Converter</Link>
+            </li>
           </ul>
         </div>
 
