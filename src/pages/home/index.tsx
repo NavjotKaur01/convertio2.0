@@ -195,7 +195,7 @@ function Home(): JSX.Element {
   return (
     <>
       <div className="lg:container mx-auto grid grid-cols-1 lg:grid-cols-5 mb-8 mt-24">
-        <div className="bg-gray-50 h-36 lg:h-full mx-5"></div>
+        <div className="bg-gray-50 h-36 lg:h-full mx-5 rounded-lg"></div>
         <div className="lg:col-span-3 py-2 px-5">
           <div className="mb-12 text-center">
             <h1 className="text-4xl font-bold">File Converter</h1>
@@ -208,7 +208,7 @@ function Home(): JSX.Element {
               {/* UI after file upload */}
               <div className="mt-5">
                 <div className="w-fit">
-                  <div className="custom-import primary-btn primary-btn-outlined border-none rounded-none">
+                  <div className="custom-import primary-btn primary-btn-outlined border-none rounded-lg">
                     <span className="label px-4 text-nowrap flex items-center text-sm">
                       {" "}
                       <span>
@@ -250,7 +250,7 @@ function Home(): JSX.Element {
                         <TEDropdown className="flex justify-center">
                           <TERipple rippleColor="light">
                             <TEDropdownToggle
-                              className={`flex items-center whitespace-nowrap rounded-lg px-3 pb-1 pt-1 border ${
+                              className={`flex items-center whitespace-nowrap px-3 pb-1 pt-1 border rounded-lg ${
                                 isNotPossibleFormat(file.fileExtension)
                                   ? "small-btn"
                                   : "error-btn"
@@ -355,7 +355,7 @@ function Home(): JSX.Element {
                   ))}
                 </div>
 
-                <div className="flex justify-between items-center added-files flex-wrap">
+                <div className="flex justify-between items-center added-files flex-wrap rounded-lg">
                   <div className="p-3 flex items-center conversion">
                     {isFileExtension ? (
                       <div className="flex items-center justify-between conversion-inside">
@@ -439,10 +439,10 @@ function Home(): JSX.Element {
           ) : (
             <>
               {/* default File uploader */}
-              <div className="dropzone-box flex justify-center items-center relative">
+              <div className="dropzone-box flex justify-center items-center relative rounded-lg">
                 <div className="text-center">
-                  <div className="custom-import primary-btn">
-                    <span className="label px-4 font-bold fs-18 text-nowrap flex items-center">
+                  <div className="custom-import primary-btn rounded-lg">
+                    <span className="label px-4 font-bold fs-18 text-nowrap flex items-center ">
                       {" "}
                       <span>
                         <img
@@ -455,7 +455,7 @@ function Home(): JSX.Element {
                     <span className="label-file"></span>
 
                     <input
-                      className="import-field"
+                      className="import-field "
                       type="file"
                       name="name"
                       multiple
@@ -470,14 +470,14 @@ function Home(): JSX.Element {
           )}
 
           {/* cards section */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 card-box p-6 my-6  rounded-lg">
+          <div className="grid grid-cols-1 lg:grid-cols-3 p-6 my-6  rounded-lg">
             {/* card-1 */}
-            <div className="text-center px-2 py-3 lg-py-0">
+            <div className="text-center px-2 py-3 lg-py-2 card-box rounded-lg mx-3">
               <svg
                 viewBox="0 0 24 24"
                 width="36"
                 height="36"
-                stroke="#282f3a"
+                stroke="#468585"
                 stroke-width="1"
                 fill="none"
                 stroke-linecap="round"
@@ -495,12 +495,12 @@ function Home(): JSX.Element {
               </p>
             </div>
             {/* card-2 */}
-            <div className="text-center px-2 py-3 lg-py-0">
+            <div className="text-center px-2 py-3 lg-py-2 card-box rounded-lg mx-3">
               <svg
                 viewBox="0 0 24 24"
                 width="36"
                 height="36"
-                stroke="#282f3a"
+                stroke="#468585"
                 stroke-width="1"
                 fill="none"
                 stroke-linecap="round"
@@ -517,12 +517,12 @@ function Home(): JSX.Element {
               </p>
             </div>
             {/* card-3 */}
-            <div className="text-center px-2 py-3 lg-py-0">
+            <div className="text-center px-2 py-3 lg-py-2 card-box rounded-lg mx-3">
               <svg
                 viewBox="0 0 24 24"
                 width="36"
                 height="36"
-                stroke="#282f3a"
+                stroke="#468585"
                 stroke-width="1"
                 fill="none"
                 stroke-linecap="round"
@@ -651,7 +651,7 @@ function Home(): JSX.Element {
             </div>
           </div>
         </div>
-        <div className="bg-gray-50 h-36 lg:h-full mx-5"></div>
+        <div className="bg-gray-50 h-36 lg:h-full mx-5 rounded-lg"></div>
       </div>
     </>
   );
