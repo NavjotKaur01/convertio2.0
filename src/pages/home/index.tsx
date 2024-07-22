@@ -10,18 +10,32 @@ import {
 import axios from "axios";
 import possibleFormat from "../../utilities/possibleFileFormat.json";
 
+interface FileDetails {
+  fileName: string;
+  size: string;
+  fileExtension: string;
+}
+
+interface ConversionFormat {
+  fileName: string;
+  conversionFormat: string;
+}
+
 function Home(): JSX.Element {
-  const [activeElement, setActiveElement] = useState("");
-  const [uploadedFileList, setUploadedFileList] = useState<any>([]);
-  const [conversionFormat, setConversionFormat] = useState<any>([]);
+  const [activeElement, setActiveElement] = useState<string>("");
+  const [uploadedFileList, setUploadedFileList] = useState<FileDetails[]>([]);
+  const [conversionFormat, setConversionFormat] = useState<ConversionFormat[]>(
+    []
+  );
   const [extensionName, setExtensionName] = useState<string>("");
   const [isFileExtension, setIsFileExtension] = useState<boolean>(false);
   const [isErrorShow, setIsErrorShow] = useState<boolean>(false);
 
+  //UseEffect for uploadedFileList
   useEffect(() => {
     if (uploadedFileList.length) {
       const fileExtensions = uploadedFileList.map(
-        (file: any) => file.fileExtension
+        (file: FileDetails) => file.fileExtension
       );
       const allExtensionsSame = fileExtensions.every(
         (ext: string) => ext === fileExtensions[0]
@@ -35,7 +49,7 @@ function Home(): JSX.Element {
     if (conversionFormat.length !== 0) {
       if (conversionFormat.length === uploadedFileList.length) {
         const fileExtensions = conversionFormat.map(
-          (file: any) => file.conversionFormat
+          (file: ConversionFormat | undefined) => file?.conversionFormat || ""
         );
         const allExtensionsSame = fileExtensions.every(
           (ext: string) => ext === fileExtensions[0]
@@ -67,35 +81,37 @@ function Home(): JSX.Element {
   };
 
   // handle multiple file uploading
-  const handleFileUpload = (event: any) => {
-    if (!event.target.files[0]) {
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) {
       console.log("No file selected");
       return;
     }
-    if (
-      Array.from(event.target.files).length > 10 ||
-      uploadedFileList.length > 9
-    ) {
+    if (Array.from(files).length > 10 || uploadedFileList.length > 9) {
       event.preventDefault();
       console.log(`Cannot upload files more than 10`);
       return;
     }
 
     const fd = new FormData();
-    for (let i = 0; i < event.target.files.length; i++) {
-      setUploadedFileList((prevState: any) => [
-        ...prevState,
-        {
-          fileName: event.target.files[i].name,
-          size: formatBytes(event.target.files[i].size),
-          fileExtension: event.target.files[i].name
-            .split(".")
-            .pop()
-            .toLowerCase(),
-        },
-      ]);
-      fd.append(`file${i + 1}`, event.target.files[i]);
+    const updatedFiles: FileDetails[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const fileName = files[i]?.name;
+      const fileExtension = fileName?.split(".").pop()?.toLowerCase();
+      if (!fileExtension) {
+        console.log(`File extension is undefined for file: ${fileName}`);
+        continue;
+      }
+
+      updatedFiles.push({
+        fileName: files[i].name,
+        size: formatBytes(files[i].size),
+        fileExtension: fileExtension,
+      });
+
+      fd.append(`file${i + 1}`, files[i]);
     }
+    setUploadedFileList((prevState) => [...prevState, ...updatedFiles]);
     axios
       .post("http://httpbin.org/post", fd, {
         headers: {
@@ -111,7 +127,7 @@ function Home(): JSX.Element {
   };
 
   // calculate file size in bytes,KB,MB,GB
-  const formatBytes = (bytes: number, decimals = 2) => {
+  const formatBytes = (bytes: number, decimals = 2): string => {
     if (!+bytes) return "0 Bytes";
     const k = 1024;
     const dm = decimals < 0 ? 0 : decimals;
@@ -123,7 +139,7 @@ function Home(): JSX.Element {
   // Handle choose conversion format
   const handleChooseConversion = (format: string, fileName: string) => {
     let fileIndex = conversionFormat.findIndex(
-      (item: any) => item.fileName === fileName
+      (item: ConversionFormat) => item.fileName === fileName
     );
     if (fileIndex != -1) {
       setConversionFormat((prevFormats: any) => {
@@ -146,10 +162,10 @@ function Home(): JSX.Element {
   // Remove uploaded file
   const handleRemoveRow = (fileName: string) => {
     const updatedDetails = uploadedFileList.filter(
-      (file: any) => file.fileName !== fileName
+      (file: FileDetails) => file.fileName !== fileName
     );
     const updatedConversionFormatted = conversionFormat.filter(
-      (conversion: any) => conversion.fileName !== fileName
+      (conversion: ConversionFormat) => conversion.fileName !== fileName
     );
     setConversionFormat(updatedConversionFormatted);
     setUploadedFileList(updatedDetails);
@@ -160,17 +176,21 @@ function Home(): JSX.Element {
     setExtensionName(conversionExtension);
     setIsErrorShow(false);
     if (conversionFormat.length === 0) {
-      const newConversionFormat = uploadedFileList.map((uploadedFile: any) => ({
-        conversionFormat: conversionExtension,
-        fileName: uploadedFile.fileName,
-      }));
+      const newConversionFormat = uploadedFileList.map(
+        (uploadedFile: FileDetails) => ({
+          conversionFormat: conversionExtension,
+          fileName: uploadedFile.fileName,
+        })
+      );
       setConversionFormat(newConversionFormat);
     } else {
       const updatedConversionFormat = uploadedFileList.map(
-        (uploadedFile: any) => {
-          const existingFormat = conversionFormat.find((format: any) => {
-            format.fileName === uploadedFile.fileName;
-          });
+        (uploadedFile: FileDetails) => {
+          const existingFormat = conversionFormat.find(
+            (format: ConversionFormat) => {
+              format.fileName === uploadedFile.fileName;
+            }
+          );
           if (existingFormat) {
             return {
               ...existingFormat,
@@ -232,7 +252,7 @@ function Home(): JSX.Element {
                 </div>
 
                 <div>
-                  {uploadedFileList.map((file: any, index: number) => (
+                  {uploadedFileList.map((file: FileDetails, index: number) => (
                     <div
                       className="flex md:grid flex-wrap justify-between items-center file-list-main rounded-lg"
                       key={index}
@@ -259,14 +279,20 @@ function Home(): JSX.Element {
                               {conversionFormat &&
                               conversionFormat.length > 0 &&
                               conversionFormat.some(
-                                (e: any) => e.fileName === file.fileName
-                              )
-                                ? conversionFormat
+                                (e: ConversionFormat) =>
+                                  e.fileName === file.fileName
+                              ) ? (
+                                <span>
+                                  {conversionFormat
                                     .find(
-                                      (e: any) => e.fileName === file.fileName
+                                      (e: ConversionFormat) =>
+                                        e.fileName === file.fileName
                                     )
-                                    .conversionFormat.toUpperCase()
-                                : "..."}
+                                    ?.conversionFormat.toUpperCase() ?? "..."}
+                                </span>
+                              ) : (
+                                "..."
+                              )}
                               <span className="ml-2 [&>svg]:w-5 w-2">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"

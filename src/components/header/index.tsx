@@ -2,15 +2,19 @@ import { Link } from "react-router-dom";
 // import { TERipple } from "tw-elements-react";
 import searchList from "../../utilities/searchData.json";
 import { useState } from "react";
+interface SearchItem {
+  id: number;
+  searchName: string;
+}
 function Header(): JSX.Element {
   const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
-  const [searchResults, setSearchResults] = useState<any>([]);
+  const [searchResults, setSearchResults] = useState<SearchItem[]>([]);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [chooseSearchResult, setChooseSearchResult] = useState<string>("");
 
   // handle search functionality
-  const handleInputChange = (e: any) => {
-    const searchString = e.target.value.trim().toLowerCase();
+  const handleInputChange = (event: string) => {
+    const searchString = event.trim().toLowerCase();
     setChooseSearchResult(searchString);
     if (searchString.length > 0) {
       setShowSearchResults(true);
@@ -23,9 +27,8 @@ function Header(): JSX.Element {
 
   // set data in dropdown
   const searchData = (inputSearchString: string) => {
-    const filterData = inputSearchString
-      ? searchList.lists.length &&
-        searchList.lists.filter((item: any) =>
+    const filterData: SearchItem[] = inputSearchString
+      ? searchList.lists.filter((item: SearchItem) =>
           item.searchName.toLowerCase().includes(inputSearchString)
         )
       : [];
@@ -71,7 +74,7 @@ function Header(): JSX.Element {
                 placeholder="Search"
                 className="w-full"
                 value={chooseSearchResult}
-                onChange={(e: any) => handleInputChange(e)}
+                onChange={(e: any) => handleInputChange(e.target.value)}
               />
               {/* Cross svg */}
               {chooseSearchResult ||
@@ -188,7 +191,7 @@ function Header(): JSX.Element {
               placeholder="Search"
               className="w-full"
               value={chooseSearchResult}
-              onChange={(e: any) => handleInputChange(e)}
+              onChange={(e: any) => handleInputChange(e.target.value)}
             />
             {/* Cross svg */}
             {chooseSearchResult ||
