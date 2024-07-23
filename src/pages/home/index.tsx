@@ -212,6 +212,7 @@ function Home(): JSX.Element {
   const isNotPossibleFormat = (fileExtension: string): boolean => {
     return Object.keys(possibleFormat).includes(fileExtension);
   };
+
   return (
     <>
       <div className="lg:container mx-auto grid grid-cols-1 lg:grid-cols-5 mb-8 mt-24">
@@ -281,18 +282,29 @@ function Home(): JSX.Element {
                               conversionFormat.some(
                                 (e: ConversionFormat) =>
                                   e.fileName === file.fileName
-                              ) ? (
-                                <span>
-                                  {conversionFormat
-                                    .find(
-                                      (e: ConversionFormat) =>
-                                        e.fileName === file.fileName
-                                    )
-                                    ?.conversionFormat.toUpperCase() ?? "..."}
-                                </span>
-                              ) : (
-                                "..."
-                              )}
+                              )
+                                ? (() => {
+                                    const conversionResult =
+                                      conversionFormat
+                                        .find(
+                                          (e: ConversionFormat) =>
+                                            e.fileName === file.fileName
+                                        )
+                                        ?.conversionFormat.toUpperCase() ??
+                                      "select";
+                                    const length = conversionResult?.length;
+                                    const space =
+                                      length > 1
+                                        ? "\u00A0".repeat(6 - length)
+                                        : "";
+                                    return (
+                                      <span>
+                                        {conversionResult}
+                                        {space}
+                                      </span>
+                                    );
+                                  })()
+                                : "select"}
                               <span className="ml-2 [&>svg]:w-5 w-2">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
