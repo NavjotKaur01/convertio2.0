@@ -142,27 +142,27 @@ function Home(): JSX.Element {
   };
 
   // Handle choose conversion format
-  const handleChooseConversion = (format: string, fileName: string) => {
-    let fileIndex = conversionFormat.findIndex(
-      (item: ConversionFormat) => item.fileName === fileName
-    );
-    if (fileIndex != -1) {
-      setConversionFormat((prevFormats: any) => {
-        const updatedFormats = [...prevFormats];
-        updatedFormats[fileIndex] = {
-          ...updatedFormats[fileIndex],
-          conversionFormat: format,
-        };
-        return updatedFormats;
-      });
-    } else {
-      setConversionFormat((prevState: any) => [
-        ...prevState,
-        { conversionFormat: format, fileName: fileName },
-      ]);
-    }
-    setIsErrorShow(true);
-  };
+  // const handleChooseConversion = (format: string, fileName: string) => {
+  //   let fileIndex = conversionFormat.findIndex(
+  //     (item: ConversionFormat) => item.fileName === fileName
+  //   );
+  //   if (fileIndex != -1) {
+  //     setConversionFormat((prevFormats: any) => {
+  //       const updatedFormats = [...prevFormats];
+  //       updatedFormats[fileIndex] = {
+  //         ...updatedFormats[fileIndex],
+  //         conversionFormat: format,
+  //       };
+  //       return updatedFormats;
+  //     });
+  //   } else {
+  //     setConversionFormat((prevState: any) => [
+  //       ...prevState,
+  //       { conversionFormat: format, fileName: fileName },
+  //     ]);
+  //   }
+  //   setIsErrorShow(true);
+  // };
 
   // Remove uploaded file
   const handleRemoveRow = (fileName: string) => {
@@ -280,6 +280,7 @@ function Home(): JSX.Element {
                       </div>
 
                       <div className="file-list-item">{file.size}</div>
+                      {/* dropdown start */}
                       <div className="file-list-item">
                         <TEDropdown className="flex justify-center">
                           <TERipple rippleColor="light">
@@ -369,14 +370,15 @@ function Home(): JSX.Element {
 
                               <div className="flex items-start">
                                 {/* tabs */}
-                                <TETabs vertical>
-                                  <TETabsItem className="primary-text primary-border"
+                                <TETabs vertical className="tabs-heading" >
+                                  <TETabsItem
                                     onClick={() => handleVerticalClick("tab1")}
                                     active={verticalActive === "tab1"}
                                   >
                                     Image
                                   </TETabsItem>
                                   <TETabsItem
+                                  // className="primary-text primary-border"
                                     onClick={() => handleVerticalClick("tab2")}
                                     active={verticalActive === "tab2"}
                                   >
@@ -414,10 +416,60 @@ function Home(): JSX.Element {
                                     </div>
                                   </TETabsPane>
                                   <TETabsPane show={verticalActive === "tab2"}>
-                                    Tab 2 content
+                                  <div className="format-grid flex flex-wrap gap-3 mt-2">
+                                      
+                                                <button
+                                                  type="button"
+                                                  className="btn px-2 py-1 btn-custom"
+                                                  key={index}
+                                                  
+                                                >
+                                                  DOC
+                                                </button>
+                                                <button
+                                                  type="button"
+                                                  className="btn px-2 py-1 btn-custom"
+                                                  key={index}
+                                                  
+                                                >
+                                                  DOCX
+                                                </button>
+                                                <button
+                                                  type="button"
+                                                  className="btn px-2 py-1 btn-custom"
+                                                  key={index}
+                                                  
+                                                >
+                                                  TXT
+                                                </button>
+                                                <button
+                                                  type="button"
+                                                  className="btn px-2 py-1 btn-custom"
+                                                  key={index}
+                                                  
+                                                >
+                                                  TEXT
+                                                </button>
+                                                <button
+                                                  type="button"
+                                                  className="btn px-2 py-1 btn-custom"
+                                                  key={index}
+                                                  
+                                                >
+                                                  HTML
+                                                </button>
+                                                <button
+                                                  type="button"
+                                                  className="btn px-2 py-1 btn-custom"
+                                                  key={index}
+                                                  
+                                                >
+                                                  PDF
+                                                </button>
+                                         
+                                    </div>
                                   </TETabsPane>
-                                  {/* <TETabsPane show={verticalActive === "tab3"}>Tab 3 content</TETabsPane>
-                                     <TETabsPane show={verticalActive === "tab4"}>Tab 4 content</TETabsPane> */}
+                                  
                                 </TETabsContent>
                                 {/* tabs end */}
                               </div>
@@ -450,6 +502,8 @@ function Home(): JSX.Element {
                           </TEDropdownMenu>
                         </TEDropdown>
                       </div>
+                      {/* dropdown end*/}
+                      {/* close button */}
                       <div className="file-list-item">
                         <svg
                           onClick={() => handleRemoveRow(file.fileName)}
@@ -487,14 +541,15 @@ function Home(): JSX.Element {
                           ></line>
                         </svg>
                       </div>
+                       {/* close button end*/}
                     </div>
                   ))}
                 </div>
 
                 <div className="flex justify-between items-center added-files flex-wrap">
                   <div className="add-more-btn flex">
-                    <div className="custom-import border-2 px-1 py-1 border-[#468585;] rounded-lg ms-3 ">
-                      <span className="label px-4 text-nowrap flex items-center text-sm font-semibold text-[#468585;] ">
+                    <div className="custom-import border-2 px-1 py-1 primary-border rounded-lg ms-3 ">
+                      <span className="label px-4 text-nowrap flex items-center text-sm font-semibold primary-text ">
                         {" "}
                         <span>
                           <img
@@ -709,7 +764,7 @@ function Home(): JSX.Element {
                   <button
                     className={`${
                       activeElement === "element1" &&
-                      `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)] font-semibold text-[#468585] `
+                      `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)] font-semibold primary-text `
                     } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white text-xl `}
                     type="button"
                     onClick={() => handleClick("element1")}
@@ -763,7 +818,7 @@ function Home(): JSX.Element {
                 <button
                   className={`${
                     activeElement === "element2" &&
-                    `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)] font-semibold text-[#468585]`
+                    `dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)] font-semibold primary-text`
                   } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left text-xl transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white`}
                   type="button"
                   onClick={() => handleClick("element2")}
