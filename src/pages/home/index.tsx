@@ -336,10 +336,41 @@ function Home(): JSX.Element {
 
                           <TEDropdownMenu>
                             <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none` ">
+                              {/* Search Bar */}
+                              <div className="dropdown-searchbar">
+                                <div className="search-bar-main relative">
+                                  <div className="search-bar-view relative">
+                                    <input
+                                      type="text"
+                                      placeholder="Search"
+                                      className="w-full"
+                                    />
+
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="1.5em"
+                                      height="1.5em"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      className="cursor-pointer"
+                                    >
+                                      <circle cx="11" cy="11" r="8"></circle>
+                                      <line
+                                        x1="21"
+                                        y1="21"
+                                        x2="16.65"
+                                        y2="16.65"
+                                      ></line>
+                                    </svg>
+                                  </div>
+                                </div>
+                              </div>
+
                               <div className="flex items-start">
-                                
+                                {/* tabs */}
                                 <TETabs vertical>
-                                  <TETabsItem
+                                  <TETabsItem className="primary-text primary-border"
                                     onClick={() => handleVerticalClick("tab1")}
                                     active={verticalActive === "tab1"}
                                   >
@@ -351,19 +382,6 @@ function Home(): JSX.Element {
                                   >
                                     Document
                                   </TETabsItem>
-                                  {/* <TETabsItem
-          onClick={() => handleVerticalClick("tab3")}
-          active={verticalActive === "tab3"}
-        >
-          Messages
-        </TETabsItem> */}
-                                  {/* <TETabsItem
-          onClick={() => handleVerticalClick("tab4")}
-          active={verticalActive === "tab4"}
-          disabled
-        >
-          Contact
-        </TETabsItem> */}
                                 </TETabs>
 
                                 <TETabsContent>
@@ -399,8 +417,9 @@ function Home(): JSX.Element {
                                     Tab 2 content
                                   </TETabsPane>
                                   {/* <TETabsPane show={verticalActive === "tab3"}>Tab 3 content</TETabsPane>
-        <TETabsPane show={verticalActive === "tab4"}>Tab 4 content</TETabsPane> */}
+                                     <TETabsPane show={verticalActive === "tab4"}>Tab 4 content</TETabsPane> */}
                                 </TETabsContent>
+                                {/* tabs end */}
                               </div>
 
                               {/* <div className="format-grid flex flex-wrap gap-3 mt-3">

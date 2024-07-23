@@ -29,6 +29,11 @@ body {
   font-size: 14px;
   scroll-behavior: smooth;
 }
+.primary-border{
+  border-color: var(--primary-color);
+}
+.primary-text{
+  color: var(--primary-color);}
 
 /* navbar css */
 
@@ -49,14 +54,14 @@ header ul li a {
   font-size: 16px;
 }
 
-header header .search-bar-main .search-bar-view svg {
+header header .search-bar-main .search-bar-view svg ,.dropdown-searchbar .search-bar-main .search-bar-view svg {
   color: var(--svg-clr);
   position: absolute;
   right: 12px;
   top: 8px;
 }
 
-header .search-bar-main .search-bar-view input {
+header .search-bar-main .search-bar-view input ,.dropdown-searchbar .search-bar-view input  {
   height: 40px;
   background-color: var(--lighter-clr);
   border: 1px solid var(--lighter-clr);
@@ -65,32 +70,40 @@ header .search-bar-main .search-bar-view input {
 }
 
 header .search-bar-main .search-bar-view input:hover,
-header .search-bar-main .search-bar-view input:focus {
+header .search-bar-main .search-bar-view input:focus ,
+.dropdown-searchbar .search-bar-main .search-bar-view input:hover,
+.dropdown-searchbar .search-bar-main .search-bar-view input:focus
+{
   border: 1px solid var(--primary-color);
 }
 
-header .search-bar-main .search-bar-view input:focus-visible {
+header .search-bar-main .search-bar-view input:focus-visible,
+.dropdown-searchbar .search-bar-main .search-bar-view input:focus-visible {
   outline: 0;
 }
 
-header .search-bar-main {
+header .search-bar-main  {
   width: 360px;
 }
 
 @media screen and (max-width: 500px) {
-  header .search-bar-main {
+  header .search-bar-main ,
+  .dropdown-searchbar .search-bar-main  {
     width: 300px;
   }
 }
 
-header .search-bar-main .search-bar-view svg {
+header .search-bar-main .search-bar-view svg,
+.dropdown-searchbar .search-bar-main .search-bar-view svg
+{
   color: var(--svg-clr);
   position: absolute;
   right: 12px;
   top: 8px;
 }
 
-header .site-search {
+header .site-search,
+.dropdown-searchbar .site-search{
   top: 50px;
   border-radius: 5px;
   box-shadow: 0 3px 24px rgba(0, 0, 0, 0.08);
@@ -100,7 +113,9 @@ header .site-search {
   overflow: auto;
 }
 
-header .site-search ul li {
+header .site-search ul li ,
+.dropdown-searchbar .site-search ul li
+{
   padding: 12px 24px;
 }
 
