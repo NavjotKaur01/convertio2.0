@@ -6,6 +6,10 @@ import {
   TEDropdownMenu,
   TEDropdownItem,
   TERipple,
+  TETabs,
+  TETabsContent,
+  TETabsItem,
+  TETabsPane,
 } from "tw-elements-react";
 import axios from "axios";
 import possibleFormat from "../../utilities/possibleFileFormat.json";
@@ -30,6 +34,7 @@ function Home(): JSX.Element {
   const [extensionName, setExtensionName] = useState<string>("");
   const [isFileExtension, setIsFileExtension] = useState<boolean>(false);
   const [isErrorShow, setIsErrorShow] = useState<boolean>(false);
+  const [verticalActive, setVerticalActive] = useState("tab1");
 
   //UseEffect for uploadedFileList
   useEffect(() => {
@@ -213,6 +218,14 @@ function Home(): JSX.Element {
     return Object.keys(possibleFormat).includes(fileExtension);
   };
 
+  // Active and deactive tabs navigation
+  const handleVerticalClick = (value: string) => {
+    if (value === verticalActive) {
+      return;
+    }
+    setVerticalActive(value);
+  };
+
   return (
     <>
       <div className="lg:container mx-auto grid grid-cols-1 lg:grid-cols-5 mb-8 mt-24">
@@ -271,7 +284,7 @@ function Home(): JSX.Element {
                         <TEDropdown className="flex justify-center">
                           <TERipple rippleColor="light">
                             <TEDropdownToggle
-                              className={`flex items-center whitespace-nowrap px-3 pb-1 pt-1 border rounded-lg ${
+                              className={`flex items-center whitespace-nowrap px-3 pb-1 pt-1 border rounded-lg w-20 ${
                                 isNotPossibleFormat(file.fileExtension)
                                   ? "small-btn"
                                   : "error-btn"
@@ -305,7 +318,7 @@ function Home(): JSX.Element {
                                     );
                                   })()
                                 : "select"}
-                              <span className="ml-2 [&>svg]:w-5 w-2">
+                              <span className="ml-2 [&>svg]:w-5 w-2 absolute right-4">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   viewBox="0 0 20 20"
@@ -322,9 +335,75 @@ function Home(): JSX.Element {
                           </TERipple>
 
                           <TEDropdownMenu>
-                            <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none">
-                              <p>Choose File Type</p>
-                              <div className="format-grid flex flex-wrap gap-3 mt-3">
+                            <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none` ">
+                              <div className="flex items-start">
+                                
+                                <TETabs vertical>
+                                  <TETabsItem
+                                    onClick={() => handleVerticalClick("tab1")}
+                                    active={verticalActive === "tab1"}
+                                  >
+                                    Image
+                                  </TETabsItem>
+                                  <TETabsItem
+                                    onClick={() => handleVerticalClick("tab2")}
+                                    active={verticalActive === "tab2"}
+                                  >
+                                    Document
+                                  </TETabsItem>
+                                  {/* <TETabsItem
+          onClick={() => handleVerticalClick("tab3")}
+          active={verticalActive === "tab3"}
+        >
+          Messages
+        </TETabsItem> */}
+                                  {/* <TETabsItem
+          onClick={() => handleVerticalClick("tab4")}
+          active={verticalActive === "tab4"}
+          disabled
+        >
+          Contact
+        </TETabsItem> */}
+                                </TETabs>
+
+                                <TETabsContent>
+                                  <TETabsPane show={verticalActive === "tab1"}>
+                                    <div className="format-grid flex flex-wrap gap-3 mt-2">
+                                      {Object.entries(possibleFormat).map(
+                                        ([key, formats]) =>
+                                          uploadedFileList[0].fileExtension ===
+                                            key &&
+                                          formats.map(
+                                            (format: string, index: number) =>
+                                              format !==
+                                                uploadedFileList[0]
+                                                  .fileExtension && (
+                                                <button
+                                                  type="button"
+                                                  className="btn px-2 py-1 btn-custom"
+                                                  key={index}
+                                                  onClick={() =>
+                                                    handleSameFileExtensionConversion(
+                                                      format
+                                                    )
+                                                  }
+                                                >
+                                                  {format.toUpperCase()}
+                                                </button>
+                                              )
+                                          )
+                                      )}
+                                    </div>
+                                  </TETabsPane>
+                                  <TETabsPane show={verticalActive === "tab2"}>
+                                    Tab 2 content
+                                  </TETabsPane>
+                                  {/* <TETabsPane show={verticalActive === "tab3"}>Tab 3 content</TETabsPane>
+        <TETabsPane show={verticalActive === "tab4"}>Tab 4 content</TETabsPane> */}
+                                </TETabsContent>
+                              </div>
+
+                              {/* <div className="format-grid flex flex-wrap gap-3 mt-3">
                                 {Object.entries(possibleFormat).map(
                                   ([key, formats]) =>
                                     file.fileExtension === key &&
@@ -347,7 +426,7 @@ function Home(): JSX.Element {
                                         )
                                     )
                                 )}
-                              </div>
+                              </div> */}
                             </TEDropdownItem>
                           </TEDropdownMenu>
                         </TEDropdown>
@@ -428,14 +507,14 @@ function Home(): JSX.Element {
                         <TEDropdown className="flex justify-center ms-2">
                           <TERipple rippleColor="light">
                             <TEDropdownToggle
-                              className={`flex items-center whitespace-nowrap rounded-lg px-3 pb-1 pt-1 border ${
+                              className={`flex items-center whitespace-nowrap rounded-lg px-3 pb-1 pt-1 border w-20 ${
                                 isErrorShow ? "error-btn" : "small-btn"
                               }`}
                             >
                               {extensionName
                                 ? extensionName.toUpperCase()
                                 : "..."}
-                              <span className="ml-2 [&>svg]:w-5 w-2">
+                              <span className="ml-2 [&>svg]:w-5 w-2 absolute right-4">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   viewBox="0 0 20 20"

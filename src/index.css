@@ -284,7 +284,7 @@ header .site-search ul li {
 ::-webkit-scrollbar-thumb {
   background: #888;
 }
-@media only screen and (max-width: 590px) {
+@media only screen and (max-width: 599px) {
   .convert-btn{
    width: 100%;
   }
