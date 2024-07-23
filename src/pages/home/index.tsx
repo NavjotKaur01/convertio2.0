@@ -227,8 +227,8 @@ function Home(): JSX.Element {
           {!!uploadedFileList && !!uploadedFileList.length ? (
             <>
               {/* UI after file upload */}
-              <div className="mt-5">
-                <div className="w-fit">
+              <div className="mt-5 border rounded-lg">
+                {/* <div className="w-fit">
                   <div className="custom-import primary-btn primary-btn-outlined border-none rounded-lg">
                     <span className="label px-4 text-nowrap flex items-center text-sm">
                       {" "}
@@ -250,12 +250,12 @@ function Home(): JSX.Element {
                       onChange={(e: any) => handleFileUpload(e)}
                     />
                   </div>
-                </div>
+                </div> */}
 
                 <div>
                   {uploadedFileList.map((file: FileDetails, index: number) => (
                     <div
-                      className="flex md:grid flex-wrap justify-between items-center file-list-main rounded-lg"
+                      className="flex md:grid flex-wrap justify-between items-center file-list-main rounded-lg border-none"
                       key={index}
                     >
                       <div className="flex items-center file-list-item">
@@ -393,7 +393,31 @@ function Home(): JSX.Element {
                   ))}
                 </div>
 
-                <div className="flex justify-between items-center added-files flex-wrap rounded-lg">
+                <div className="flex justify-between items-center added-files flex-wrap">
+                  <div className="add-more-btn flex">
+                    <div className="custom-import border-2 px-1 py-1 border-[#468585;] rounded-lg ms-3 ">
+                      <span className="label px-4 text-nowrap flex items-center text-sm font-semibold text-[#468585;] ">
+                        {" "}
+                        <span>
+                          <img
+                            className="mr-1"
+                            src="../../static/img/ic-add-green.svg"
+                            style={{ marginBottom: "4px" }}
+                          />
+                        </span>{" "}
+                        Add more Files
+                      </span>
+                      <span className="label-file"></span>
+                      <input
+                        className="import-field"
+                        type="file"
+                        name="name"
+                        multiple
+                        onChange={(e: any) => handleFileUpload(e)}
+                      />
+                    </div>
+                  </div>
+
                   <div className="p-3 flex items-center conversion">
                     {isFileExtension ? (
                       <div className="flex items-center justify-between conversion-inside">
@@ -500,7 +524,9 @@ function Home(): JSX.Element {
                       onChange={(e: any) => handleFileUpload(e)}
                     />
                   </div>
-                  <p className="mb-0 mt-2">Max. 10 files are allowed</p>
+                  <p className="mb-0 mt-2 text-white ">
+                    Max. 10 files are allowed
+                  </p>
                 </div>
               </div>
               {/* default File uploader ends */}
