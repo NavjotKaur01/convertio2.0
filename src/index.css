@@ -107,7 +107,8 @@ header .site-search ul li {
 /* navbar css end  */
 .dropzone-box {
   padding: 70px;
-  background-color: var(--box-bg-clr);
+  /* background-color: var(--box-bg-clr); */
+  background-image: linear-gradient(to right, #468585, #609c94, #7cb4a3, #9bcbb2, #bbe3c2);
 }
 
 /* Custom file uploader */

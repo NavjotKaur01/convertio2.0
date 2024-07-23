@@ -496,9 +496,9 @@ function Home(): JSX.Element {
           )}
 
           {/* cards section */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 p-6 my-6  rounded-lg">
+          <div className="grid grid-cols-1 lg:grid-cols-3 p-6 my-6  rounded-lg card-box">
             {/* card-1 */}
-            <div className="text-center px-2 py-3 lg-py-2 card-box rounded-lg mx-3">
+            <div className="text-center px-2 py-3 lg:py-2  rounded-lg mx-3 mb-2 lg:mb-0">
               <svg
                 viewBox="0 0 24 24"
                 width="36"
@@ -521,7 +521,7 @@ function Home(): JSX.Element {
               </p>
             </div>
             {/* card-2 */}
-            <div className="text-center px-2 py-3 lg-py-2 card-box rounded-lg mx-3">
+            <div className="text-center px-2 py-3 lg:py-2 rounded-lg mx-3 mb-2 lg:mb-0">
               <svg
                 viewBox="0 0 24 24"
                 width="36"
@@ -543,7 +543,7 @@ function Home(): JSX.Element {
               </p>
             </div>
             {/* card-3 */}
-            <div className="text-center px-2 py-3 lg-py-2 card-box rounded-lg mx-3">
+            <div className="text-center px-2 py-3 lg:py-2 rounded-lg mx-3 mb-2 lg:mb-0">
               <svg
                 viewBox="0 0 24 24"
                 width="36"
@@ -573,8 +573,8 @@ function Home(): JSX.Element {
                   <button
                     className={`${
                       activeElement === "element1" &&
-                      `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)] `
-                    } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left text-neutral-800 transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white text-xl `}
+                      `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)] font-semibold text-[#468585] `
+                    } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white text-xl `}
                     type="button"
                     onClick={() => handleClick("element1")}
                     aria-expanded="true"
@@ -622,13 +622,13 @@ function Home(): JSX.Element {
                 </TECollapse>
               </div>
             </div>
-            <div className="rounded-none border-neutral-200 bg-white dark:border-neutral-600 dark:bg-neutral-800">
+            <div className="rounded-none border-neutral-200 bg-white dark:border-neutral-600 dark:bg-neutral-800 ">
               <h2 className="mb-0" id="headingTwo">
                 <button
                   className={`${
                     activeElement === "element2" &&
-                    `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)]`
-                  } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left text-xl text-neutral-800 transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white`}
+                    `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)] font-semibold text-[#468585]`
+                  } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left text-xl transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white`}
                   type="button"
                   onClick={() => handleClick("element2")}
                   aria-expanded="true"
