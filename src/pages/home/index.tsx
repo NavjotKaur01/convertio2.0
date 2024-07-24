@@ -336,7 +336,7 @@ function Home(): JSX.Element {
                           </TERipple>
 
                           <TEDropdownMenu>
-                            <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none` ">
+                            <div className="p-4 custom-drop-menu border-0 mt-2 shadow-none`">
                               {/* Search Bar */}
                               <div className="dropdown-searchbar">
                                 <div className="search-bar-main relative">
@@ -370,107 +370,110 @@ function Home(): JSX.Element {
 
                               <div className="flex items-start">
                                 {/* tabs */}
-                                <TETabs vertical className="tabs-heading" >
-                                  <TETabsItem
-                                    onClick={() => handleVerticalClick("tab1")}
-                                    active={verticalActive === "tab1"}
-                                  >
-                                    Image
-                                  </TETabsItem>
-                                  <TETabsItem
-                                  // className="primary-text primary-border"
-                                    onClick={() => handleVerticalClick("tab2")}
-                                    active={verticalActive === "tab2"}
-                                  >
-                                    Document
-                                  </TETabsItem>
-                                </TETabs>
+                                <TEDropdownItem preventCloseOnClick>
+                                  <TETabs vertical className="tabs-heading">
+                                    <TETabsItem
+                                      onClick={() =>
+                                        handleVerticalClick("tab1")
+                                      }
+                                      active={verticalActive === "tab1"}
+                                    >
+                                      Image
+                                    </TETabsItem>
+                                    <TETabsItem
+                                      // className="primary-text primary-border"
+                                      onClick={() =>
+                                        handleVerticalClick("tab2")
+                                      }
+                                      active={verticalActive === "tab2"}
+                                    >
+                                      Document
+                                    </TETabsItem>
+                                  </TETabs>
+                                </TEDropdownItem>
 
-                                <TETabsContent>
-                                  <TETabsPane show={verticalActive === "tab1"}>
-                                    <div className="format-grid flex flex-wrap gap-3 mt-2">
-                                      {Object.entries(possibleFormat).map(
-                                        ([key, formats]) =>
-                                          uploadedFileList[0].fileExtension ===
-                                            key &&
-                                          formats.map(
-                                            (format: string, index: number) =>
-                                              format !==
-                                                uploadedFileList[0]
-                                                  .fileExtension && (
-                                                <button
-                                                  type="button"
-                                                  className="btn px-2 py-1 btn-custom"
-                                                  key={index}
-                                                  onClick={() =>
-                                                    handleSameFileExtensionConversion(
-                                                      format
-                                                    )
-                                                  }
-                                                >
-                                                  {format.toUpperCase()}
-                                                </button>
-                                              )
-                                          )
-                                      )}
-                                    </div>
-                                  </TETabsPane>
-                                  <TETabsPane show={verticalActive === "tab2"}>
-                                  <div className="format-grid flex flex-wrap gap-3 mt-2">
-                                      
-                                                <button
-                                                  type="button"
-                                                  className="btn px-2 py-1 btn-custom"
-                                                  key={index}
-                                                  
-                                                >
-                                                  DOC
-                                                </button>
-                                                <button
-                                                  type="button"
-                                                  className="btn px-2 py-1 btn-custom"
-                                                  key={index}
-                                                  
-                                                >
-                                                  DOCX
-                                                </button>
-                                                <button
-                                                  type="button"
-                                                  className="btn px-2 py-1 btn-custom"
-                                                  key={index}
-                                                  
-                                                >
-                                                  TXT
-                                                </button>
-                                                <button
-                                                  type="button"
-                                                  className="btn px-2 py-1 btn-custom"
-                                                  key={index}
-                                                  
-                                                >
-                                                  TEXT
-                                                </button>
-                                                <button
-                                                  type="button"
-                                                  className="btn px-2 py-1 btn-custom"
-                                                  key={index}
-                                                  
-                                                >
-                                                  HTML
-                                                </button>
-                                                <button
-                                                  type="button"
-                                                  className="btn px-2 py-1 btn-custom"
-                                                  key={index}
-                                                  
-                                                >
-                                                  PDF
-                                                </button>
-                                         
-                                    </div>
-                                  </TETabsPane>
-                                  
-                                </TETabsContent>
+                                <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none`">
+                                  <TETabsContent>
+                                    <TETabsPane
+                                      show={verticalActive === "tab1"}
+                                    >
+                                      <div className="format-grid flex flex-wrap gap-3 mt-2">
+                                        {Object.entries(possibleFormat).map(
+                                          ([key, formats]) =>
+                                            uploadedFileList[0]
+                                              .fileExtension === key &&
+                                            formats.map(
+                                              (format: string, index: number) =>
+                                                format !==
+                                                  uploadedFileList[0]
+                                                    .fileExtension && (
+                                                  <button
+                                                    type="button"
+                                                    className="btn px-2 py-1 btn-custom"
+                                                    key={index}
+                                                    onClick={() =>
+                                                      handleSameFileExtensionConversion(
+                                                        format
+                                                      )
+                                                    }
+                                                  >
+                                                    {format.toUpperCase()}
+                                                  </button>
+                                                )
+                                            )
+                                        )}
+                                      </div>
+                                    </TETabsPane>
+                                    <TETabsPane
+                                      show={verticalActive === "tab2"}
+                                    >
+                                      <div className="format-grid flex flex-wrap gap-3 mt-2">
+                                        <button
+                                          type="button"
+                                          className="btn px-2 py-1 btn-custom"
+                                          key={index}
+                                        >
+                                          DOC
+                                        </button>
+                                        <button
+                                          type="button"
+                                          className="btn px-2 py-1 btn-custom"
+                                          key={index}
+                                        >
+                                          DOCX
+                                        </button>
+                                        <button
+                                          type="button"
+                                          className="btn px-2 py-1 btn-custom"
+                                          key={index}
+                                        >
+                                          TXT
+                                        </button>
+                                        <button
+                                          type="button"
+                                          className="btn px-2 py-1 btn-custom"
+                                          key={index}
+                                        >
+                                          TEXT
+                                        </button>
+                                        <button
+                                          type="button"
+                                          className="btn px-2 py-1 btn-custom"
+                                          key={index}
+                                        >
+                                          HTML
+                                        </button>
+                                        <button
+                                          type="button"
+                                          className="btn px-2 py-1 btn-custom"
+                                          key={index}
+                                        >
+                                          PDF
+                                        </button>
+                                      </div>
+                                    </TETabsPane>
+                                  </TETabsContent>
+                                </TEDropdownItem>
                                 {/* tabs end */}
                               </div>
 
@@ -498,7 +501,7 @@ function Home(): JSX.Element {
                                     )
                                 )}
                               </div> */}
-                            </TEDropdownItem>
+                            </div>
                           </TEDropdownMenu>
                         </TEDropdown>
                       </div>
@@ -541,7 +544,7 @@ function Home(): JSX.Element {
                           ></line>
                         </svg>
                       </div>
-                       {/* close button end*/}
+                      {/* close button end*/}
                     </div>
                   ))}
                 </div>
