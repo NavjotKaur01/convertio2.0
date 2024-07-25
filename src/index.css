@@ -242,8 +242,8 @@ header .site-search ul li,
 
 .custom-drop-menu {
   /* padding: 20px; */
-  width: 345px;
-  max-width: 90vw;
+  /* width: 345px;
+  max-width: 90vw; */
   pointer-events: auto;
   height: auto;
   margin: 0 auto;
@@ -268,6 +268,7 @@ header .site-search ul li,
 .custom-drop-menu .btn-custom-selected {
   background-color: var(--primary-color);
   color: #fff;
+  border-radius: 4px;
 }
 
 /* Cards */

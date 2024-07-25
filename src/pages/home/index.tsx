@@ -236,7 +236,11 @@ function Home(): JSX.Element {
   };
 
   // Handle choose conversion format
-  const handleChooseConversion = (format: string, fileName: string) => {
+  const handleChooseConversion = (
+    format: string,
+    fileName: string,
+    isComman?: boolean
+  ) => {
     let fileIndex = conversionFormat.findIndex(
       (item: ConversionFormat) => item.fileName === fileName
     );
@@ -254,6 +258,9 @@ function Home(): JSX.Element {
         ...prevState,
         { conversionFormat: format, fileName: fileName },
       ]);
+    }
+    if (isComman) {
+      handleSameFileExtensionConversion(format);
     }
     setExtensionName(format);
     setFilterFormattedList([]);
@@ -554,7 +561,17 @@ function Home(): JSX.Element {
                                                       <button
                                                         key={`${index}-${idx}-${innerIdx}`}
                                                         type="button"
-                                                        className={`btn px-1 text-center py-1 btn-custom mx-1 my-1 col-span-4`}
+                                                        className={`btn px-1 text-center py-1 mx-1 my-1 col-span-4 ${
+                                                          conversionFormat.find(
+                                                            (items: any) =>
+                                                              items.fileName ===
+                                                              file.fileName
+                                                          )
+                                                            ?.conversionFormat ===
+                                                          fileExtension
+                                                            ? "btn-custom-selected"
+                                                            : "btn-custom"
+                                                        }`}
                                                         onClick={() =>
                                                           handleChooseConversion(
                                                             fileExtension,
@@ -743,7 +760,8 @@ function Home(): JSX.Element {
                                             onClick={() =>
                                               handleChooseConversion(
                                                 item,
-                                                uploadedFileList[0].fileName
+                                                uploadedFileList[0].fileName,
+                                                true
                                               )
                                             }
                                           >
