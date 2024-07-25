@@ -1,146 +1,218 @@
 {
-    "png": [
-        "jpg",
-        "jpeg",
-        "bmp",
-        "eps",
-        "gif",
-        "ico",
-        "odd",
-        "psd",
-        "svg",
-        "tga",
-        "tiff",
-        "webp"
-    ],
-    "svg": [
-        "png",
-        "jpg",
-        "jpeg",
-        "svg",
-        "tiff",
-        "webp",
-        "odd",
-        "bmp",
-        "gif",
-        "ico"
-    ],
-    "jpg": [
-        "png",
-        "svg",
-        "jpeg",
-        "bmp",
-        "eps",
-        "gif",
-        "ico",
-        "odd",
-        "psd",
-        "tga",
-        "tiff",
-        "webp"
-    ],
-    "jpeg": [
-        "png",
-        "svg",
-        "jpg",
-        "bmp",
-        "gif",
-        "ico",
-        "odd",
-        "psd",
-        "tiff",
-        "webp"
-    ],
-    "pdf": [
-        "doc",
-        "docx",
-        "excel",
-        "html",
-        "odt",
-        "ppt",
-        "pptx",
-        "ps",
-        "rtf",
-        "text",
-        "txt",
-        "word",
-        "xls",
-        "xlsx"
-    ],
-    "text": [
-        "doc",
-        "docx",
-        "excel",
-        "html",
-        "odt",
-        "ppt",
-        "pptx",
-        "ps",
-        "rtf",
-        "txt",
-        "word",
-        "xls",
-        "xlsx"
-    ],
-    "txt": [
-        "doc",
-        "docx",
-        "excel",
-        "html",
-        "odt",
-        "ppt",
-        "pptx",
-        "ps",
-        "rtf",
-        "text",
-        "word",
-        "xls",
-        "xlsx"
-    ],
-    "docx": [
-        "doc",
-        "html",
-        "odt",
-        "pdf",
-        "rtf",
-        "text",
-        "txt"
-    ],
-    "doc": [
-        "docx",
-        "html",
-        "odt",
-        "pdf",
-        "rtf",
-        "text",
-        "txt"
-    ],
-    "xml": [
-        "pdf",
-        "text",
-        "txt",
-        "html"
-    ],
-    "zip": [
-        "7z",
-        "Gz",
-        "rar",
-        "tar",
-        "targz",
-        "tgz"
-    ],
-    "xlsx": [
-        "pdf",
-        "csv",
-        "ods",
-        "xls",
-        "xml"
-    ],
-    "xls": [
-        "pdf",
-        "csv",
-        "ods",
-        "xlsx",
-        "xml"
-    ]
+    "png": {
+        "images": [
+            "bmp",
+            "eps",
+            "gif",
+            "ico",
+            "jpeg",
+            "jpg",
+            "odd",
+            "psd",
+            "svg",
+            "tga",
+            "tiff",
+            "webp"
+        ],
+        "documents": [
+            "doc",
+            "docx",
+            "pdf",
+            "ps",
+            "text",
+            "txt",
+            "word"
+        ]
+    },
+    "svg": {
+        "images": [
+            "bmp",
+            "gif",
+            "ico",
+            "jpeg",
+            "jpg",
+            "odd",
+            "png",
+            "svg",
+            "tiff",
+            "webp"
+        ],
+        "documents": [
+            "doc",
+            "docx",
+            "pdf",
+            "ps",
+            "word"
+        ],
+        "vector": [
+            "emf",
+            "wmf"
+        ]
+    },
+    "jpg": {
+        "images": [
+            "bmp",
+            "eps",
+            "gif",
+            "ico",
+            "jpeg",
+            "odd",
+            "png",
+            "psd",
+            "svg",
+            "tga",
+            "tiff",
+            "webp"
+        ],
+        "documents": [
+            "doc",
+            "docx",
+            "pdf",
+            "ps",
+            "text",
+            "txt",
+            "word"
+        ]
+    },
+    "jpeg": {
+        "images": [
+            "bmp",
+            "gif",
+            "ico",
+            "jpg",
+            "odd",
+            "png",
+            "psd",
+            "svg",
+            "tiff",
+            "webp"
+        ],
+        "documents": [
+            "pdf",
+            "ps",
+            "text",
+            "txt"
+        ]
+    },
+    "pdf": {
+        "images": [
+            "bpm",
+            "eps",
+            "gif",
+            "jpeg",
+            "jpg",
+            "odd",
+            "png",
+            "psd",
+            "tiff",
+            "webp"
+        ],
+        "documents": [
+            "doc",
+            "docx",
+            "excel",
+            "html",
+            "odt",
+            "ppt",
+            "pptx",
+            "ps",
+            "rtf",
+            "text",
+            "txt",
+            "word",
+            "xls",
+            "xlsx"
+        ],
+        "ebook": [
+            "azw3",
+            "epub",
+            "mobi"
+        ]
+    },
+    "txt": {
+        "documents": [
+            "doc",
+            "docx",
+            "html",
+            "pdf",
+            "word"
+        ],
+        "ebook": [
+            "epub"
+        ]
+    },
+    "docx": {
+        "images": [
+            "jpeg",
+            "jpg"
+        ],
+        "documents": [
+            "doc",
+            "html",
+            "odt",
+            "pdf",
+            "rtf",
+            "text",
+            "txt"
+        ],
+        "ebook": [
+            "epub",
+            "mobi"
+        ]
+    },
+    "doc": {
+        "images": [
+            "jpeg",
+            "jpg"
+        ],
+        "documents": [
+            "docx",
+            "html",
+            "odt",
+            "pdf",
+            "rtf",
+            "text",
+            "txt"
+        ],
+        "ebook": [
+            "epub",
+            "mobi"
+        ]
+    },
+    "xml": {
+        "documents": [
+            "html",
+            "pdf",
+            "text",
+            "txt"
+        ]
+    },
+    "zip": {
+        "archive": [
+            "7z",
+            "Gz",
+            "rar",
+            "tar",
+            "targz",
+            "tgz"
+        ]
+    },
+    "xlsx": {
+        "documents": [
+            "csv",
+            "ods",
+            "pdf",
+            "xls",
+            "xml"
+        ]
+    },
+    "xls": {
+        "documents": [
+            "csv",
+            "ods",
+            "pdf",
+            "xlsx",
+            "xml"
+        ]
+    }
 }
