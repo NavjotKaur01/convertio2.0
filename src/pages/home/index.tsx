@@ -104,7 +104,6 @@ function Home(): JSX.Element {
       uploadedFileList.forEach((file) => {
         if (possibleFormat.hasOwnProperty(file.fileExtension)) {
           initialActiveState[file.fileName] = `tab-${file.fileName}-1-images`;
-          initialActiveState["images"] = `tab-${file.fileName}-1-images`;
         }
       });
       setVerticalActive(initialActiveState);
@@ -171,6 +170,8 @@ function Home(): JSX.Element {
       return [];
     }
   }
+
+  // handle FAQ show and hide
   const handleClick = (value: string) => {
     if (value === activeElement) {
       setActiveElement("");
@@ -536,7 +537,7 @@ function Home(): JSX.Element {
                                                 idx
                                               ) => (
                                                 <TETabsPane
-                                                  className="gap-4"
+                                                  className="grid grid-cols-12"
                                                   key={`${idx}`}
                                                   show={
                                                     verticalActive[
@@ -553,7 +554,7 @@ function Home(): JSX.Element {
                                                       <button
                                                         key={`${index}-${idx}-${innerIdx}`}
                                                         type="button"
-                                                        className="btn px-3 py-1 btn-custom mx-1 my-1"
+                                                        className={`btn px-1 text-center py-1 btn-custom mx-1 my-1 col-span-4`}
                                                         onClick={() =>
                                                           handleChooseConversion(
                                                             fileExtension,
@@ -811,7 +812,7 @@ function Home(): JSX.Element {
                                                 idx
                                               ) => (
                                                 <TETabsPane
-                                                  className="gap-4"
+                                                  className="grid grid-cols-12"
                                                   key={`${idx}`}
                                                   show={
                                                     verticalActive[
@@ -829,7 +830,7 @@ function Home(): JSX.Element {
                                                       <button
                                                         key={`${index}-${idx}-${innerIdx}`}
                                                         type="button"
-                                                        className="btn px-3 py-1 btn-custom mx-1 my-1"
+                                                        className="btn px-1 text-center py-1 btn-custom mx-1 my-1 col-span-4"
                                                         onClick={() =>
                                                           handleSameFileExtensionConversion(
                                                             fileExtension
