@@ -12,14 +12,7 @@ import {
   TETabsPane,
 } from "tw-elements-react";
 import axios from "axios";
-const possibleFormat: {
-  [key: string]: {
-    images: string[];
-    documents: string[];
-    vector?: string[];
-    ebook?: string[];
-  };
-} = require("./possibleFileFormat.json");
+import possibleFormat from "../../utilities/possibleFileFormat.json";
 
 interface FileDetails {
   fileName: string;
@@ -89,7 +82,7 @@ function Home(): JSX.Element {
     if (uploadedFileList.length > 0 && possibleFormat) {
       const initialActiveState: { [fileName: string]: string } = {};
       uploadedFileList.forEach((file) => {
-        if (possibleFormat[file.fileExtension]) {
+        if (possibleFormat.hasOwnProperty(file.fileExtension)) {
           initialActiveState[file.fileName] = `tab-${file.fileName}-1-images`;
         }
       });
