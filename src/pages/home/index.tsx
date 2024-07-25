@@ -35,6 +35,26 @@ function Home(): JSX.Element {
   const [isFileExtension, setIsFileExtension] = useState<boolean>(false);
   const [isErrorShow, setIsErrorShow] = useState<boolean>(false);
   const [verticalActive, setVerticalActive] = useState<any>({});
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [jsonFileData, setJsonFileData] = useState<any>(null);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [queryObject, setQueryObject] = useState<string>("");
+  const [filterFormattedList, setFilterFormattedList] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (Object.keys(possibleFormat).length) {
+      setJsonFileData(possibleFormat);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (searchResults.length) {
+      let s = searchResults.find(
+        (item: any) => item.fName === queryObject
+      ).extensionList;
+      setFilterFormattedList(s);
+    }
+  }, [searchResults]);
 
   //UseEffect for uploadedFileList
   useEffect(() => {
@@ -84,12 +104,73 @@ function Home(): JSX.Element {
       uploadedFileList.forEach((file) => {
         if (possibleFormat.hasOwnProperty(file.fileExtension)) {
           initialActiveState[file.fileName] = `tab-${file.fileName}-1-images`;
+          initialActiveState["images"] = `tab-${file.fileName}-1-images`;
         }
       });
       setVerticalActive(initialActiveState);
     }
   }, [uploadedFileList, possibleFormat]);
 
+  const handleSearchPossibleFormat = (
+    fileName: string,
+    searchStr: string,
+    extension: string
+  ) => {
+    const searchString = searchStr.trim().toLowerCase();
+    setQueryObject(fileName);
+    setSearchQuery(searchString);
+    const filteredData = filterFileType(extension, fileName, searchString);
+
+    const updateSearchResults = (fileName: string, filteredData: string[]) => {
+      setSearchResults((prevState) => {
+        const existingEntryIndex = prevState.findIndex(
+          (entry) => entry.fName === fileName
+        );
+
+        if (existingEntryIndex !== -1) {
+          prevState[existingEntryIndex].extensionList = filteredData;
+          return [...prevState];
+        } else {
+          return [
+            ...prevState,
+            { fName: fileName, extensionList: filteredData },
+          ];
+        }
+      });
+    };
+
+    if (filteredData) {
+      updateSearchResults(fileName, filteredData);
+    }
+  };
+
+  function filterFileType(
+    fileType: string,
+    fileName: string,
+    searchStr: string
+  ) {
+    if (
+      possibleFormat.hasOwnProperty(fileType) &&
+      Object.keys(verticalActive).includes(fileName) &&
+      searchStr
+    ) {
+      const activeTabId = verticalActive[fileName];
+      const lastIndex = activeTabId.lastIndexOf("-");
+      let filterData = [];
+      if (lastIndex !== -1) {
+        const lastWord = activeTabId.substring(lastIndex + 1);
+        const activeTabData = jsonFileData[fileType][lastWord];
+        if (activeTabData.length) {
+          filterData = activeTabData.filter((item: string) =>
+            item.toLowerCase().includes(searchStr)
+          );
+        }
+      }
+      return filterData;
+    } else {
+      return [];
+    }
+  }
   const handleClick = (value: string) => {
     if (value === activeElement) {
       setActiveElement("");
@@ -102,7 +183,6 @@ function Home(): JSX.Element {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files || files.length === 0) {
-      console.log("No file selected");
       return;
     }
     if (Array.from(files).length > 10 || uploadedFileList.length > 9) {
@@ -174,6 +254,10 @@ function Home(): JSX.Element {
         { conversionFormat: format, fileName: fileName },
       ]);
     }
+    setExtensionName(format);
+    setFilterFormattedList([]);
+    setSearchQuery("");
+
     setIsErrorShow(true);
   };
 
@@ -232,13 +316,15 @@ function Home(): JSX.Element {
   };
 
   // Active and deactive tabs navigation
-  const handleVerticalClick = (tabName: string, ObjectKeyName: string) => {
+  const handleVerticalClick = (
+    tabName: string,
+    ObjectKeyName: string
+    // keyName: string
+  ) => {
     const updatedState = { ...verticalActive };
     updatedState[ObjectKeyName] = tabName;
     setVerticalActive(updatedState);
   };
-
-  console.log(conversionFormat);
 
   return (
     <>
@@ -255,30 +341,6 @@ function Home(): JSX.Element {
             <>
               {/* UI after file upload */}
               <div className="mt-5 border rounded-lg">
-                {/* <div className="w-fit">
-                  <div className="custom-import primary-btn primary-btn-outlined border-none rounded-lg">
-                    <span className="label px-4 text-nowrap flex items-center text-sm">
-                      {" "}
-                      <span>
-                        <img
-                          className="mr-1"
-                          src="../../static/img/ic-add-green.svg"
-                          style={{ marginBottom: "4px" }}
-                        />
-                      </span>{" "}
-                      Add more Files
-                    </span>
-                    <span className="label-file"></span>
-                    <input
-                      className="import-field"
-                      type="file"
-                      name="name"
-                      multiple
-                      onChange={(e: any) => handleFileUpload(e)}
-                    />
-                  </div>
-                </div> */}
-
                 <div>
                   {uploadedFileList.map((file: FileDetails, index: number) => (
                     <div
@@ -305,7 +367,7 @@ function Home(): JSX.Element {
                                   : "error-btn"
                               }`}
                             >
-                              {conversionFormat &&
+                              {!!conversionFormat &&
                               conversionFormat.length > 0 &&
                               conversionFormat.some(
                                 (e: ConversionFormat) =>
@@ -359,6 +421,18 @@ function Home(): JSX.Element {
                                       type="text"
                                       placeholder="Search"
                                       className="w-full"
+                                      // value={
+                                      //   queryObject === file.fileName
+                                      //     ? searchQuery
+                                      //     : ""
+                                      // }
+                                      onChange={(e: any) =>
+                                        handleSearchPossibleFormat(
+                                          file.fileName,
+                                          e.target.value,
+                                          file.fileExtension
+                                        )
+                                      }
                                     />
 
                                     <svg
@@ -383,90 +457,123 @@ function Home(): JSX.Element {
                               </div>
 
                               <div className="flex items-start">
-                                {/* tabs */}
-                                <TEDropdownItem preventCloseOnClick>
-                                  {Object.entries(possibleFormat).map(
-                                    ([key, formats], index) =>
-                                      file.fileExtension === key && (
-                                        <React.Fragment key={index}>
-                                          <TETabs
-                                            vertical
-                                            className="tabs-heading"
+                                {searchQuery &&
+                                queryObject === file.fileName ? (
+                                  <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none`">
+                                    {!!filterFormattedList &&
+                                      !!filterFormattedList.length &&
+                                      filterFormattedList.map(
+                                        (item: any, idx: number) => (
+                                          <button
+                                            key={`${idx}`}
+                                            type="button"
+                                            className={`btn px-3 py-1 btn-custom mx-1 my-1`}
+                                            onClick={() =>
+                                              handleChooseConversion(
+                                                item,
+                                                file.fileName
+                                              )
+                                            }
                                           >
-                                            {Object.keys(formats).map(
-                                              (keyName, idx) => (
-                                                <TETabsItem
-                                                  className={`${
+                                            {item.toUpperCase()}
+                                          </button>
+                                        )
+                                      )}
+                                  </TEDropdownItem>
+                                ) : (
+                                  <>
+                                    {/* tabs */}
+                                    <TEDropdownItem preventCloseOnClick>
+                                      {Object.entries(possibleFormat).map(
+                                        ([key, formats], index) =>
+                                          file.fileExtension === key && (
+                                            <React.Fragment key={index}>
+                                              <TETabs
+                                                vertical
+                                                className="tabs-heading"
+                                              >
+                                                {Object.keys(formats).map(
+                                                  (keyName, idx) => (
+                                                    <TETabsItem
+                                                      className={`${
+                                                        verticalActive[
+                                                          file.fileName
+                                                        ] ===
+                                                        `tab-${file.fileName}-1-${keyName}`
+                                                          ? "primary-active"
+                                                          : ""
+                                                      }`}
+                                                      key={idx}
+                                                      onClick={() =>
+                                                        handleVerticalClick(
+                                                          `tab-${file.fileName}-1-${keyName}`,
+                                                          file.fileName
+                                                        )
+                                                      }
+                                                      active={
+                                                        verticalActive ===
+                                                        `tab-${file.fileName}-1-${keyName}`
+                                                      }
+                                                    >
+                                                      {keyName}
+                                                    </TETabsItem>
+                                                  )
+                                                )}
+                                              </TETabs>
+                                            </React.Fragment>
+                                          )
+                                      )}
+                                    </TEDropdownItem>
+
+                                    <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none`">
+                                      <TETabsContent>
+                                        {Object.entries(possibleFormat).map(
+                                          ([key, formats], index) =>
+                                            file.fileExtension === key &&
+                                            Object.entries(formats).map(
+                                              (
+                                                [keyName, possibleFormats],
+                                                idx
+                                              ) => (
+                                                <TETabsPane
+                                                  className="gap-4"
+                                                  key={`${idx}`}
+                                                  show={
                                                     verticalActive[
                                                       file.fileName
                                                     ] ===
                                                     `tab-${file.fileName}-1-${keyName}`
-                                                      ? "primary-active"
-                                                      : ""
-                                                  }`}
-                                                  key={idx}
-                                                  onClick={() =>
-                                                    handleVerticalClick(
-                                                      `tab-${file.fileName}-1-${keyName}`,
-                                                      file.fileName
-                                                    )
-                                                  }
-                                                  active={
-                                                    verticalActive ===
-                                                    `tab-${file.fileName}-1-${keyName}`
                                                   }
                                                 >
-                                                  {keyName}
-                                                </TETabsItem>
+                                                  {possibleFormats.map(
+                                                    (
+                                                      fileExtension,
+                                                      innerIdx
+                                                    ) => (
+                                                      <button
+                                                        key={`${index}-${idx}-${innerIdx}`}
+                                                        type="button"
+                                                        className="btn px-3 py-1 btn-custom mx-1 my-1"
+                                                        onClick={() =>
+                                                          handleChooseConversion(
+                                                            fileExtension,
+                                                            file.fileName
+                                                          )
+                                                        }
+                                                      >
+                                                        {fileExtension.toUpperCase()}
+                                                      </button>
+                                                    )
+                                                  )}
+                                                </TETabsPane>
                                               )
-                                            )}
-                                          </TETabs>
-                                        </React.Fragment>
-                                      )
-                                  )}
-                                </TEDropdownItem>
-
-                                <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none`">
-                                  <TETabsContent>
-                                    {Object.entries(possibleFormat).map(
-                                      ([key, formats], index) =>
-                                        file.fileExtension === key &&
-                                        Object.entries(formats).map(
-                                          ([keyName, possibleFormats], idx) => (
-                                            <TETabsPane
-                                              className="gap-4"
-                                              key={`${idx}`}
-                                              show={
-                                                verticalActive[
-                                                  file.fileName
-                                                ] ===
-                                                `tab-${file.fileName}-1-${keyName}`
-                                              }
-                                            >
-                                              {possibleFormats.map(
-                                                (fileExtension, innerIdx) => (
-                                                  <button
-                                                    key={`${index}-${idx}-${innerIdx}`}
-                                                    type="button"
-                                                    className="btn px-3 py-1 btn-custom mx-1 my-1"
-                                                    onClick={() =>
-                                                      handleChooseConversion(
-                                                        fileExtension,
-                                                        file.fileName
-                                                      )
-                                                    }
-                                                  >
-                                                    {fileExtension.toUpperCase()}
-                                                  </button>
-                                                )
-                                              )}
-                                            </TETabsPane>
-                                          )
-                                        )
-                                    )}
-                                  </TETabsContent>
-                                </TEDropdownItem>
-                                {/* tabs end */}
+                                            )
+                                        )}
+                                      </TETabsContent>
+                                    </TEDropdownItem>
+                                    {/* tabs end */}
+                                  </>
+                                )}
                               </div>
                             </div>
                           </TEDropdownMenu>
@@ -557,7 +664,7 @@ function Home(): JSX.Element {
                             >
                               {extensionName
                                 ? extensionName.toUpperCase()
-                                : "..."}
+                                : "select"}
                               <span className="ml-2 [&>svg]:w-5 w-2 absolute right-4">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -584,6 +691,19 @@ function Home(): JSX.Element {
                                       type="text"
                                       placeholder="Search"
                                       className="w-full"
+                                      value={
+                                        queryObject ===
+                                        uploadedFileList[0].fileName
+                                          ? searchQuery
+                                          : ""
+                                      }
+                                      onChange={(e: any) =>
+                                        handleSearchPossibleFormat(
+                                          uploadedFileList[0].fileName,
+                                          e.target.value,
+                                          uploadedFileList[0].fileExtension
+                                        )
+                                      }
                                     />
 
                                     <svg
@@ -608,93 +728,127 @@ function Home(): JSX.Element {
                               </div>
 
                               <div className="flex items-start">
-                                {/* tabs */}
-                                <TEDropdownItem preventCloseOnClick>
-                                  {Object.entries(possibleFormat).map(
-                                    ([key, formats], index) =>
-                                      uploadedFileList[0].fileExtension ===
-                                        key && (
-                                        <React.Fragment key={index}>
-                                          <TETabs
-                                            vertical
-                                            className="tabs-heading"
+                                {searchQuery &&
+                                queryObject === uploadedFileList[0].fileName ? (
+                                  <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none`">
+                                    {!!filterFormattedList &&
+                                      !!filterFormattedList.length &&
+                                      filterFormattedList.map(
+                                        (item: any, idx: number) => (
+                                          <button
+                                            key={`${idx}`}
+                                            type="button"
+                                            className="btn px-3 py-1 btn-custom mx-1 my-1"
+                                            onClick={() =>
+                                              handleChooseConversion(
+                                                item,
+                                                uploadedFileList[0].fileName
+                                              )
+                                            }
                                           >
-                                            {Object.keys(formats).map(
-                                              (keyName, idx) => (
-                                                <TETabsItem
-                                                  className={`${
+                                            {item.toUpperCase()}
+                                          </button>
+                                        )
+                                      )}
+                                  </TEDropdownItem>
+                                ) : (
+                                  <>
+                                    {/* tabs */}
+                                    <TEDropdownItem preventCloseOnClick>
+                                      {Object.entries(possibleFormat).map(
+                                        ([key, formats], index) =>
+                                          uploadedFileList[0].fileExtension ===
+                                            key && (
+                                            <React.Fragment key={index}>
+                                              <TETabs
+                                                vertical
+                                                className="tabs-heading"
+                                              >
+                                                {Object.keys(formats).map(
+                                                  (keyName, idx) => (
+                                                    <TETabsItem
+                                                      className={`${
+                                                        verticalActive[
+                                                          uploadedFileList[0]
+                                                            .fileName
+                                                        ] ===
+                                                        `tab-${uploadedFileList[0].fileName}-1-${keyName}`
+                                                          ? "primary-active"
+                                                          : ""
+                                                      }`}
+                                                      key={idx}
+                                                      onClick={() =>
+                                                        handleVerticalClick(
+                                                          `tab-${uploadedFileList[0].fileName}-1-${keyName}`,
+                                                          uploadedFileList[0]
+                                                            .fileName
+                                                        )
+                                                      }
+                                                      active={
+                                                        verticalActive ===
+                                                        `tab-${uploadedFileList[0].fileName}-1-${keyName}`
+                                                      }
+                                                    >
+                                                      {keyName}
+                                                    </TETabsItem>
+                                                  )
+                                                )}
+                                              </TETabs>
+                                            </React.Fragment>
+                                          )
+                                      )}
+                                    </TEDropdownItem>
+
+                                    <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none`">
+                                      <TETabsContent>
+                                        {Object.entries(possibleFormat).map(
+                                          ([key, formats], index) =>
+                                            uploadedFileList[0]
+                                              .fileExtension === key &&
+                                            Object.entries(formats).map(
+                                              (
+                                                [keyName, possibleFormats],
+                                                idx
+                                              ) => (
+                                                <TETabsPane
+                                                  className="gap-4"
+                                                  key={`${idx}`}
+                                                  show={
                                                     verticalActive[
                                                       uploadedFileList[0]
                                                         .fileName
                                                     ] ===
                                                     `tab-${uploadedFileList[0].fileName}-1-${keyName}`
-                                                      ? "primary-active"
-                                                      : ""
-                                                  }`}
-                                                  key={idx}
-                                                  onClick={() =>
-                                                    handleVerticalClick(
-                                                      `tab-${uploadedFileList[0].fileName}-1-${keyName}`,
-                                                      uploadedFileList[0]
-                                                        .fileName
-                                                    )
-                                                  }
-                                                  active={
-                                                    verticalActive ===
-                                                    `tab-${uploadedFileList[0].fileName}-1-${keyName}`
                                                   }
                                                 >
-                                                  {keyName}
-                                                </TETabsItem>
+                                                  {possibleFormats.map(
+                                                    (
+                                                      fileExtension,
+                                                      innerIdx
+                                                    ) => (
+                                                      <button
+                                                        key={`${index}-${idx}-${innerIdx}`}
+                                                        type="button"
+                                                        className="btn px-3 py-1 btn-custom mx-1 my-1"
+                                                        onClick={() =>
+                                                          handleSameFileExtensionConversion(
+                                                            fileExtension
+                                                          )
+                                                        }
+                                                      >
+                                                        {fileExtension.toUpperCase()}
+                                                      </button>
+                                                    )
+                                                  )}
+                                                </TETabsPane>
                                               )
-                                            )}
-                                          </TETabs>
-                                        </React.Fragment>
-                                      )
-                                  )}
-                                </TEDropdownItem>
-
-                                <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none`">
-                                  <TETabsContent>
-                                    {Object.entries(possibleFormat).map(
-                                      ([key, formats], index) =>
-                                        uploadedFileList[0].fileExtension ===
-                                          key &&
-                                        Object.entries(formats).map(
-                                          ([keyName, possibleFormats], idx) => (
-                                            <TETabsPane
-                                              className="gap-4"
-                                              key={`${idx}`}
-                                              show={
-                                                verticalActive[
-                                                  uploadedFileList[0].fileName
-                                                ] ===
-                                                `tab-${uploadedFileList[0].fileName}-1-${keyName}`
-                                              }
-                                            >
-                                              {possibleFormats.map(
-                                                (fileExtension, innerIdx) => (
-                                                  <button
-                                                    key={`${index}-${idx}-${innerIdx}`}
-                                                    type="button"
-                                                    className="btn px-3 py-1 btn-custom mx-1 my-1"
-                                                    onClick={() =>
-                                                      handleSameFileExtensionConversion(
-                                                        fileExtension
-                                                      )
-                                                    }
-                                                  >
-                                                    {fileExtension.toUpperCase()}
-                                                  </button>
-                                                )
-                                              )}
-                                            </TETabsPane>
-                                          )
-                                        )
-                                    )}
-                                  </TETabsContent>
-                                </TEDropdownItem>
-                                {/* tabs end */}
+                                            )
+                                        )}
+                                      </TETabsContent>
+                                    </TEDropdownItem>
+                                    {/* tabs end */}
+                                  </>
+                                )}
                               </div>
                             </div>
                             <></>

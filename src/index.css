@@ -265,6 +265,11 @@ header .site-search ul li,
   transform: scale(1.05);
 }
 
+.custom-drop-menu .btn-custom-selected {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
 /* Cards */
 .card-box {
   box-shadow: 0 3px 24px rgba(0, 0, 0, 0.08);
