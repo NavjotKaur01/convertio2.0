@@ -1,4 +1,3 @@
-import { TECollapse } from "tw-elements-react";
 import React, { useEffect, useState } from "react";
 import {
   TEDropdown,
@@ -26,7 +25,6 @@ interface ConversionFormat {
 }
 
 function ImageConverter(): JSX.Element {
-  const [activeElement, setActiveElement] = useState<string>("");
   const [uploadedFileList, setUploadedFileList] = useState<FileDetails[]>([]);
   const [conversionFormat, setConversionFormat] = useState<ConversionFormat[]>(
     []
@@ -170,15 +168,6 @@ function ImageConverter(): JSX.Element {
       return [];
     }
   }
-
-  // handle FAQ show and hide
-  const handleClick = (value: string) => {
-    if (value === activeElement) {
-      setActiveElement("");
-    } else {
-      setActiveElement(value);
-    }
-  };
 
   // handle multiple file uploading
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {

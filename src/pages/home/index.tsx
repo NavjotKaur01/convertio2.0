@@ -40,6 +40,7 @@ function Home(): JSX.Element {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [queryObject, setQueryObject] = useState<string>("");
   const [filterFormattedList, setFilterFormattedList] = useState<string[]>([]);
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
     if (Object.keys(possibleFormat).length) {
@@ -186,12 +187,15 @@ function Home(): JSX.Element {
     if (!files || files.length === 0) {
       return;
     }
-    if (Array.from(files).length > 10 || uploadedFileList.length > 9) {
+
+    const newFilesArray = Array.from(files);
+    const totalFilesCount = uploadedFileList.length + newFilesArray.length;
+
+    if (totalFilesCount > 10) {
       event.preventDefault();
-      console.log(`Cannot upload files more than 10`);
+      setErrorMsg(`Cannot upload more than 10 files.`);
       return;
     }
-
     const fd = new FormData();
     const updatedFiles: FileDetails[] = [];
     for (let i = 0; i < files.length; i++) {
@@ -211,6 +215,7 @@ function Home(): JSX.Element {
       fd.append(`file${i + 1}`, files[i]);
     }
     setUploadedFileList((prevState) => [...prevState, ...updatedFiles]);
+    setErrorMsg("");
     axios
       .post("http://httpbin.org/post", fd, {
         headers: {
@@ -279,6 +284,9 @@ function Home(): JSX.Element {
     );
     setConversionFormat(updatedConversionFormatted);
     setUploadedFileList(updatedDetails);
+    if (uploadedFileList.length <= 10) {
+      setErrorMsg("");
+    }
   };
 
   // handle same file extension conversion
@@ -874,6 +882,8 @@ function Home(): JSX.Element {
                           </TEDropdownMenu>
                         </TEDropdown>
                       </div>
+                    ) : errorMsg ? (
+                      <p className="text-red-500">{errorMsg}</p>
                     ) : (
                       <p> Added {uploadedFileList.length} files</p>
                     )}
