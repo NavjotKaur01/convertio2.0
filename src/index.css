@@ -333,6 +333,10 @@ header .site-search ul li,
 .tabs-heading .primary-active {
   color: var(--primary-color) !important;
   border-color: var(--primary-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
 }
 
 .tabs-heading li a {

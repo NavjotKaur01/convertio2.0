@@ -496,6 +496,7 @@ function ImageConverter(): JSX.Element {
                                                 vertical
                                                 className="tabs-heading"
                                               >
+                                                
                                                 {Object.keys(formats).map(
                                                   (keyName, idx) => (
                                                     <TETabsItem
@@ -520,6 +521,7 @@ function ImageConverter(): JSX.Element {
                                                       }
                                                     >
                                                       {keyName}
+                                                      <img className="ms-2" src="../../static/img/right-arrow.svg" alt="" />
                                                     </TETabsItem>
                                                   )
                                                 )}

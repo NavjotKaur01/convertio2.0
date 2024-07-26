@@ -518,11 +518,12 @@ function Home(): JSX.Element {
                                                           ? "primary-active"
                                                           : ""
                                                       }`}
+                                                      
                                                       key={idx}
                                                       onClick={() =>
                                                         handleVerticalClick(
                                                           `tab-${file.fileName}-1-${keyName}`,
-                                                          file.fileName
+                                                          file.fileName 
                                                         )
                                                       }
                                                       active={
