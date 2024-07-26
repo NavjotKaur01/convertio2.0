@@ -62,7 +62,7 @@ function Header(): JSX.Element {
                 <Link to="#">Heif Converter </Link>
               </li>
               <li>
-                <Link to="#">Image Converter</Link>
+                <Link to="/image-converter">Image Converter</Link>
               </li>
             </ul>
           </div>
