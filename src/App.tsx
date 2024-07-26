@@ -3,6 +3,7 @@ import Home from "./pages/home";
 import Header from "./components/header";
 import Footer from "./components/footer";
 import ImageConverter from "./pages/imageConverter";
+import Download from "./pages/download";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/image-converter" element={<ImageConverter />} />
+        <Route path="/download" element={<Download />} />
       </Routes>
       <Footer />
     </>

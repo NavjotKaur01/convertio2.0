@@ -13,6 +13,7 @@ import {
 } from "tw-elements-react";
 import axios from "axios";
 import possibleFormat from "../../utilities/possibleFileFormat.json";
+import { useNavigate } from "react-router-dom";
 
 interface FileDetails {
   fileName: string;
@@ -41,6 +42,7 @@ function Home(): JSX.Element {
   const [queryObject, setQueryObject] = useState<string>("");
   const [filterFormattedList, setFilterFormattedList] = useState<string[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (Object.keys(possibleFormat).length) {
@@ -341,6 +343,16 @@ function Home(): JSX.Element {
     setVerticalActive(updatedState);
   };
 
+  // handle convert file
+  const handleConvert = () => {
+    if (uploadedFileList.length === 0) {
+      setErrorMsg("No files uploaded.");
+      return;
+    }
+    localStorage.setItem("files", JSON.stringify(uploadedFileList));
+    navigate("/download");
+  };
+
   return (
     <>
       <div className="lg:container mx-auto grid grid-cols-1 lg:grid-cols-5 mb-8 mt-24">
@@ -518,12 +530,11 @@ function Home(): JSX.Element {
                                                           ? "primary-active"
                                                           : ""
                                                       }`}
-                                                      
                                                       key={idx}
                                                       onClick={() =>
                                                         handleVerticalClick(
                                                           `tab-${file.fileName}-1-${keyName}`,
-                                                          file.fileName 
+                                                          file.fileName
                                                         )
                                                       }
                                                       active={
@@ -888,7 +899,10 @@ function Home(): JSX.Element {
                       <p> Added {uploadedFileList.length} files</p>
                     )}
                   </div>
-                  <div className="text-xl font-bold text-white flex items-center convert-btn cursor-pointer rounded-lg">
+                  <div
+                    className="text-xl font-bold text-white flex items-center convert-btn cursor-pointer rounded-lg"
+                    onClick={() => handleConvert()}
+                  >
                     Convert
                     <img
                       src="../../static/img/ic-right-arrow.svg"
