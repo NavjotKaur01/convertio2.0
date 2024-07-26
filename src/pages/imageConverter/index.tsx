@@ -38,6 +38,7 @@ function ImageConverter(): JSX.Element {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [queryObject, setQueryObject] = useState<string>("");
   const [filterFormattedList, setFilterFormattedList] = useState<string[]>([]);
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
     if (Object.keys(possibleFormat).length) {
@@ -175,12 +176,14 @@ function ImageConverter(): JSX.Element {
     if (!files || files.length === 0) {
       return;
     }
-    if (Array.from(files).length > 10 || uploadedFileList.length > 9) {
+
+    const newFilesArray = Array.from(files);
+    const totalFilesCount = uploadedFileList.length + newFilesArray.length;
+    if (totalFilesCount > 10) {
       event.preventDefault();
-      console.log(`Cannot upload files more than 10`);
+      setErrorMsg(`Cannot upload more than 10 files.`);
       return;
     }
-
     const fd = new FormData();
     const updatedFiles: FileDetails[] = [];
     for (let i = 0; i < files.length; i++) {
@@ -200,6 +203,7 @@ function ImageConverter(): JSX.Element {
       fd.append(`file${i + 1}`, files[i]);
     }
     setUploadedFileList((prevState) => [...prevState, ...updatedFiles]);
+    setErrorMsg("");
     axios
       .post("http://httpbin.org/post", fd, {
         headers: {
@@ -268,6 +272,9 @@ function ImageConverter(): JSX.Element {
     );
     setConversionFormat(updatedConversionFormatted);
     setUploadedFileList(updatedDetails);
+    if (uploadedFileList.length <= 10) {
+      setErrorMsg("");
+    }
   };
 
   // handle same file extension conversion
@@ -329,8 +336,10 @@ function ImageConverter(): JSX.Element {
         <div className="bg-gray-50 h-36 lg:h-full mx-5 rounded-lg"></div>
         <div className="lg:col-span-3 py-2 px-5">
           <div className="mb-12 text-center">
-            <h1 className="text-4xl font-bold">Image Converter</h1>
-            <p className="text-sm pt-2">Convert images online, for free.</p>
+            <h1 className="text-4xl font-bold">File Converter</h1>
+            <p className="text-sm pt-2">
+              Easily convert files from one format to another, online.
+            </p>
           </div>
           {!!uploadedFileList && !!uploadedFileList.length ? (
             <>
@@ -861,6 +870,8 @@ function ImageConverter(): JSX.Element {
                           </TEDropdownMenu>
                         </TEDropdown>
                       </div>
+                    ) : errorMsg ? (
+                      <p className="text-red-500">{errorMsg}</p>
                     ) : (
                       <p> Added {uploadedFileList.length} files</p>
                     )}
@@ -902,9 +913,13 @@ function ImageConverter(): JSX.Element {
                       onChange={(e: any) => handleFileUpload(e)}
                     />
                   </div>
-                  <p className="mb-0 mt-2 text-white ">
-                    Max. 10 files are allowed
-                  </p>
+                  {!!uploadedFileList && uploadedFileList.length === 0 ? (
+                    <p className="text-red-500">{errorMsg}</p>
+                  ) : (
+                    <p className="mb-0 mt-2 text-white ">
+                      Max. 10 files are allowed
+                    </p>
+                  )}
                 </div>
               </div>
               {/* default File uploader ends */}

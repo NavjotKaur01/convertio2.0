@@ -190,7 +190,6 @@ function Home(): JSX.Element {
 
     const newFilesArray = Array.from(files);
     const totalFilesCount = uploadedFileList.length + newFilesArray.length;
-
     if (totalFilesCount > 10) {
       event.preventDefault();
       setErrorMsg(`Cannot upload more than 10 files.`);
@@ -925,9 +924,13 @@ function Home(): JSX.Element {
                       onChange={(e: any) => handleFileUpload(e)}
                     />
                   </div>
-                  <p className="mb-0 mt-2 text-white ">
-                    Max. 10 files are allowed
-                  </p>
+                  {!!uploadedFileList && uploadedFileList.length === 0 ? (
+                    <p className="text-red-500">{errorMsg}</p>
+                  ) : (
+                    <p className="mb-0 mt-2 text-white ">
+                      Max. 10 files are allowed
+                    </p>
+                  )}
                 </div>
               </div>
               {/* default File uploader ends */}
