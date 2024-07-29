@@ -978,7 +978,7 @@ function ImageConverter(): JSX.Element {
           )}
 
           {/* get-it on-mobile */}
-          <div className="card-box md:p-6 p-3 my-6 rounded-lg">
+          {/* <div className="card-box md:p-6 p-3 my-6 rounded-lg">
             <div>
               <h2 className="font-bold text-center text-xl">
                 Get it on Mobile
@@ -996,7 +996,7 @@ function ImageConverter(): JSX.Element {
                 </span>
               </p>
             </div>
-          </div>
+          </div> */}
 
           {/* how-to-convert-image */}
           <div className="card-box md:p-6 p-3 my-6 rounded-lg">
@@ -1022,11 +1022,7 @@ function ImageConverter(): JSX.Element {
                 </li>
               </ol>
             </div>
-          </div>
-
-          {/*convert-any-image*/}
-          <div className="card-box md:p-6 p-3 my-6 rounded-lg">
-            <div className="grid xl:grid-cols-3 sm:grid-cols-2">
+            <div className="grid xl:grid-cols-3 sm:grid-cols-2 mt-10">
               {/* card-1 */}
               <div>
                 <div>
@@ -1094,47 +1090,98 @@ function ImageConverter(): JSX.Element {
             </div>
           </div>
 
-         {/*valueable-image-tool*/}
-         <div className="card-box md:p-6 p-3 my-6 rounded-lg">
-          <div>
+          {/*valueable-image-tool*/}
+          <div className="card-box md:p-6 p-3 my-6 rounded-lg">
             <div>
-              <h2 className="text-[23px] font-bold px-5 py-4 ">
-              Valuable Image Tools
-              </h2>
-              <div className="px-5 py-4">
-                <p className="text-base">Here is a list of image tools to further edit your images.</p>
-                <ol  className="text-base mt-2 list-decimal px-5 py-4 md:ml-5 ml-1">
-                  <li className="leading-8">
-                    <a href="#" className="text-[var(--primary-color)]">Image-Resizer-</a>
-                    &nbsp;Use this tool to crop unwanted areas from your image
-                  </li>
-                  <li  className="leading-8">
-                    <a href="#" className="text-[var(--primary-color)]">Crop Image-</a>
-                    &nbsp;Quick and easy way to resize an image to any size
-                  </li>
-                  <li  className="leading-8">
-                    <a href="#" className="text-[var(--primary-color)]">Image-Compressor-</a>
-                    &nbsp;Reduce image files size by up to 80 to 90% using this tool
-                  </li>
-                  <li  className="leading-8">
-                    <a href="#" className="text-[var(--primary-color)]">Color-Picker-</a>
-                    &nbsp;Quickly pick a color from the color wheel or from your image online
-                  </li>
-                  <li  className="leading-8">
-                    <a href="#" className="text-[var(--primary-color)]">Image-Enlarger-</a>
-                    &nbsp;A fast way to make your images bigger
-                  </li>
-                </ol>
+              <div>
+                <h2 className="mb-0 " id="headingOne">
+                  <button
+                    className={`${
+                      activeElement === "element2" &&
+                      `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)]  primary-text `
+                    } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left font-bold text-[23px] transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white text-xl `}
+                    type="button"
+                    onClick={() => handleClick("element2")}
+                    aria-expanded="true"
+                    aria-controls="collapseOne"
+                  >
+                    Valuable Image Tools
+                    <span
+                      className={`${
+                        activeElement === "element2"
+                          ? `rotate-[-180deg] -mr-1`
+                          : `rotate-0 fill-[#212529] dark:fill-white`
+                      } ml-auto h-5 w-5 shrink-0 fill-[#336dec] transition-transform duration-200 ease-in-out motion-reduce:transition-none dark:fill-blue-300`}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="h-6 w-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                        />
+                      </svg>
+                    </span>
+                  </button>
+                </h2>
+
+                <TECollapse
+                  show={activeElement !== "element2"}
+                  className="!mt-0 !rounded-b-none !shadow-none"
+                >
+                  <div className="px-5 py-4">
+                    <p className="text-base">
+                      Here is a list of image tools to further edit your images.
+                    </p>
+                    <ol className="text-base mt-2 list-decimal px-5 py-4 md:ml-5 ml-1">
+                      <li className="leading-8">
+                        <a href="#" className="text-[var(--primary-color)]">
+                          Image-Resizer-
+                        </a>
+                        &nbsp;Use this tool to crop unwanted areas from your
+                        image
+                      </li>
+                      <li className="leading-8">
+                        <a href="#" className="text-[var(--primary-color)]">
+                          Crop Image-
+                        </a>
+                        &nbsp;Quick and easy way to resize an image to any size
+                      </li>
+                      <li className="leading-8">
+                        <a href="#" className="text-[var(--primary-color)]">
+                          Image-Compressor-
+                        </a>
+                        &nbsp;Reduce image files size by up to 80 to 90% using
+                        this tool
+                      </li>
+                      <li className="leading-8">
+                        <a href="#" className="text-[var(--primary-color)]">
+                          Color-Picker-
+                        </a>
+                        &nbsp;Quickly pick a color from the color wheel or from
+                        your image online
+                      </li>
+                      <li className="leading-8">
+                        <a href="#" className="text-[var(--primary-color)]">
+                          Image-Enlarger-
+                        </a>
+                        &nbsp;A fast way to make your images bigger
+                      </li>
+                    </ol>
+                  </div>
+                </TECollapse>
               </div>
             </div>
           </div>
 
-
-         </div>
-
-
           <div className="card-box md:p-6 p-3 my-6 rounded-lg">
-            <div id="accordionExample">
+            <div>
               <div className="rounded-none border-neutral-200 bg-white dark:border-neutral-600 dark:bg-neutral-800 ">
                 <h2 className="mb-0 " id="headingOne">
                   <button
