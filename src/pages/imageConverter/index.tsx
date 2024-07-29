@@ -80,7 +80,6 @@ function ImageConverter(): JSX.Element {
       setIsFileExtension(allExtensionsSame);
     }
   }, [uploadedFileList]);
-
   // show error when we select the same file and change specific conversion format
   useEffect(() => {
     if (conversionFormat.length !== 0) {
@@ -105,7 +104,15 @@ function ImageConverter(): JSX.Element {
 
   useEffect(() => {
     if (extensionName) {
-      setIsErrorShow(false);
+      const fileExtensions = conversionFormat.map(
+        (file: ConversionFormat | undefined) => file?.conversionFormat || ""
+      );
+      const allExtensionsSame = fileExtensions.every(
+        (ext: string) => ext === extensionName
+      );
+      if (!allExtensionsSame) {
+        setIsErrorShow(true);
+      }
     }
   }, [extensionName]);
 
@@ -438,11 +445,6 @@ function ImageConverter(): JSX.Element {
                                       type="text"
                                       placeholder="Search"
                                       className="w-full"
-                                      // value={
-                                      //   queryObject === file.fileName
-                                      //     ? searchQuery
-                                      //     : ""
-                                      // }
                                       onChange={(e: any) =>
                                         handleSearchPossibleFormat(
                                           file.fileName,
@@ -999,7 +1001,7 @@ function ImageConverter(): JSX.Element {
                   </button>
                 </h2>
                 <TECollapse
-                  show={true}
+                  show={activeElement !== "element1"}
                   className="!mt-0 !rounded-b-none !shadow-none"
                 >
                   <div className="px-5 py-4">
@@ -1007,7 +1009,10 @@ function ImageConverter(): JSX.Element {
                       {imageFormat &&
                         imageFormat.formats.map(
                           (format: string, indx: number) => (
-                            <li key={indx} className="text-[var(--primary-color)] border-b border-[var(--border-lighter)] text-base p-3">
+                            <li
+                              key={indx}
+                              className="text-[var(--primary-color)] border-b border-[var(--border-lighter)] text-base p-3"
+                            >
                               <Link to="#">
                                 {format.toUpperCase()} Converter
                               </Link>

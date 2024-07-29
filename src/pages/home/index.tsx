@@ -96,7 +96,15 @@ function Home(): JSX.Element {
 
   useEffect(() => {
     if (extensionName) {
-      setIsErrorShow(false);
+      const fileExtensions = conversionFormat.map(
+        (file: ConversionFormat | undefined) => file?.conversionFormat || ""
+      );
+      const allExtensionsSame = fileExtensions.every(
+        (ext: string) => ext === extensionName
+      );
+      if (!allExtensionsSame) {
+        setIsErrorShow(true);
+      }
     }
   }, [extensionName]);
 

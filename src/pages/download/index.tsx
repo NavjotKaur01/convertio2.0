@@ -203,178 +203,181 @@ function Download() {
             </div>
             {!isConverting && (
               <div className="bg-gray-50 mx-5 rounded-lg">
-              <div className="p-6 my-6  rounded-lg card-box">
-                <div className="border border-[var(--light-grey)] ">
-                  <div className="bg-[var(--light-grey)] py-[14px] px-[30px]">
-                    <h3 className="text-[22px] font-bold">
-                      Are you a happy user?
-                    </h3>
-                  </div>
-
-                  {/* div-1 */}
-                  <div className="grid grid-cols-12 xl:gap-14 lg:gap-10 gap-5 w-full sm:px-[30px] px-1 py-5 border-b border-[var(--light-grey)]">
-                    <div className="lg:col-span-4 col-span-12">
-                      <p className="sm:text-base text-sm">
-                        Want more features?
-                      </p>
-                    </div>
-                    <div className="lg:col-span-8 col-span-12">
-                      <button className="flex items-center border border-[var(--primary-color)] sm:px-[7px] px-3 py-[5px] gap-3 rounded">
-                        <div>
-                          <img
-                            className=""
-                            src="/static/img/happy-user/diamond.svg"
-                            style={{}}
-                          />
-                        </div>
-                        <div>
-                          <p className="text-[var(--primary-color)] text-sm">
-                            Upgrade to Pro
-                          </p>
-                        </div>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* div-2 */}
-                  <div className="grid grid-cols-12 xl:gap-14 lg:gap-10 gap-5 w-full sm:px-[30px] px-1 py-5 border-b border-[var(--light-grey)]">
-                    <div className="lg:col-span-4 col-span-8">
-                      <p className="sm:text-base text-sm">Buy more Coffee</p>
-                    </div>
-                    <div className="lg:col-span-8 col-span-12">
-                      <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3 rounded">
-                        <div>
-                          <img
-                            className=""
-                            src="/static/img/happy-user/offer.svg"
-                            style={{}}
-                          />
-                        </div>
-                        <div>
-                          <p className="text-[var(--primary-color)] text-sm">
-                            Donate
-                          </p>
-                        </div>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-12 xl:gap-14 lg:gap-10 gap-5 w-full sm:px-[30px] px-1 py-5 border-b border-[var(--light-grey)]+">
-                    <div className="lg:col-span-4 col-span-8">
-                      <p className="sm:text-base text-sm">Sharing is caring</p>
+                <div className="p-6 my-6  rounded-lg card-box">
+                  <div className="border border-[var(--light-grey)] ">
+                    <div className="bg-[var(--light-grey)] py-[14px] px-[30px]">
+                      <h3 className="text-[22px] font-bold">
+                        Are you a happy user?
+                      </h3>
                     </div>
 
-                    <div className="lg:col-span-8 col-span-12">
-                      <div className="flex items-center flex-wrap gap-5">
-                        {/* button-1 */}
-                        <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3 rounded">
-                          <img
-                            className=""
-                            src="/static/img/happy-user/diamond.svg"
-                            style={{}}
-                          />
-
-                          <p className="text-[var(--primary-color)] text-sm">
-                            Facebook
-                          </p>
-                        </button>
-
-                        {/* button-2*/}
-                        <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3 rounded">
-                          <img
-                            className=""
-                            src="/static/img/happy-user/offer.svg"
-                            style={{}}
-                          />
-
-                          <p className="text-[var(--primary-color)] text-sm">
-                            Twitter
-                          </p>
-                        </button>
-               
-                  
-
-                    {/* button-3*/}
-                    <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3 rounded">
-                      <img
-                        src="/static/img/happy-user/reddit.svg"
-                        style={{}}
-                      />
-
-                      <div>
-                        <p className="text-[var(--primary-color)] text-sm">
-                          Reddit
+                    {/* div-1 */}
+                    <div className="grid grid-cols-12 xl:gap-14 lg:gap-10 gap-5 w-full sm:px-[30px] px-1 py-5 border-b border-[var(--light-grey)]">
+                      <div className="lg:col-span-4 col-span-12">
+                        <p className="sm:text-base text-sm">
+                          Want more features?
                         </p>
                       </div>
-                    </button>
-
-                    {/* button-3*/}
-                    <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3 rounded">
-                      <img
-                        src="/static/img/happy-user/linkedin.svg"
-                        style={{}}
-                      />
-
-                      <p className="text-[var(--primary-color)] text-sm">
-                        Linkedin
-                      </p>
-                    </button>
+                      <div className="lg:col-span-8 col-span-12">
+                        <button className="flex items-center border border-[var(--primary-color)] sm:px-[7px] px-3 py-[5px] gap-3 rounded">
+                          <div>
+                            <img
+                              className=""
+                              src="/static/img/happy-user/diamond.svg"
+                              style={{}}
+                            />
+                          </div>
+                          <div>
+                            <p className="text-[var(--primary-color)] text-sm">
+                              Upgrade to Pro
+                            </p>
+                          </div>
+                        </button>
+                      </div>
                     </div>
+
+                    {/* div-2 */}
+                    <div className="grid grid-cols-12 xl:gap-14 lg:gap-10 gap-5 w-full sm:px-[30px] px-1 py-5 border-b border-[var(--light-grey)]">
+                      <div className="lg:col-span-4 col-span-8">
+                        <p className="sm:text-base text-sm">Buy more Coffee</p>
+                      </div>
+                      <div className="lg:col-span-8 col-span-12">
+                        <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3 rounded">
+                          <div>
+                            <img
+                              className=""
+                              src="/static/img/happy-user/offer.svg"
+                              style={{}}
+                            />
+                          </div>
+                          <div>
+                            <p className="text-[var(--primary-color)] text-sm">
+                              Donate
+                            </p>
+                          </div>
+                        </button>
+                      </div>
                     </div>
-                  </div>
 
-
-                  {/* div-4*/}
-                  <div className="grid grid-cols-12 xl:gap-14 lg:gap-10 gap-5 w-full sm:px-[30px] px-1 py-5 border-b border-[var(--light-grey)] ">
-                    <div className="lg:col-span-4 col-span-8">
-                      <p className="sm:text-base text-sm">Come Back!</p>
-                    </div>
-                    <div className="col-span-8">
-                      <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3 rounded">
-                        <img
-                          className=""
-                          src="/static/img/happy-user/bookmark.svg"
-                          style={{}}
-                        />
-
-                        <p className="text-[var(--primary-color)] text-sm">
-                          Bookmark Page
+                    <div className="grid grid-cols-12 xl:gap-14 lg:gap-10 gap-5 w-full sm:px-[30px] px-1 py-5 border-b border-[var(--light-grey)]+">
+                      <div className="lg:col-span-4 col-span-8">
+                        <p className="sm:text-base text-sm">
+                          Sharing is caring
                         </p>
-                      </button>
-                    </div>
-                  </div>
+                      </div>
 
-                  {/* div-5*/}
-                  <div className="grid grid-cols-12 xl:gap-14 lg:gap-10 gap-5 w-full sm:px-[30px] px-1 py-5 border-b border-[var(--light-grey)]">
-                    <div className="lg:col-span-4 col-span-8">
-                      <p className="sm:text-base text-sm">Link in this tool</p>
+                      <div className="lg:col-span-8 col-span-12">
+                        <div className="flex items-center flex-wrap gap-5">
+                          {/* button-1 */}
+                          <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3 rounded">
+                            <img
+                              className=""
+                              src="/static/img/happy-user/diamond.svg"
+                              style={{}}
+                            />
+
+                            <p className="text-[var(--primary-color)] text-sm">
+                              Facebook
+                            </p>
+                          </button>
+
+                          {/* button-2*/}
+                          <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3 rounded">
+                            <img
+                              className=""
+                              src="/static/img/happy-user/offer.svg"
+                              style={{}}
+                            />
+
+                            <p className="text-[var(--primary-color)] text-sm">
+                              Twitter
+                            </p>
+                          </button>
+
+                          {/* button-3*/}
+                          <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3 rounded">
+                            <img
+                              src="/static/img/happy-user/reddit.svg"
+                              style={{}}
+                            />
+
+                            <div>
+                              <p className="text-[var(--primary-color)] text-sm">
+                                Reddit
+                              </p>
+                            </div>
+                          </button>
+
+                          {/* button-3*/}
+                          <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3 rounded">
+                            <img
+                              src="/static/img/happy-user/linkedin.svg"
+                              style={{}}
+                            />
+
+                            <p className="text-[var(--primary-color)] text-sm">
+                              Linkedin
+                            </p>
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                    <div className="col-span-8">
-                      <div className="flex flex-wrap">
-                        <button className="flex items-center border border-[var(--primary-color)] sm:px-[7px] px-3 py-[5px]  gap-3 rounded-l">
+
+                    {/* div-4*/}
+                    <div className="grid grid-cols-12 xl:gap-14 lg:gap-10 gap-5 w-full sm:px-[30px] px-1 py-5 border-b border-[var(--light-grey)] ">
+                      <div className="lg:col-span-4 col-span-8">
+                        <p className="sm:text-base text-sm">Come Back!</p>
+                      </div>
+                      <div className="col-span-8">
+                        <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3 rounded">
                           <img
                             className=""
-                            src="/static/img/happy-user/link.svg"
+                            src="/static/img/happy-user/bookmark.svg"
                             style={{}}
                           />
-                          <a href="#">
-                            <p className="text-[var(--primary-color)] text-sm">
-                              https://www.freeconverter.com
-                            </p>
-                          </a>
-                        </button>
 
-                        <div className="bg-[var(--primary-color)] rounded-r ">
-                          <a href="#">
-                            <p className="text-white md:px-3 px-1 py-1">Copy</p>
-                          </a>
+                          <p className="text-[var(--primary-color)] text-sm">
+                            Bookmark Page
+                          </p>
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* div-5*/}
+                    <div className="grid grid-cols-12 xl:gap-14 lg:gap-10 gap-5 w-full sm:px-[30px] px-1 py-5 border-b border-[var(--light-grey)]">
+                      <div className="lg:col-span-4 col-span-8">
+                        <p className="sm:text-base text-sm">
+                          Link in this tool
+                        </p>
+                      </div>
+                      <div className="col-span-8">
+                        <div className="flex flex-wrap">
+                          <button className="flex items-center border border-[var(--primary-color)] sm:px-[7px] px-3 py-[5px]  gap-3 rounded-l">
+                            <img
+                              className=""
+                              src="/static/img/happy-user/link.svg"
+                              style={{}}
+                            />
+                            <a href="#">
+                              <p className="text-[var(--primary-color)] text-sm">
+                                https://convertio2-0-red.vercel.app
+                              </p>
+                            </a>
+                          </button>
+
+                          <div className="bg-[var(--primary-color)] rounded-r ">
+                            <a href="#">
+                              <p className="text-white md:px-3 px-1 py-1">
+                                Copy
+                              </p>
+                            </a>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
             )}
 
             {/* UI after file upload ends */}
