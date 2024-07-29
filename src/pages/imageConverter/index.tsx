@@ -966,7 +966,7 @@ function ImageConverter(): JSX.Element {
                   <button
                     className={`${
                       activeElement === "element1" &&
-                      `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)] font-semibold primary-text `
+                      `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)]  primary-text font-bold`
                     } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white text-xl `}
                     type="button"
                     onClick={() => handleClick("element1")}
@@ -1003,11 +1003,11 @@ function ImageConverter(): JSX.Element {
                   className="!mt-0 !rounded-b-none !shadow-none"
                 >
                   <div className="px-5 py-4">
-                    <ul className="grid grid-cols-3">
+                    <ul className="grid md:grid-cols-3  sm:grid-cols-2">
                       {imageFormat &&
                         imageFormat.formats.map(
                           (format: string, indx: number) => (
-                            <li key={indx}>
+                            <li key={indx} className="text-[var(--primary-color)] border-b border-[var(--border-lighter)] text-base p-3">
                               <Link to="#">
                                 {format.toUpperCase()} Converter
                               </Link>
