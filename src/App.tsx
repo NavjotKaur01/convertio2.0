@@ -13,6 +13,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/image-converter" element={<ImageConverter />} />
         <Route path="/download" element={<Download />} />
+        <Route path="/image-converter/download" element={<Download />} />
       </Routes>
       <Footer />
     </>

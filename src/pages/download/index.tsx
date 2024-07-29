@@ -1,6 +1,5 @@
-// Download.js
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Download() {
   const navigate = useNavigate();
@@ -8,11 +7,16 @@ function Download() {
   const [isConverting, setIsConverting] = useState(true);
   const [progress, setProgress] = useState(0);
   const [isDone, setIsDone] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const storedFiles = localStorage.getItem("files");
     if (storedFiles) {
-      navigate("/download");
+      if (location.state === "image-converter") {
+        navigate("/image-converter/download");
+      } else {
+        navigate("/download");
+      }
     } else {
       navigate("/");
     }
@@ -76,7 +80,11 @@ function Download() {
     setFiles(updatedFiles);
     if (updatedFiles.length === 0) {
       localStorage.removeItem("files");
-      navigate("/");
+      if (location.pathname.includes("image-converter")) {
+        navigate("/image-converter");
+      } else {
+        navigate("/");
+      }
     }
   };
 

@@ -14,7 +14,7 @@ import {
 import axios from "axios";
 import possibleFormat from "../../utilities/possibleFileFormat.json";
 import imageFormat from "../../utilities/imageFormat.json";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface FileDetails {
   fileName: string;
@@ -43,6 +43,7 @@ function ImageConverter(): JSX.Element {
   const [queryObject, setQueryObject] = useState<string>("");
   const [filterFormattedList, setFilterFormattedList] = useState<string[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (Object.keys(possibleFormat).length) {
@@ -348,16 +349,21 @@ function ImageConverter(): JSX.Element {
   };
 
   // Active and deactive tabs navigation
-  const handleVerticalClick = (
-    tabName: string,
-    ObjectKeyName: string
-    // keyName: string
-  ) => {
+  const handleVerticalClick = (tabName: string, ObjectKeyName: string) => {
     const updatedState = { ...verticalActive };
     updatedState[ObjectKeyName] = tabName;
     setVerticalActive(updatedState);
   };
 
+  // handle convert file
+  const handleConvert = () => {
+    if (uploadedFileList.length === 0) {
+      setErrorMsg("No files uploaded.");
+      return;
+    }
+    localStorage.setItem("files", JSON.stringify(uploadedFileList));
+    navigate("/image-converter/download", { state: "image-converter" });
+  };
   return (
     <>
       <div className="lg:container mx-auto grid grid-cols-1 lg:grid-cols-5 mb-8 mt-24">
@@ -918,7 +924,10 @@ function ImageConverter(): JSX.Element {
                       <p> Added {uploadedFileList.length} files</p>
                     )}
                   </div>
-                  <div className="text-xl font-bold text-white flex items-center convert-btn cursor-pointer rounded-lg">
+                  <div
+                    className="text-xl font-bold text-white flex items-center convert-btn cursor-pointer rounded-lg"
+                    onClick={() => handleConvert()}
+                  >
                     Convert
                     <img
                       src="../../static/img/ic-right-arrow.svg"
