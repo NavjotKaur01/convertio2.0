@@ -90,7 +90,11 @@ function Home(): JSX.Element {
         setIsErrorShow(true);
       }
     } else {
-      setIsErrorShow(false);
+      if (conversionFormat.length) {
+        setIsErrorShow(false);
+      } else {
+        setIsErrorShow(true);
+      }
     }
   }, [conversionFormat, isErrorShow]);
 
@@ -113,13 +117,20 @@ function Home(): JSX.Element {
     if (uploadedFileList.length > 0 && possibleFormat) {
       const initialActiveState: { [fileName: string]: string } = {};
       uploadedFileList.forEach((file) => {
-        if (possibleFormat.hasOwnProperty(file.fileExtension)) {
-          initialActiveState[file.fileName] = `tab-${file.fileName}-1-images`;
+        const format: string = file.fileExtension;
+        if (possibleFormat.hasOwnProperty(format)) {
+          const formatProperties = jsonFileData[format];
+          const propertyToUse = formatProperties.images
+            ? "images"
+            : "documents";
+          initialActiveState[
+            file.fileName
+          ] = `tab-${file.fileName}-1-${propertyToUse}`;
         }
       });
       setVerticalActive(initialActiveState);
     }
-  }, [uploadedFileList, possibleFormat]);
+  }, [uploadedFileList]);
 
   const handleSearchPossibleFormat = (
     fileName: string,
@@ -197,7 +208,6 @@ function Home(): JSX.Element {
     if (!files || files.length === 0) {
       return;
     }
-
     const newFilesArray = Array.from(files);
     const totalFilesCount = uploadedFileList.length + newFilesArray.length;
     if (totalFilesCount > 10) {
@@ -292,10 +302,8 @@ function Home(): JSX.Element {
   };
 
   // Remove uploaded file
-  const handleRemoveRow = (fileName: string) => {
-    const updatedDetails = uploadedFileList.filter(
-      (file: FileDetails) => file.fileName !== fileName
-    );
+  const handleRemoveRow = (fileName: string, idx: number) => {
+    const updatedDetails = uploadedFileList.filter((_, index) => index !== idx);
     const updatedConversionFormatted = conversionFormat.filter(
       (conversion: ConversionFormat) => conversion.fileName !== fileName
     );
@@ -365,10 +373,13 @@ function Home(): JSX.Element {
       setErrorMsg("No files uploaded.");
       return;
     }
-    localStorage.setItem("files", JSON.stringify(uploadedFileList));
-    navigate("/download");
+    if (conversionFormat.length) {
+      localStorage.setItem("files", JSON.stringify(uploadedFileList));
+      navigate("/download");
+    } else {
+      setIsErrorShow(true);
+    }
   };
-
   return (
     <>
       <div className="lg:container mx-auto grid grid-cols-1 lg:grid-cols-5 mb-8 mt-24">
@@ -641,7 +652,7 @@ function Home(): JSX.Element {
                       {/* close button */}
                       <div className="file-list-item">
                         <svg
-                          onClick={() => handleRemoveRow(file.fileName)}
+                          onClick={() => handleRemoveRow(file.fileName, index)}
                           xmlns="http://www.w3.org/2000/svg"
                           width="1.5em"
                           height="1.5em"
