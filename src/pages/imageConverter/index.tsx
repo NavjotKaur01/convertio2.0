@@ -9,9 +9,12 @@ import {
   TETabsContent,
   TETabsItem,
   TETabsPane,
+  TECollapse,
 } from "tw-elements-react";
 import axios from "axios";
 import possibleFormat from "../../utilities/possibleFileFormat.json";
+import imageFormat from "../../utilities/imageFormat.json";
+import { Link } from "react-router-dom";
 
 interface FileDetails {
   fileName: string;
@@ -25,6 +28,7 @@ interface ConversionFormat {
 }
 
 function ImageConverter(): JSX.Element {
+  const [activeElement, setActiveElement] = useState<string>("");
   const [uploadedFileList, setUploadedFileList] = useState<FileDetails[]>([]);
   const [conversionFormat, setConversionFormat] = useState<ConversionFormat[]>(
     []
@@ -54,6 +58,15 @@ function ImageConverter(): JSX.Element {
       setFilterFormattedList(s);
     }
   }, [searchResults]);
+
+  // handle FAQ show and hide
+  const handleClick = (value: string) => {
+    if (value === activeElement) {
+      setActiveElement("");
+    } else {
+      setActiveElement(value);
+    }
+  };
 
   //UseEffect for uploadedFileList
   useEffect(() => {
@@ -946,6 +959,67 @@ function ImageConverter(): JSX.Element {
               {/* default File uploader ends */}
             </>
           )}
+          <div className="card-box p-6 my-6 rounded-lg">
+            <div id="accordionExample">
+              <div className="rounded-none border-neutral-200 bg-white dark:border-neutral-600 dark:bg-neutral-800 ">
+                <h2 className="mb-0 " id="headingOne">
+                  <button
+                    className={`${
+                      activeElement === "element1" &&
+                      `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)] font-semibold primary-text `
+                    } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white text-xl `}
+                    type="button"
+                    onClick={() => handleClick("element1")}
+                    aria-expanded="true"
+                    aria-controls="collapseOne"
+                  >
+                    Specific image converters
+                    <span
+                      className={`${
+                        activeElement === "element1"
+                          ? `rotate-[-180deg] -mr-1`
+                          : `rotate-0 fill-[#212529] dark:fill-white`
+                      } ml-auto h-5 w-5 shrink-0 fill-[#336dec] transition-transform duration-200 ease-in-out motion-reduce:transition-none dark:fill-blue-300`}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="h-6 w-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                        />
+                      </svg>
+                    </span>
+                  </button>
+                </h2>
+                <TECollapse
+                  show={true}
+                  className="!mt-0 !rounded-b-none !shadow-none"
+                >
+                  <div className="px-5 py-4">
+                    <ul className="grid grid-cols-3">
+                      {imageFormat &&
+                        imageFormat.formats.map(
+                          (format: string, indx: number) => (
+                            <li key={indx}>
+                              <Link to="#">
+                                {format.toUpperCase()} Converter
+                              </Link>
+                            </li>
+                          )
+                        )}
+                    </ul>
+                  </div>
+                </TECollapse>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="bg-gray-50 h-36 lg:h-full mx-5 rounded-lg"></div>
