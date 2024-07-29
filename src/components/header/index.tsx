@@ -49,8 +49,8 @@ function Header(): JSX.Element {
       <div className="navbar bg-white z-30">
         {/* Destop design */}
         <nav className="flex lg:container px-5 lg:px-10 mx-auto justify-between py-4">
-          <div className="flex items-center">
-            <Link className="text-xl mr-4 font-semibold" to="#">
+          <div className="flex items-center xl:gap-72 gap-10">
+            <Link className="text-xl lg:mx-24 font-semibold" to="#">
               logo
             </Link>
             <ul className="gap-10 items-center hidden lg:flex">
@@ -66,7 +66,7 @@ function Header(): JSX.Element {
               </li>
             </ul>
           </div>
-          <div className="search-bar-main relative hidden lg:block">
+          <div className="search-bar-main relative hidden lg:block lg:ml-10">
             {/* Search Bar */}
             <div className="search-bar-view relative">
               <input
