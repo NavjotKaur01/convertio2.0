@@ -496,7 +496,6 @@ function ImageConverter(): JSX.Element {
                                                 vertical
                                                 className="tabs-heading"
                                               >
-                                                
                                                 {Object.keys(formats).map(
                                                   (keyName, idx) => (
                                                     <TETabsItem
@@ -521,7 +520,16 @@ function ImageConverter(): JSX.Element {
                                                       }
                                                     >
                                                       {keyName}
-                                                      <img className="ms-2" src="../../static/img/right-arrow.svg" alt="" />
+                                                      {verticalActive[
+                                                        file.fileName
+                                                      ] ===
+                                                        `tab-${file.fileName}-1-${keyName}` && (
+                                                        <img
+                                                          className="ms-2"
+                                                          src="../../static/img/right-arrow.svg"
+                                                          alt=""
+                                                        />
+                                                      )}
                                                     </TETabsItem>
                                                   )
                                                 )}
@@ -806,7 +814,18 @@ function ImageConverter(): JSX.Element {
                                                         `tab-${uploadedFileList[0].fileName}-1-${keyName}`
                                                       }
                                                     >
-                                                      {keyName}
+                                                      {keyName}{" "}
+                                                      {verticalActive[
+                                                        uploadedFileList[0]
+                                                          .fileName
+                                                      ] ===
+                                                        `tab-${uploadedFileList[0].fileName}-1-${keyName}` && (
+                                                        <img
+                                                          className="ms-2"
+                                                          src="../../static/img/right-arrow.svg"
+                                                          alt=""
+                                                        />
+                                                      )}
                                                     </TETabsItem>
                                                   )
                                                 )}

@@ -448,11 +448,6 @@ function Home(): JSX.Element {
                                       type="text"
                                       placeholder="Search"
                                       className="w-full"
-                                      // value={
-                                      //   queryObject === file.fileName
-                                      //     ? searchQuery
-                                      //     : ""
-                                      // }
                                       onChange={(e: any) =>
                                         handleSearchPossibleFormat(
                                           file.fileName,
@@ -542,7 +537,17 @@ function Home(): JSX.Element {
                                                         `tab-${file.fileName}-1-${keyName}`
                                                       }
                                                     >
-                                                      {keyName}
+                                                      {keyName}{" "}
+                                                      {verticalActive[
+                                                        file.fileName
+                                                      ] ===
+                                                        `tab-${file.fileName}-1-${keyName}` && (
+                                                        <img
+                                                          className="ms-2"
+                                                          src="../../static/img/right-arrow.svg"
+                                                          alt=""
+                                                        />
+                                                      )}
                                                     </TETabsItem>
                                                   )
                                                 )}
@@ -828,6 +833,17 @@ function Home(): JSX.Element {
                                                       }
                                                     >
                                                       {keyName}
+                                                      {verticalActive[
+                                                        uploadedFileList[0]
+                                                          .fileName
+                                                      ] ===
+                                                        `tab-${uploadedFileList[0].fileName}-1-${keyName}` && (
+                                                        <img
+                                                          className="ms-2"
+                                                          src="../../static/img/right-arrow.svg"
+                                                          alt=""
+                                                        />
+                                                      )}
                                                     </TETabsItem>
                                                   )
                                                 )}

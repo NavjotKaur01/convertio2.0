@@ -89,10 +89,7 @@ function Download() {
       <div className="bg-gray-50 h-36 lg:h-full mx-5 rounded-lg"></div>
       <div className="lg:col-span-3 py-2 px-5">
         <div className="mb-12 text-center">
-          <h1 className="text-4xl font-bold">File Converter</h1>
-          <p className="text-sm pt-2">
-            Easily convert files from one format to another, online.
-          </p>
+          <h1 className="text-4xl font-bold">Conversion Results</h1>
         </div>
         {!!files && !!files.length && (
           <>
@@ -129,7 +126,11 @@ function Download() {
                     ) : (
                       <div className="text-gray-700">{file.size}</div>
                     )}
-                    <div className="text-white bg-[var(--primary-color)] px-5 py-3 w-28 rounded ml-[-53px]">
+                    <div
+                      className={`text-white bg-[var(--primary-color)] px-5 py-3 w-28 rounded ml-[-53px] ${
+                        isConverting ? "opacity-75" : "opacity-100"
+                      }`}
+                    >
                       <button
                         disabled={isConverting}
                         className={`${isConverting ? "cursor-no-drop" : ""}`}
@@ -200,156 +201,159 @@ function Download() {
                 </div>
               </div>
             </div>
-            <div className="bg-gray-50 mx-5 rounded-lg">
-              <div className="p-6 my-6  rounded-lg card-box">
-                <div className="bg-[var(--light-grey)] py-[14px] px-[30px]">
-                  <h3 className="">Are you a happy user?</h3>
-                </div>
-
-                {/* div-1 */}
-                <div className="grid grid-cols-12 gap-14 w-full px-[14px] py-[30px] border-b border-[var(--light-grey)] rounded">
-                  <div className="col-span-4">
-                    <p className="text-base">Want more features?</p>
-                  </div>
-                  <div className="col-span-8">
-                    <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3">
-                      <div>
-                        <img
-                          className=""
-                          src="/static/img/happy-user/diamond.svg"
-                          style={{}}
-                        />
-                      </div>
-                      <div>
-                        <p className="text-[var(--primary-color)] text-base">
-                          Upgrade to Pro
-                        </p>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-
-                {/* div-2 */}
-                <div className="grid grid-cols-12 gap-14 w-full px-[14px] py-[30px] border-b border-[var(--light-grey)] rounded">
-                  <div className="col-span-4">
-                    <p className="text-base">Buy more Coffee</p>
-                  </div>
-                  <div className="col-span-8">
-                    <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3">
-                      <div>
-                        <img
-                          className=""
-                          src="/static/img/happy-user/offer.svg"
-                          style={{}}
-                        />
-                      </div>
-                      <div>
-                        <p className="text-[var(--primary-color)] text-base">
-                          Donate
-                        </p>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-12 gap-14 w-full px-[14px] py-[30px] border-b border-[var(--light-grey)] rounded">
-                  <div className="col-span-4">
-                    <p className="text-base">Sharing is Caring</p>
+            {!isConverting && (
+              <div className="bg-gray-50 mx-5 rounded-lg">
+                <div className="p-6 my-6  rounded-lg card-box">
+                  <div className="bg-[var(--light-grey)] py-[14px] px-[30px]">
+                    <h3 className="">Are you a happy user?</h3>
                   </div>
 
-                  <div className="col-span-8">
-                    <div className="flex items-center flex-wrap gap-5">
-                      {/* button-1 */}
-                      <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-5 rounded">
+                  {/* div-1 */}
+                  <div className="grid grid-cols-12 gap-14 w-full px-[14px] py-[30px] border-b border-[var(--light-grey)] rounded">
+                    <div className="col-span-4">
+                      <p className="text-base">Want more features?</p>
+                    </div>
+                    <div className="col-span-8">
+                      <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3">
                         <div>
                           <img
                             className=""
-                            src="/static/img/happy-user/fb.svg"
+                            src="/static/img/happy-user/diamond.svg"
                             style={{}}
                           />
                         </div>
                         <div>
                           <p className="text-[var(--primary-color)] text-base">
-                            Facebook
+                            Upgrade to Pro
                           </p>
                         </div>
                       </button>
+                    </div>
+                  </div>
 
-                      {/* button-2*/}
-                      <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-5 rounded">
+                  {/* div-2 */}
+                  <div className="grid grid-cols-12 gap-14 w-full px-[14px] py-[30px] border-b border-[var(--light-grey)] rounded">
+                    <div className="col-span-4">
+                      <p className="text-base">Buy more Coffee</p>
+                    </div>
+                    <div className="col-span-8">
+                      <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3">
                         <div>
                           <img
                             className=""
-                            src="/static/img/happy-user/twitter.svg"
+                            src="/static/img/happy-user/offer.svg"
                             style={{}}
                           />
                         </div>
                         <div>
                           <p className="text-[var(--primary-color)] text-base">
-                            Twitter
+                            Donate
                           </p>
                         </div>
                       </button>
+                    </div>
+                  </div>
 
-                      {/* button-3*/}
-                      <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-5 rounded">
+                  <div className="grid grid-cols-12 gap-14 w-full px-[14px] py-[30px] border-b border-[var(--light-grey)] rounded">
+                    <div className="col-span-4">
+                      <p className="text-base">Sharing is Caring</p>
+                    </div>
+
+                    <div className="col-span-8">
+                      <div className="flex items-center flex-wrap gap-5">
+                        {/* button-1 */}
+                        <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-5 rounded">
+                          <div>
+                            <img
+                              className=""
+                              src="/static/img/happy-user/fb.svg"
+                              style={{}}
+                            />
+                          </div>
+                          <div>
+                            <p className="text-[var(--primary-color)] text-base">
+                              Facebook
+                            </p>
+                          </div>
+                        </button>
+
+                        {/* button-2*/}
+                        <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-5 rounded">
+                          <div>
+                            <img
+                              className=""
+                              src="/static/img/happy-user/twitter.svg"
+                              style={{}}
+                            />
+                          </div>
+                          <div>
+                            <p className="text-[var(--primary-color)] text-base">
+                              Twitter
+                            </p>
+                          </div>
+                        </button>
+
+                        {/* button-3*/}
+                        <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-5 rounded">
+                          <div>
+                            <img
+                              className=""
+                              src="/static/img/happy-user/reddit.svg"
+                              style={{}}
+                            />
+                          </div>
+                          <div>
+                            <p className="text-[var(--primary-color)] text-base">
+                              Reddit
+                            </p>
+                          </div>
+                        </button>
+
+                        {/* button-3*/}
+                        <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-5 rounded">
+                          <div>
+                            <img
+                              className=""
+                              src="/static/img/happy-user/linkedin.svg"
+                              style={{}}
+                            />
+                          </div>
+                          <div>
+                            <p className="text-[var(--primary-color)] text-base">
+                              Linkedin
+                            </p>
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* div-4 */}
+                  <div className="grid grid-cols-12 gap-14 w-full px-[14px] py-[30px] border-b border-[var(--light-grey)] rounded">
+                    <div className="col-span-4">
+                      <p className="text-base">Come Back!</p>
+                    </div>
+                    <div className="col-span-8">
+                      <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3">
                         <div>
                           <img
                             className=""
-                            src="/static/img/happy-user/reddit.svg"
+                            src="/static/img/happy-user/bookmark.svg"
                             style={{}}
                           />
                         </div>
                         <div>
                           <p className="text-[var(--primary-color)] text-base">
-                            Reddit
-                          </p>
-                        </div>
-                      </button>
-
-                      {/* button-3*/}
-                      <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-5 rounded">
-                        <div>
-                          <img
-                            className=""
-                            src="/static/img/happy-user/linkedin.svg"
-                            style={{}}
-                          />
-                        </div>
-                        <div>
-                          <p className="text-[var(--primary-color)] text-base">
-                            Linkedin
+                            Bookmark Page
                           </p>
                         </div>
                       </button>
                     </div>
                   </div>
                 </div>
-
-                {/* div-4 */}
-                <div className="grid grid-cols-12 gap-14 w-full px-[14px] py-[30px] border-b border-[var(--light-grey)] rounded">
-                  <div className="col-span-4">
-                    <p className="text-base">Come Back!</p>
-                  </div>
-                  <div className="col-span-8">
-                    <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3">
-                      <div>
-                        <img
-                          className=""
-                          src="/static/img/happy-user/bookmark.svg"
-                          style={{}}
-                        />
-                      </div>
-                      <div>
-                        <p className="text-[var(--primary-color)] text-base">
-                          Bookmark Page
-                        </p>
-                      </div>
-                    </button>
-                  </div>
-                </div>
               </div>
-            </div>
+            )}
+
             {/* UI after file upload ends */}
           </>
         )}
