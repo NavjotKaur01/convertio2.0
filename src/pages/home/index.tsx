@@ -207,6 +207,7 @@ function Home(): JSX.Element {
     }
     const fd = new FormData();
     const updatedFiles: FileDetails[] = [];
+    const updateConversion: ConversionFormat[] = [];
     for (let i = 0; i < files.length; i++) {
       const fileName = files[i]?.name;
       const fileExtension = fileName?.split(".").pop()?.toLowerCase();
@@ -220,10 +221,17 @@ function Home(): JSX.Element {
         size: formatBytes(files[i].size),
         fileExtension: fileExtension,
       });
+      updateConversion.push({
+        conversionFormat: extensionName,
+        fileName: files[i].name,
+      });
 
       fd.append(`file${i + 1}`, files[i]);
     }
     setUploadedFileList((prevState) => [...prevState, ...updatedFiles]);
+    if (conversionFormat.length) {
+      setConversionFormat((prevState) => [...prevState, ...updateConversion]);
+    }
     setErrorMsg("");
     axios
       .post("http://httpbin.org/post", fd, {
