@@ -314,6 +314,11 @@ header .site-search ul li,
   background: #888;
 }
 
+@media only screen and (min-width: 1280px) and (max-width: 1534px){
+  .download{
+    margin-left: 0px !important;
+  }
+}
 @media only screen and (max-width: 610px) {
   .convert-btn {
     width: 100%;

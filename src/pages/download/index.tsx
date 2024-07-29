@@ -135,7 +135,7 @@ function Download() {
                       <div className="text-gray-700">{file.size}</div>
                     )}
                     <div
-                      className={`text-white bg-[var(--primary-color)] px-5 py-3 w-28 rounded md:ml-[-53px] ${
+                      className={`text-white bg-[var(--primary-color)] px-5 py-3 w-28 rounded xl:ml-[-53px] download ${
                         isConverting ? "opacity-75" : "opacity-100"
                       }`}
                     >
