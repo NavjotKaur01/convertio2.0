@@ -121,21 +121,36 @@ function ImageConverter(): JSX.Element {
   useEffect(() => {
     if (uploadedFileList.length > 0 && possibleFormat) {
       const initialActiveState: { [fileName: string]: string } = {};
+      const updateConversionList: ConversionFormat[] = [];
       uploadedFileList.forEach((file) => {
-        const format: string = file.fileExtension;
+        const format = file.fileExtension;
         if (possibleFormat.hasOwnProperty(format)) {
           const formatProperties = jsonFileData[format];
-          console.log(possibleFormat.hasOwnProperty(file.fileExtension));
+          const allFormats = [
+            ...(formatProperties.images || []),
+            ...(formatProperties.documents || []),
+          ];
+
+          if (allFormats.length > 0) {
+            const randomIndex = Math.floor(Math.random() * allFormats.length);
+
+            updateConversionList.push({
+              fileName: file.fileName,
+              conversionFormat: allFormats[randomIndex],
+            });
+          }
+
           const propertyToUse = formatProperties.images
             ? "images"
             : "documents";
-
           initialActiveState[
             file.fileName
           ] = `tab-${file.fileName}-1-${propertyToUse}`;
         }
       });
+
       setVerticalActive(initialActiveState);
+      setConversionFormat(updateConversionList);
     }
   }, [uploadedFileList]);
 
@@ -368,8 +383,12 @@ function ImageConverter(): JSX.Element {
       setErrorMsg("No files uploaded.");
       return;
     }
-    localStorage.setItem("files", JSON.stringify(uploadedFileList));
-    navigate("/image-converter/download", { state: "image-converter" });
+    if (conversionFormat.length) {
+      localStorage.setItem("files", JSON.stringify(uploadedFileList));
+      navigate("/image-converter/download", { state: "image-converter" });
+    } else {
+      setIsErrorShow(true);
+    }
   };
   return (
     <>

@@ -116,10 +116,25 @@ function Home(): JSX.Element {
   useEffect(() => {
     if (uploadedFileList.length > 0 && possibleFormat) {
       const initialActiveState: { [fileName: string]: string } = {};
+      const updateConversionList: ConversionFormat[] = [];
       uploadedFileList.forEach((file) => {
-        const format: string = file.fileExtension;
+        const format = file.fileExtension;
         if (possibleFormat.hasOwnProperty(format)) {
           const formatProperties = jsonFileData[format];
+          const allFormats = [
+            ...(formatProperties.images || []),
+            ...(formatProperties.documents || []),
+          ];
+
+          if (allFormats.length > 0) {
+            const randomIndex = Math.floor(Math.random() * allFormats.length);
+
+            updateConversionList.push({
+              fileName: file.fileName,
+              conversionFormat: allFormats[randomIndex],
+            });
+          }
+
           const propertyToUse = formatProperties.images
             ? "images"
             : "documents";
@@ -128,7 +143,9 @@ function Home(): JSX.Element {
           ] = `tab-${file.fileName}-1-${propertyToUse}`;
         }
       });
+
       setVerticalActive(initialActiveState);
+      setConversionFormat(updateConversionList);
     }
   }, [uploadedFileList]);
 
