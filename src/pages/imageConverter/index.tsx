@@ -1101,90 +1101,6 @@ function ImageConverter(): JSX.Element {
           <div className="card-box md:p-6 p-3 my-6 rounded-lg">
             <div>
               <div>
-<<<<<<< Updated upstream
-                <h2 className="mb-0 " id="headingOne">
-                  <button
-                    className={`${
-                      activeElement === "element2" &&
-                      `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)]  primary-text `
-                    } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left font-bold text-[23px] transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white text-xl `}
-                    type="button"
-                    onClick={() => handleClick("element2")}
-                    aria-expanded="true"
-                    aria-controls="collapseOne"
-                  >
-                    Valuable Image Tools
-                    <span
-                      className={`${
-                        activeElement === "element2"
-                          ? `rotate-[-180deg] -mr-1`
-                          : `rotate-0 fill-[#212529] dark:fill-white`
-                      } ml-auto h-5 w-5 shrink-0 fill-[#336dec] transition-transform duration-200 ease-in-out motion-reduce:transition-none dark:fill-blue-300`}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="h-6 w-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                        />
-                      </svg>
-                    </span>
-                  </button>
-                </h2>
-
-                <TECollapse
-                  show={activeElement !== "element2"}
-                  className="!mt-0 !rounded-b-none !shadow-none"
-                >
-                  <div className="px-5 py-4">
-                    <p className="text-base">
-                      Here is a list of image tools to further edit your images.
-                    </p>
-                    <ol className="text-base mt-2 list-decimal px-5 py-4 md:ml-5 ml-1">
-                      <li className="leading-8">
-                        <a href="#" className="text-[var(--primary-color)]">
-                          Image-Resizer-
-                        </a>
-                        &nbsp;Use this tool to crop unwanted areas from your
-                        image
-                      </li>
-                      <li className="leading-8">
-                        <a href="#" className="text-[var(--primary-color)]">
-                          Crop Image-
-                        </a>
-                        &nbsp;Quick and easy way to resize an image to any size
-                      </li>
-                      <li className="leading-8">
-                        <a href="#" className="text-[var(--primary-color)]">
-                          Image-Compressor-
-                        </a>
-                        &nbsp;Reduce image files size by up to 80 to 90% using
-                        this tool
-                      </li>
-                      <li className="leading-8">
-                        <a href="#" className="text-[var(--primary-color)]">
-                          Color-Picker-
-                        </a>
-                        &nbsp;Quickly pick a color from the color wheel or from
-                        your image online
-                      </li>
-                      <li className="leading-8">
-                        <a href="#" className="text-[var(--primary-color)]">
-                          Image-Enlarger-
-                        </a>
-                        &nbsp;A fast way to make your images bigger
-                      </li>
-                    </ol>
-                  </div>
-                </TECollapse>
-=======
                 <h2 className="text-[23px] font-bold px-5 py-4 ">
                   Valuable Image Tools
                 </h2>
@@ -1227,7 +1143,6 @@ function ImageConverter(): JSX.Element {
                     </li>
                   </ol>
                 </div>
->>>>>>> Stashed changes
               </div>
             </div>
           </div>
@@ -1300,145 +1215,153 @@ function ImageConverter(): JSX.Element {
           {/*review-section*/}
           <div className="card-box md:p-6 p-3 my-6 rounded-lg">
             <div className="border-b border-[var(--border-lighter)]">
-            <h2 className="text-[23px] font-bold px-5 py-4">
-              Our Users Love Us
-            </h2>
-            <div className="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 md:px-5 px-3 py-4">
-              {/*section-1  */}
-              <div>
-                <div className="flex gap-1 ">
-                  <img
-                    src="/static/img/happy-user/star.svg"
-                    className="h-5 w-5"
-                    style={{}}
-                  />
-                  <img
-                    src="/static/img/happy-user/star.svg"
-                    className="h-5 w-5"
-                    style={{}}
-                  />
-                  <img
-                    src="/static/img/happy-user/star.svg"
-                    className="h-5 w-5"
-                    style={{}}
-                  />
-                  <img
-                    src="/static/img/happy-user/star.svg"
-                    className="h-5 w-5"
-                    style={{}}
-                  />
-                  <img
-                    src="/static/img/happy-user/star.svg"
-                    className="h-5 w-5"
-                    style={{}}
-                  />
-                </div>
+              <h2 className="text-[23px] font-bold px-5 py-4">
+                Our Users Love Us
+              </h2>
+              <div className="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 md:px-5 px-3 py-4">
+                {/*section-1  */}
                 <div>
-                  <h5 className="py-3 text-base font-bold">Awesome Site</h5>
-                  <p className="text-sm lg:mb-5 mb-0 leading-[20px]">
-                    I needed to email a video clip to choir members, but the
-                    file size was a problem. I used FreeConvert to reduce the
-                    file size and the result was just right. I had no trouble
-                    emailing the file.
-                  </p>
-                  <h5 className="py-3 text-base font-semibold">Annabelle L</h5>
+                  <div className="flex gap-1 ">
+                    <img
+                      src="/static/img/happy-user/star.svg"
+                      className="h-5 w-5"
+                      style={{}}
+                    />
+                    <img
+                      src="/static/img/happy-user/star.svg"
+                      className="h-5 w-5"
+                      style={{}}
+                    />
+                    <img
+                      src="/static/img/happy-user/star.svg"
+                      className="h-5 w-5"
+                      style={{}}
+                    />
+                    <img
+                      src="/static/img/happy-user/star.svg"
+                      className="h-5 w-5"
+                      style={{}}
+                    />
+                    <img
+                      src="/static/img/happy-user/star.svg"
+                      className="h-5 w-5"
+                      style={{}}
+                    />
+                  </div>
+                  <div>
+                    <h5 className="py-3 text-base font-bold">Awesome Site</h5>
+                    <p className="text-sm lg:mb-5 mb-0 leading-[20px]">
+                      I needed to email a video clip to choir members, but the
+                      file size was a problem. I used FreeConvert to reduce the
+                      file size and the result was just right. I had no trouble
+                      emailing the file.
+                    </p>
+                    <h5 className="py-3 text-base font-semibold">
+                      Annabelle L
+                    </h5>
+                  </div>
                 </div>
-              </div>
 
-              {/*section-2*/}
-              <div>
-                <div className="flex gap-1 ">
-                  <img
-                    src="/static/img/happy-user/star.svg"
-                    className="h-5 w-5"
-                    style={{}}
-                  />
-                  <img
-                    src="/static/img/happy-user/star.svg"
-                    className="h-5 w-5"
-                    style={{}}
-                  />
-                  <img
-                    src="/static/img/happy-user/star.svg"
-                    className="h-5 w-5"
-                    style={{}}
-                  />
-                  <img
-                    src="/static/img/happy-user/star.svg"
-                    className="h-5 w-5"
-                    style={{}}
-                  />
-                  <img
-                    src="/static/img/happy-user/star.svg"
-                    className="h-5 w-5"
-                    style={{}}
-                  />
-                </div>
+                {/*section-2*/}
                 <div>
-                  <h5 className="py-3 text-base font-bold">Incredible!</h5>
-                  <p className="text-sm lg:mb-5 mb-0 leading-[20px]">
-                    Just perfection. Best for converting an existing video to
-                    audio (mp3). It lets you trim correctly, fade in/out,
-                    reverse, and also lets you save in different formats. Love
-                    it.
-                  </p>
-                  <h5 className="py-3 text-base font-semibold">Joseph</h5>
+                  <div className="flex gap-1 ">
+                    <img
+                      src="/static/img/happy-user/star.svg"
+                      className="h-5 w-5"
+                      style={{}}
+                    />
+                    <img
+                      src="/static/img/happy-user/star.svg"
+                      className="h-5 w-5"
+                      style={{}}
+                    />
+                    <img
+                      src="/static/img/happy-user/star.svg"
+                      className="h-5 w-5"
+                      style={{}}
+                    />
+                    <img
+                      src="/static/img/happy-user/star.svg"
+                      className="h-5 w-5"
+                      style={{}}
+                    />
+                    <img
+                      src="/static/img/happy-user/star.svg"
+                      className="h-5 w-5"
+                      style={{}}
+                    />
+                  </div>
+                  <div>
+                    <h5 className="py-3 text-base font-bold">Incredible!</h5>
+                    <p className="text-sm lg:mb-5 mb-0 leading-[20px]">
+                      Just perfection. Best for converting an existing video to
+                      audio (mp3). It lets you trim correctly, fade in/out,
+                      reverse, and also lets you save in different formats. Love
+                      it.
+                    </p>
+                    <h5 className="py-3 text-base font-semibold">Joseph</h5>
+                  </div>
                 </div>
-              </div>
 
-              {/*section-3*/}
-              <div className="xl:mt-0 mt-5">
-                <div className="flex gap-1 ">
-                  <img
-                    src="/static/img/happy-user/star.svg"
-                    className="h-5 w-5"
-                    style={{}}
-                  />
-                  <img
-                    src="/static/img/happy-user/star.svg"
-                    className="h-5 w-5"
-                    style={{}}
-                  />
-                  <img
-                    src="/static/img/happy-user/star.svg"
-                    className="h-5 w-5"
-                    style={{}}
-                  />
-                  <img
-                    src="/static/img/happy-user/star.svg"
-                    className="h-5 w-5"
-                    style={{}}
-                  />
-                  <img
-                    src="/static/img/happy-user/star.svg"
-                    className="h-5 w-5"
-                    style={{}}
-                  />
-                </div>
-                <div>
-                  <h5 className="py-3 text-base font-bold">Great service</h5>
-                  <p className="text-sm lg:mb-5 mb-0 leading-[20px]">
-                    After trying several competitors, I was shocked that this
-                    worked. It converted big psd files into a vector format. I
-                    am super thankful and will use this more often!
-                  </p>
-                  <h5 className="py-3 text-base font-semibold">
-                    Klaudia Wyzujak
-                  </h5>
+                {/*section-3*/}
+                <div className="xl:mt-0 mt-5">
+                  <div className="flex gap-1 ">
+                    <img
+                      src="/static/img/happy-user/star.svg"
+                      className="h-5 w-5"
+                      style={{}}
+                    />
+                    <img
+                      src="/static/img/happy-user/star.svg"
+                      className="h-5 w-5"
+                      style={{}}
+                    />
+                    <img
+                      src="/static/img/happy-user/star.svg"
+                      className="h-5 w-5"
+                      style={{}}
+                    />
+                    <img
+                      src="/static/img/happy-user/star.svg"
+                      className="h-5 w-5"
+                      style={{}}
+                    />
+                    <img
+                      src="/static/img/happy-user/star.svg"
+                      className="h-5 w-5"
+                      style={{}}
+                    />
+                  </div>
+                  <div>
+                    <h5 className="py-3 text-base font-bold">Great service</h5>
+                    <p className="text-sm lg:mb-5 mb-0 leading-[20px]">
+                      After trying several competitors, I was shocked that this
+                      worked. It converted big psd files into a vector format. I
+                      am super thankful and will use this more often!
+                    </p>
+                    <h5 className="py-3 text-base font-semibold">
+                      Klaudia Wyzujak
+                    </h5>
+                  </div>
                 </div>
               </div>
-            </div>
             </div>
 
             <div className="text-center">
-              <p className="text-base  mt-5 mb-2.5">Rated <span className="font-bold">4.6</span>/5 Based on <span className="text-[var(--primary-color)] font-bold">3000 + reviews</span>  Showing our latest reviews.</p>
+              <p className="text-base  mt-5 mb-2.5">
+                Rated <span className="font-bold">4.6</span>/5 Based on{" "}
+                <span className="text-[var(--primary-color)] font-bold">
+                  3000 + reviews
+                </span>{" "}
+                Showing our latest reviews.
+              </p>
               <div className="flex justify-center items-center gap-2">
-              <img
-                    src="/static/img/happy-user/star.svg"
-                    className="h-5 w-5"
-                    style={{}}
-                  />
-                  <p className="text-base font-bold">Trustpilot</p>
+                <img
+                  src="/static/img/happy-user/star.svg"
+                  className="h-5 w-5"
+                  style={{}}
+                />
+                <p className="text-base font-bold">Trustpilot</p>
               </div>
             </div>
           </div>
