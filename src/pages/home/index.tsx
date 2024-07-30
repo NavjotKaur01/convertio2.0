@@ -41,6 +41,8 @@ function Home(): JSX.Element {
   const [queryObject, setQueryObject] = useState<string>("");
   const [filterFormattedList, setFilterFormattedList] = useState<string[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [hoveredTab, setHoveredTab] = useState<any>(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -547,44 +549,62 @@ function Home(): JSX.Element {
                                             <React.Fragment key={index}>
                                               <TETabs
                                                 vertical
-                                                className="tabs-heading"
+                                                className="tabs-heading file-tabs"
                                               >
                                                 {Object.keys(formats).map(
-                                                  (keyName, idx) => (
-                                                    <TETabsItem
-                                                      className={`${
-                                                        verticalActive[
+                                                  (keyName, idx) => {
+                                                    return (
+                                                      <TETabsItem
+                                                        className={`tab-item ${
+                                                          verticalActive[
+                                                            file.fileName
+                                                          ] ===
+                                                            `tab-${file.fileName}-1-${keyName}` ||
+                                                          hoveredTab ===
+                                                            `tab-${file.fileName}-1-${keyName}`
+                                                            ? "primary-active"
+                                                            : ""
+                                                        }`}
+                                                        key={idx}
+                                                        onClick={() =>
+                                                          handleVerticalClick(
+                                                            `tab-${file.fileName}-1-${keyName}`,
+                                                            file.fileName
+                                                          )
+                                                        }
+                                                        active={
+                                                          verticalActive ===
+                                                          `tab-${file.fileName}-1-${keyName}`
+                                                        }
+                                                        onMouseEnter={() => {
+                                                          setHoveredTab(
+                                                            `tab-${file.fileName}-1-${keyName}`
+                                                          );
+                                                          handleVerticalClick(
+                                                            `tab-${file.fileName}-1-${keyName}`,
+                                                            file.fileName
+                                                          );
+                                                        }}
+                                                        onMouseLeave={() =>
+                                                          setHoveredTab(null)
+                                                        }
+                                                      >
+                                                        {keyName}
+                                                        {(verticalActive[
                                                           file.fileName
                                                         ] ===
-                                                        `tab-${file.fileName}-1-${keyName}`
-                                                          ? "primary-active"
-                                                          : ""
-                                                      }`}
-                                                      key={idx}
-                                                      onClick={() =>
-                                                        handleVerticalClick(
-                                                          `tab-${file.fileName}-1-${keyName}`,
-                                                          file.fileName
-                                                        )
-                                                      }
-                                                      active={
-                                                        verticalActive ===
-                                                        `tab-${file.fileName}-1-${keyName}`
-                                                      }
-                                                    >
-                                                      {keyName}{" "}
-                                                      {verticalActive[
-                                                        file.fileName
-                                                      ] ===
-                                                        `tab-${file.fileName}-1-${keyName}` && (
-                                                        <img
-                                                          className="ms-2"
-                                                          src="../../static/img/right-arrow.svg"
-                                                          alt=""
-                                                        />
-                                                      )}
-                                                    </TETabsItem>
-                                                  )
+                                                          `tab-${file.fileName}-1-${keyName}` ||
+                                                          hoveredTab ===
+                                                            `tab-${file.fileName}-1-${keyName}`) && (
+                                                          <img
+                                                            className="ms-2"
+                                                            src="../../static/img/right-arrow.svg"
+                                                            alt=""
+                                                          />
+                                                        )}
+                                                      </TETabsItem>
+                                                    );
+                                                  }
                                                 )}
                                               </TETabs>
                                             </React.Fragment>
@@ -840,17 +860,19 @@ function Home(): JSX.Element {
                                             <React.Fragment key={index}>
                                               <TETabs
                                                 vertical
-                                                className="tabs-heading"
+                                                className="tabs-heading file-tabs"
                                               >
                                                 {Object.keys(formats).map(
                                                   (keyName, idx) => (
                                                     <TETabsItem
-                                                      className={`${
+                                                      className={`tab-item ${
                                                         verticalActive[
                                                           uploadedFileList[0]
                                                             .fileName
                                                         ] ===
-                                                        `tab-${uploadedFileList[0].fileName}-1-${keyName}`
+                                                          `tab-${uploadedFileList[0].fileName}-1-${keyName}` ||
+                                                        hoveredTab ===
+                                                          `tab-${uploadedFileList[0].fileName}-1-${keyName}`
                                                           ? "primary-active"
                                                           : ""
                                                       }`}
@@ -865,6 +887,19 @@ function Home(): JSX.Element {
                                                       active={
                                                         verticalActive ===
                                                         `tab-${uploadedFileList[0].fileName}-1-${keyName}`
+                                                      }
+                                                      onMouseEnter={() => {
+                                                        setHoveredTab(
+                                                          `tab-${uploadedFileList[0].fileName}-1-${keyName}`
+                                                        );
+                                                        handleVerticalClick(
+                                                          `tab-${uploadedFileList[0].fileName}-1-${keyName}`,
+                                                          uploadedFileList[0]
+                                                            .fileName
+                                                        );
+                                                      }}
+                                                      onMouseLeave={() =>
+                                                        setHoveredTab(null)
                                                       }
                                                     >
                                                       {keyName}

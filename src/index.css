@@ -314,11 +314,12 @@ header .site-search ul li,
   background: #888;
 }
 
-@media only screen and (min-width: 1280px) and (max-width: 1534px){
-  .download{
+@media only screen and (min-width: 1280px) and (max-width: 1534px) {
+  .download {
     margin-left: 0px !important;
   }
 }
+
 @media only screen and (max-width: 610px) {
   .convert-btn {
     width: 100%;
@@ -336,15 +337,42 @@ header .site-search ul li,
   }
 }
 
+.tabs-heading .tab-item {
+  border-bottom: 1px solid #e8ebf1;
+  padding: 10px 20px;
+  font-weight: bold;
+  justify-content: start;
+  align-items: start;
+}
+
+.tabs-heading .tab-item img {
+  opacity: 0;
+}
+
 .tabs-heading .primary-active {
   color: var(--primary-color) !important;
-  border-color: var(--primary-color);
   display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
+  transition: border-bottom 0.3s ease;
+}
+
+.tabs-heading .primary-active img {
+  opacity: 1;
+  transition: img 0.2s ease;
+
 }
 
 .tabs-heading li a {
   padding: 18px 10px;
+}
+
+.file-tabs li {
+  text-align: left;
+}
+
+.custom-drop-menu .duration-150 {
+  transition-duration: 500ms;
+}
+
+.custom-drop-menu .ease-linear {
+  transition-timing-function: ease-in-out;
 }
