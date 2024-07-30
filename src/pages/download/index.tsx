@@ -128,7 +128,7 @@ function Download() {
                         </div>
                       </>
                     ) : isDone ? (
-                      <div className="border border-[var(--primary-color)] text-[var(--primary-color)] px-5 py-2 w-20 rounded m-auto">
+                      <div className="border border-[#1add72] text-[#1add72] px-7 py-1 w-fit rounded m-auto">
                         Done
                       </div>
                     ) : (
