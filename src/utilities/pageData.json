@@ -1,0 +1,11 @@
+{
+    "/image-converter": {
+        "title": "Image"
+    },
+    "/heif-converter": {
+        "title": "Image"
+    },
+    "/heif-jpg-converter": {
+        "title": "Image"
+    }
+}

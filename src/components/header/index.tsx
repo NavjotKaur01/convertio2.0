@@ -56,10 +56,10 @@ function Header(): JSX.Element {
             <ul className="gap-10 items-center hidden lg:flex">
               <li className=""></li>
               <li>
-                <Link to="#">Heif JPG </Link>
+                <Link to="/heif-jpg-converter">Heif JPG </Link>
               </li>
               <li>
-                <Link to="#">Heif Converter </Link>
+                <Link to="/heif-converter">Heif Converter </Link>
               </li>
               <li>
                 <Link to="/image-converter">Image Converter</Link>

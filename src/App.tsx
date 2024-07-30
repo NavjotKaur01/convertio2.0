@@ -12,6 +12,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/image-converter" element={<ImageConverter />} />
+        <Route path="/heif-jpg-converter" element={<ImageConverter />} />
+        <Route path="/heif-converter" element={<ImageConverter />} />
         <Route path="/download" element={<Download />} />
         <Route path="/image-converter/download" element={<Download />} />
       </Routes>
