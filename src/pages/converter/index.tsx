@@ -1222,7 +1222,7 @@ function ImageConverter(): JSX.Element {
                   </button>
                 </h2>
                 <TECollapse
-                  show={activeElement === "section1"}
+                  show={activeElement !== "section1"}
                   className="!mt-0 !rounded-b-none !shadow-none"
                 >
                   <div className="my-4">
