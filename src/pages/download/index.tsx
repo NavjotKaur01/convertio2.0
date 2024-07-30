@@ -7,13 +7,14 @@ function Download() {
   const [isConverting, setIsConverting] = useState(true);
   const [progress, setProgress] = useState(0);
   const [isDone, setIsDone] = useState(false);
+  const urlList = ["image-converter", "heif-converter", "heif-jpg-converter"];
   const location = useLocation();
 
   useEffect(() => {
     const storedFiles = localStorage.getItem("files");
     if (storedFiles) {
-      if (location.state === "image-converter") {
-        navigate("/image-converter/download");
+      if (urlList.includes(location.state)) {
+        navigate(`/${location.state}/download`);
       } else {
         navigate("/download");
       }
@@ -73,10 +74,8 @@ function Download() {
   }
 
   // Remove uploaded file
-  const handleRemoveRow = (fileName: string) => {
-    const updatedFiles = files.filter(
-      (file: any) => file.fileName !== fileName
-    );
+  const handleRemoveRow = (idx: number) => {
+    const updatedFiles = files.filter((_, index: number) => index !== idx);
     setFiles(updatedFiles);
     if (updatedFiles.length === 0) {
       localStorage.removeItem("files");
@@ -149,7 +148,7 @@ function Download() {
                     </div>
                     <div className="file-list-item">
                       <svg
-                        onClick={() => handleRemoveRow(file.fileName)}
+                        onClick={() => handleRemoveRow(index)}
                         xmlns="http://www.w3.org/2000/svg"
                         width="1.5em"
                         height="1.5em"

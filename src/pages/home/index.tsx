@@ -1,4 +1,3 @@
-import { TECollapse } from "tw-elements-react";
 import React, { useEffect, useState } from "react";
 import {
   TEDropdown,
@@ -14,6 +13,7 @@ import {
 import axios from "axios";
 import possibleFormat from "../../utilities/possibleFileFormat.json";
 import { useNavigate } from "react-router-dom";
+import FAQ from "../../components/faq";
 
 interface FileDetails {
   fileName: string;
@@ -27,7 +27,6 @@ interface ConversionFormat {
 }
 
 function Home(): JSX.Element {
-  const [activeElement, setActiveElement] = useState<string>("");
   const [uploadedFileList, setUploadedFileList] = useState<FileDetails[]>([]);
   const [conversionFormat, setConversionFormat] = useState<ConversionFormat[]>(
     []
@@ -124,6 +123,7 @@ function Home(): JSX.Element {
           const allFormats = [
             ...(formatProperties.images || []),
             ...(formatProperties.documents || []),
+            ...(formatProperties.archive || []),
           ];
 
           if (allFormats.length > 0) {
@@ -209,15 +209,6 @@ function Home(): JSX.Element {
       return [];
     }
   }
-
-  // handle FAQ show and hide
-  const handleClick = (value: string) => {
-    if (value === activeElement) {
-      setActiveElement("");
-    } else {
-      setActiveElement(value);
-    }
-  };
 
   // handle multiple file uploading
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -1082,116 +1073,7 @@ function Home(): JSX.Element {
             </div>
           </div>
           {/* accordion */}
-          <div className="card-box p-6 my-6 rounded-lg">
-            <div id="accordionExample">
-              <div className="rounded-none border-neutral-200 bg-white dark:border-neutral-600 dark:bg-neutral-800 ">
-                <h2 className="mb-0 " id="headingOne">
-                  <button
-                    className={`${
-                      activeElement === "element1" &&
-                      `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)] font-semibold primary-text `
-                    } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white text-xl `}
-                    type="button"
-                    onClick={() => handleClick("element1")}
-                    aria-expanded="true"
-                    aria-controls="collapseOne"
-                  >
-                    How many colors should I choose?
-                    <span
-                      className={`${
-                        activeElement === "element1"
-                          ? `rotate-[-180deg] -mr-1`
-                          : `rotate-0 fill-[#212529] dark:fill-white`
-                      } ml-auto h-5 w-5 shrink-0 fill-[#336dec] transition-transform duration-200 ease-in-out motion-reduce:transition-none dark:fill-blue-300`}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="h-6 w-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                        />
-                      </svg>
-                    </span>
-                  </button>
-                </h2>
-                <TECollapse
-                  show={activeElement === "element1"}
-                  className="!mt-0 !rounded-b-none !shadow-none"
-                >
-                  <div className="px-5 py-4">
-                    <strong>This is the first item's accordion body.</strong>{" "}
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Vestibulum eu rhoncus purus, vitae tincidunt nibh. Vivamus
-                    elementum egestas ligula in varius. Proin ac erat pretium,
-                    ultricies leo at, cursus ante. Pellentesque at odio euismod,
-                    mattis urna ac, accumsan metus. Nam nisi leo, malesuada
-                    vitae pretium et, laoreet at lorem. Curabitur non
-                    sollicitudin neque.
-                  </div>
-                </TECollapse>
-              </div>
-            </div>
-            <div className="rounded-none border-neutral-200 bg-white dark:border-neutral-600 dark:bg-neutral-800 ">
-              <h2 className="mb-0" id="headingTwo">
-                <button
-                  className={`${
-                    activeElement === "element2" &&
-                    `dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)] font-semibold primary-text`
-                  } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left text-xl transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white`}
-                  type="button"
-                  onClick={() => handleClick("element2")}
-                  aria-expanded="true"
-                  aria-controls="collapseOne"
-                >
-                  How does the contrast checker work?
-                  <span
-                    className={`${
-                      activeElement === "element2"
-                        ? `rotate-[-180deg] -mr-1`
-                        : `rotate-0 fill-[#212529] dark:fill-white`
-                    } ml-auto h-5 w-5 shrink-0 fill-[#336dec] transition-transform duration-200 ease-in-out motion-reduce:transition-none dark:fill-blue-300`}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="h-6 w-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </h2>
-              <TECollapse
-                show={activeElement === "element2"}
-                className="!mt-0 !rounded-b-none !shadow-none"
-              >
-                <div className="px-5 py-4">
-                  <strong>This is the second item's accordion body.</strong>{" "}
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Vestibulum eu rhoncus purus, vitae tincidunt nibh. Vivamus
-                  elementum egestas ligula in varius. Proin ac erat pretium,
-                  ultricies leo at, cursus ante. Pellentesque at odio euismod,
-                  mattis urna ac, accumsan metus. Nam nisi leo, malesuada vitae
-                  pretium et, laoreet at lorem. Curabitur non sollicitudin
-                  neque.
-                </div>
-              </TECollapse>
-            </div>
-          </div>
+          <FAQ />
         </div>
 
         <div className="bg-gray-50 h-36 lg:h-full mx-5 rounded-lg"></div>

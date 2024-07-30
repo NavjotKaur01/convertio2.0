@@ -12,10 +12,11 @@ import {
   TECollapse,
 } from "tw-elements-react";
 import axios from "axios";
-import possibleFormat from "../../utilities/possibleFileFormat.json";
-// import pageData from "../../utilities/pageData.json";
+import possibleFormat from "../../utilities/possibleImageFormat.json";
+import pageData from "../../utilities/pageData.json";
 import imageFormat from "../../utilities/imageFormat.json";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import FAQ from "../../components/faq";
 
 interface FileDetails {
   fileName: string;
@@ -29,7 +30,7 @@ interface ConversionFormat {
 }
 
 function ImageConverter(): JSX.Element {
-  const [activeElement, setActiveElement] = useState<string>("");
+  const [activeElement, setActiveElement] = useState<string>("section1");
   const [uploadedFileList, setUploadedFileList] = useState<FileDetails[]>([]);
   const [conversionFormat, setConversionFormat] = useState<ConversionFormat[]>(
     []
@@ -44,20 +45,25 @@ function ImageConverter(): JSX.Element {
   const [queryObject, setQueryObject] = useState<string>("");
   const [filterFormattedList, setFilterFormattedList] = useState<string[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>("");
-  // const [urlList, setUrlList] = useState([
-  //   "/heif-converter",
-  //   "/heif-jpg-converter",
-  //   "/image-converter",
-  // ]);
+  const [dataList, setDataList] = useState<any>({});
+  const [pageTitle, setPageTitle] = useState<string>("");
+
   const navigate = useNavigate();
-  // const location = useLocation();
+  const location = useLocation();
+
+  useEffect(() => {
+    setDataList(pageData);
+    if (Object.keys(dataList).includes(location.pathname)) {
+      setPageTitle(dataList[location.pathname].title);
+      setUploadedFileList([]);
+    }
+  }, [dataList, pageTitle, location.pathname]);
 
   useEffect(() => {
     if (Object.keys(possibleFormat).length) {
       setJsonFileData(possibleFormat);
     }
   }, []);
-
   useEffect(() => {
     if (searchResults.length) {
       let s = searchResults.find(
@@ -136,14 +142,13 @@ function ImageConverter(): JSX.Element {
           const allFormats = [
             ...(formatProperties.images || []),
             ...(formatProperties.documents || []),
+            ...(formatProperties.archive || []),
           ];
 
           if (allFormats.length > 0) {
-            const randomIndex = Math.floor(Math.random() * allFormats.length);
-
             updateConversionList.push({
               fileName: file.fileName,
-              conversionFormat: allFormats[randomIndex],
+              conversionFormat: allFormats[1],
             });
           }
 
@@ -392,7 +397,9 @@ function ImageConverter(): JSX.Element {
     }
     if (conversionFormat.length) {
       localStorage.setItem("files", JSON.stringify(uploadedFileList));
-      navigate("/image-converter/download", { state: "image-converter" });
+      navigate(`${location.pathname}/download`, {
+        state: location.pathname.replace("/", ""),
+      });
     } else {
       setIsErrorShow(true);
     }
@@ -403,8 +410,10 @@ function ImageConverter(): JSX.Element {
         <div className="bg-gray-50 h-36 lg:h-full mx-5 rounded-lg"></div>
         <div className="lg:col-span-3 py-2 px-5">
           <div className="mb-12 text-center">
-            <h1 className="text-4xl font-bold">Image Converter</h1>
-            <p className="text-sm pt-2">Convert images online, for free.</p>
+            <h1 className="text-4xl font-bold">{pageTitle} Converter</h1>
+            <p className="text-sm pt-2">
+              Convert {pageTitle} online, for free.
+            </p>
           </div>
           {!!uploadedFileList && !!uploadedFileList.length ? (
             <>
@@ -1035,7 +1044,7 @@ function ImageConverter(): JSX.Element {
           <div className="card-box md:p-6 p-3 my-6 rounded-lg">
             <div className="mb-3">
               <h2 className="text-[23px] font-bold md:px-5 px-3 py-4">
-                How to Convert Images
+                How to Convert {pageTitle}
               </h2>
               <ol className="text-base mt-1 list-decimal px-5 py-4 md:ml-10 ml-1">
                 <li className="leading-8">
@@ -1044,7 +1053,7 @@ function ImageConverter(): JSX.Element {
                 </li>
 
                 <li className="leading-8">
-                  Select a target image format from the{" "}
+                  Select a target {pageTitle} format from the{" "}
                   <span className="font-bold">“Convert to"</span>{" "}
                   drop-down-list.
                 </li>
@@ -1067,13 +1076,13 @@ function ImageConverter(): JSX.Element {
                 </div>
                 <div className="md:px-5 px-3">
                   <h2 className="text-center mb-[16px] mt-5 text-[23px] font-bold min-h-[52px]">
-                    Convert Any Image
+                    Convert Any {pageTitle}
                   </h2>
                   <p className="leading-relaxed text-base py-4">
                     {" "}
-                    Convert more than 500+ image formats into popular formats
-                    like JPG, PNG, WebP, and more. You can also convert camera
-                    RAW image files.
+                    Convert more than 500+ {pageTitle} formats into popular
+                    formats like JPG, PNG, WebP, and more. You can also convert
+                    camera RAW {pageTitle} files.
                   </p>
                 </div>
               </div>
@@ -1089,12 +1098,12 @@ function ImageConverter(): JSX.Element {
                 </div>
                 <div className="md:px-5 px-3">
                   <h2 className="text-center mb-[16px] mt-4 text-[23px] font-bold min-h-[52px]">
-                    Best Image Converter
+                    Best {pageTitle} Converter
                   </h2>
                   <p className="leading-relaxed text-base">
-                    Convert your images with perfect quality, size, and
-                    compression. Plus, you can also batch convert images using
-                    this tool.
+                    Convert your {pageTitle} with perfect quality, size, and
+                    compression. Plus, you can also batch convert {pageTitle}{" "}
+                    using this tool.
                   </p>
                 </div>
               </div>
@@ -1113,10 +1122,10 @@ function ImageConverter(): JSX.Element {
                     Free & Secure
                   </h2>
                   <p className="leading-relaxed text-base py-4">
-                    Our Image Converter is free and works on any web browser. We
-                    guarantee file security and privacy. Files are protected
-                    with 256-bit SSL encryption and automatically delete after a
-                    few hours.
+                    Our {pageTitle} Converter is free and works on any web
+                    browser. We guarantee file security and privacy. Files are
+                    protected with 256-bit SSL encryption and automatically
+                    delete after a few hours.
                   </p>
                 </div>
               </div>
@@ -1179,18 +1188,18 @@ function ImageConverter(): JSX.Element {
                 <h2 className="mb-0 " id="headingOne1">
                   <button
                     className={`${
-                      activeElement === "element_1" &&
+                      activeElement === "section1" &&
                       `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)]  primary-text `
                     } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left font-bold text-[23px] transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white text-xl `}
                     type="button"
-                    onClick={() => handleClick("element_1")}
+                    onClick={() => handleClick("section1")}
                     aria-expanded="true"
                     aria-controls="collapseOne1"
                   >
-                    Specific image converters
+                    Specific {pageTitle} converters
                     <span
                       className={`${
-                        activeElement === "element_1"
+                        activeElement === "section1"
                           ? `rotate-[-180deg] -mr-1`
                           : `rotate-0 fill-[#212529] dark:fill-white`
                       } ml-auto h-5 w-5 shrink-0 fill-[#336dec] transition-transform duration-200 ease-in-out motion-reduce:transition-none dark:fill-blue-300`}
@@ -1213,7 +1222,7 @@ function ImageConverter(): JSX.Element {
                   </button>
                 </h2>
                 <TECollapse
-                  show={activeElement == "element_1"}
+                  show={activeElement === "section1"}
                   className="!mt-0 !rounded-b-none !shadow-none"
                 >
                   <div className="my-4">
@@ -1237,116 +1246,7 @@ function ImageConverter(): JSX.Element {
               </div>
             </div>
           </div>
-          <div className="card-box p-6 my-6 rounded-lg">
-            <div id="accordionExample">
-              <div className="rounded-none border-neutral-200 bg-white dark:border-neutral-600 dark:bg-neutral-800 ">
-                <h2 className="mb-0 " id="headingOne">
-                  <button
-                    className={`${
-                      activeElement === "element1" &&
-                      `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)] font-semibold primary-text `
-                    } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white text-xl `}
-                    type="button"
-                    onClick={() => handleClick("element1")}
-                    aria-expanded="true"
-                    aria-controls="collapseOne"
-                  >
-                    How many colors should I choose?
-                    <span
-                      className={`${
-                        activeElement === "element1"
-                          ? `rotate-[-180deg] -mr-1`
-                          : `rotate-0 fill-[#212529] dark:fill-white`
-                      } ml-auto h-5 w-5 shrink-0 fill-[#336dec] transition-transform duration-200 ease-in-out motion-reduce:transition-none dark:fill-blue-300`}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="h-6 w-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                        />
-                      </svg>
-                    </span>
-                  </button>
-                </h2>
-                <TECollapse
-                  show={activeElement === "element1"}
-                  className="!mt-0 !rounded-b-none !shadow-none"
-                >
-                  <div className="px-5 py-4 h-[auto]">
-                    <strong>This is the first item's accordion body.</strong>{" "}
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Vestibulum eu rhoncus purus, vitae tincidunt nibh. Vivamus
-                    elementum egestas ligula in varius. Proin ac erat pretium,
-                    ultricies leo at, cursus ante. Pellentesque at odio euismod,
-                    mattis urna ac, accumsan metus. Nam nisi leo, malesuada
-                    vitae pretium et, laoreet at lorem. Curabitur non
-                    sollicitudin neque.
-                  </div>
-                </TECollapse>
-              </div>
-            </div>
-            <div className="rounded-none border-neutral-200 bg-white dark:border-neutral-600 dark:bg-neutral-800 ">
-              <h2 className="mb-0" id="headingTwo">
-                <button
-                  className={`${
-                    activeElement === "element3" &&
-                    `dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)] font-semibold primary-text`
-                  } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left text-xl transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white`}
-                  type="button"
-                  onClick={() => handleClick("element3")}
-                  aria-expanded="true"
-                  aria-controls="collapseTwo"
-                >
-                  How does the contrast checker work?
-                  <span
-                    className={`${
-                      activeElement === "element3"
-                        ? `rotate-[-180deg] -mr-1`
-                        : `rotate-0 fill-[#212529] dark:fill-white`
-                    } ml-auto h-5 w-5 shrink-0 fill-[#336dec] transition-transform duration-200 ease-in-out motion-reduce:transition-none dark:fill-blue-300`}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="h-6 w-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </h2>
-              <TECollapse
-                show={activeElement === "element3"}
-                className="!mt-0 !rounded-b-none !shadow-none"
-              >
-                <div className="px-5 py-4">
-                  <strong>This is the second item's accordion body.</strong>{" "}
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Vestibulum eu rhoncus purus, vitae tincidunt nibh. Vivamus
-                  elementum egestas ligula in varius. Proin ac erat pretium,
-                  ultricies leo at, cursus ante. Pellentesque at odio euismod,
-                  mattis urna ac, accumsan metus. Nam nisi leo, malesuada vitae
-                  pretium et, laoreet at lorem. Curabitur non sollicitudin
-                  neque.
-                </div>
-              </TECollapse>
-            </div>
-          </div>
+          <FAQ />
 
           {/*review-section*/}
         </div>
