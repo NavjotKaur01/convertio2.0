@@ -50,7 +50,7 @@ function Header(): JSX.Element {
         {/* Destop design */}
         <nav className="flex lg:container px-5 lg:px-10 mx-auto justify-between py-4">
           <div className="flex items-center xl:gap-72 gap-10">
-            <Link className="text-xl lg:mx-24 font-semibold" to="#">
+            <Link className="text-xl lg:mx-24 font-semibold" to="/">
               logo
             </Link>
             <ul className="gap-10 items-center hidden lg:flex">
