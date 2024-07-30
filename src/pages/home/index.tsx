@@ -475,7 +475,7 @@ function Home(): JSX.Element {
                             </TEDropdownToggle>
                           </TERipple>
 
-                          <TEDropdownMenu>
+                          <TEDropdownMenu  style={{ transform: "translate3d(-120px, 31px, 0px)"}}>
                             <div className="p-2 custom-drop-menu border-0 mt-2 shadow-none`">
                               {/* Search Bar */}
                               <div className="dropdown-searchbar">

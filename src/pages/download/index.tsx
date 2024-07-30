@@ -105,10 +105,10 @@ function Download() {
               <div>
                 {files.map((file: any, index: number) => (
                   <div
-                    className="flex md:grid flex-wrap justify-between items-center file-list-main rounded-lg border-none"
+                    className="flex md:grid flex-wrap sm:justify-between items-center file-list-main rounded-lg border-none "
                     key={index}
                   >
-                    <div className="flex items-center file-list-item">
+                    <div className="flex items-center file-list-item w-full sm:w-fit ">
                       <div className="">{file.fileName}</div>
                     </div>
 
@@ -126,15 +126,17 @@ function Download() {
                           </div>
                         </div>
                       </>
+                  
                     ) : isDone ? (
-                      <div className="border border-[#1add72] text-[#1add72] px-7 py-1 w-fit rounded m-auto">
+                      <div className="border border-[#1add72] text-[#1add72] px-7 py-1 w-fit rounded mx-5 sm:m-auto">
                         Done
                       </div>
                     ) : (
                       <div className="text-gray-700">{file.size}</div>
                     )}
+                    
                     <div
-                      className={`text-white bg-[var(--primary-color)] px-5 py-3 w-28 rounded xl:ml-[-53px] download ${
+                      className={`text-white bg-[var(--primary-color)] px-5 py-3 w-28 rounded  xl:ml-[-53px] download ${
                         isConverting ? "opacity-75" : "opacity-100"
                       }`}
                     >
@@ -188,7 +190,7 @@ function Download() {
               </div>
 
               <div className="flex justify-between items-center added-files flex-wrap">
-                <div className="add-more-btn flex">
+                <div className="add-more-btn flex items-center">
                   <div className="custom-import border-2 px-1 py-1 primary-border rounded-lg ms-3 ">
                     <span
                       className="label px-4 text-nowrap flex items-center text-sm font-semibold primary-text"
