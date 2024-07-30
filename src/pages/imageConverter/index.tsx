@@ -1176,21 +1176,21 @@ function ImageConverter(): JSX.Element {
           <div className="card-box md:p-6 p-3 my-6 rounded-lg">
             <div>
               <div className="rounded-none border-neutral-200 bg-white dark:border-neutral-600 dark:bg-neutral-800 ">
-                <h2 className="mb-0 " id="headingOne">
+                <h2 className="mb-0 " id="headingOne1">
                   <button
                     className={`${
-                      activeElement === "element1" &&
+                      activeElement === "element_1" &&
                       `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)]  primary-text `
                     } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left font-bold text-[23px] transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white text-xl `}
                     type="button"
-                    onClick={() => handleClick("element1")}
+                    onClick={() => handleClick("element_1")}
                     aria-expanded="true"
-                    aria-controls="collapseOne"
+                    aria-controls="collapseOne1"
                   >
                     Specific image converters
                     <span
                       className={`${
-                        activeElement === "element1"
+                        activeElement === "element_1"
                           ? `rotate-[-180deg] -mr-1`
                           : `rotate-0 fill-[#212529] dark:fill-white`
                       } ml-auto h-5 w-5 shrink-0 fill-[#336dec] transition-transform duration-200 ease-in-out motion-reduce:transition-none dark:fill-blue-300`}
@@ -1213,7 +1213,7 @@ function ImageConverter(): JSX.Element {
                   </button>
                 </h2>
                 <TECollapse
-                  show={activeElement !== "element1"}
+                  show={activeElement == "element_1"}
                   className="!mt-0 !rounded-b-none !shadow-none"
                 >
                   <div className="my-4">
@@ -1247,7 +1247,7 @@ function ImageConverter(): JSX.Element {
                       `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)] font-semibold primary-text `
                     } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white text-xl `}
                     type="button"
-                    onClick={() => handleClick("element2")}
+                    onClick={() => handleClick("element1")}
                     aria-expanded="true"
                     aria-controls="collapseOne"
                   >
@@ -1277,7 +1277,7 @@ function ImageConverter(): JSX.Element {
                   </button>
                 </h2>
                 <TECollapse
-                  show={activeElement === "element2"}
+                  show={activeElement === "element1"}
                   className="!mt-0 !rounded-b-none !shadow-none"
                 >
                   <div className="px-5 py-4 h-[auto]">
@@ -1303,12 +1303,12 @@ function ImageConverter(): JSX.Element {
                   type="button"
                   onClick={() => handleClick("element3")}
                   aria-expanded="true"
-                  aria-controls="collapseOne"
+                  aria-controls="collapseTwo"
                 >
                   How does the contrast checker work?
                   <span
                     className={`${
-                      activeElement === "element2"
+                      activeElement === "element3"
                         ? `rotate-[-180deg] -mr-1`
                         : `rotate-0 fill-[#212529] dark:fill-white`
                     } ml-auto h-5 w-5 shrink-0 fill-[#336dec] transition-transform duration-200 ease-in-out motion-reduce:transition-none dark:fill-blue-300`}
