@@ -206,6 +206,34 @@
             "xml"
         ]
     },
+    "ppt": {
+        "images": [
+            "jpeg",
+            "jpg"
+        ],
+        "documents": [
+            "doc",
+            "docx",
+            "pdf",
+            "pptx",
+            "odp",
+            "word"
+        ]
+    },
+    "pptx": {
+        "images": [
+            "jpeg",
+            "jpg"
+        ],
+        "documents": [
+            "doc",
+            "docx",
+            "pdf",
+            "ppt",
+            "odp",
+            "word"
+        ]
+    },
     "xls": {
         "documents": [
             "csv",
