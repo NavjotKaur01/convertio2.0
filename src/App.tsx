@@ -8,18 +8,23 @@ import Download from "./pages/download";
 function App() {
   return (
     <>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/image-converter" element={<ImageConverter />} />
-        <Route path="/heif-jpg-converter" element={<ImageConverter />} />
-        <Route path="/heif-converter" element={<ImageConverter />} />
-        <Route path="/download" element={<Download />} />
-        <Route path="/image-converter/download" element={<Download />} />
-        <Route path="/heif-converter/download" element={<Download />} />
-        <Route path="/heif-jpg-converter/download" element={<Download />} />
-      </Routes>
-      <Footer />
+      <div className="flex min-h-screen flex-col justify-between">
+        <div>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/image-converter" element={<ImageConverter />} />
+            <Route path="/heif-jpg-converter" element={<ImageConverter />} />
+            <Route path="/heif-converter" element={<ImageConverter />} />
+            <Route path="/download" element={<Download />} />
+            <Route path="/image-converter/download" element={<Download />} />
+            <Route path="/heif-converter/download" element={<Download />} />
+            <Route path="/heif-jpg-converter/download" element={<Download />} />
+          </Routes>
+        </div>
+
+        <Footer />
+      </div>
     </>
   );
 }

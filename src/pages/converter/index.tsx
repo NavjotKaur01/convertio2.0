@@ -440,7 +440,7 @@ function ImageConverter(): JSX.Element {
                 <div>
                   {uploadedFileList.map((file: FileDetails, index: number) => (
                     <div
-                      className="flex md:grid flex-wrap justify-between items-center file-list-main rounded-lg border-none"
+                      className="flex md:grid flex-wrap justify-between items-center file-list-main rounded-lg border-none w-full"
                       key={index}
                     >
                       <div className="flex items-center file-list-item">
@@ -448,12 +448,12 @@ function ImageConverter(): JSX.Element {
                           src="../../static/img/picture.svg"
                           className="me-1"
                         /> */}
-                        <div className="">{file.fileName}</div>
+                        <div className="text-ellipsis overflow-hidden w-[100px] whitespace-nowrap">{file.fileName}</div>
                       </div>
 
                       <div className="file-list-item">{file.size}</div>
                       {/* dropdown start */}
-                      <div className="file-list-item">
+                      <div className="file-list-item ">
                         <TEDropdown className="flex justify-center">
                           <TERipple rippleColor="light">
                             <TEDropdownToggle
@@ -752,7 +752,7 @@ function ImageConverter(): JSX.Element {
                   ))}
                 </div>
 
-                <div className="flex justify-between items-center added-files flex-wrap">
+                <div className="flex sm:justify-between justify-center items-center added-files flex-wrap">
                   <div className="add-more-btn flex">
                     <div className="custom-import border-2 px-1 py-1 primary-border rounded-lg ms-3 ">
                       <span className="label px-4 text-nowrap flex items-center text-sm font-semibold primary-text ">
@@ -764,7 +764,7 @@ function ImageConverter(): JSX.Element {
                             style={{ marginBottom: "4px" }}
                           />
                         </span>{" "}
-                        Add more Files
+                        Add more Files 
                       </span>
                       <span className="label-file"></span>
                       <input
@@ -777,7 +777,7 @@ function ImageConverter(): JSX.Element {
                     </div>
                   </div>
 
-                  <div className="p-3 flex items-center conversion">
+                  <div className="p-3 flex items-center justify-center conversion">
                     {isFileExtension ? (
                       <div className="flex items-center justify-between conversion-inside">
                         <p className="mb-0">

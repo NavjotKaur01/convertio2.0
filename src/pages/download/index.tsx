@@ -105,11 +105,11 @@ function Download() {
               <div>
                 {files.map((file: any, index: number) => (
                   <div
-                    className="flex md:grid flex-wrap sm:justify-between items-center file-list-main rounded-lg border-none "
+                    className="flex md:grid flex-wrap sm:justify-between items-center file-list-main-download rounded-lg border-none"
                     key={index}
                   >
                     <div className="flex items-center file-list-item w-full sm:w-fit ">
-                      <div className="">{file.fileName}</div>
+                      <div >{file.fileName}</div>
                     </div>
 
                     {isConverting ? (
@@ -374,7 +374,7 @@ function Download() {
                             </a>
                           </button>
 
-                          <div className="bg-[var(--primary-color)] rounded-r ">
+                          <div className="bg-[var(--primary-color)] rounded-r">
                             <a href="#">
                               <p className="text-white md:px-3 px-1 py-1">
                                 Copy

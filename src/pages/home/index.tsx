@@ -419,20 +419,22 @@ function Home(): JSX.Element {
                 <div>
                   {uploadedFileList.map((file: FileDetails, index: number) => (
                     <div
-                      className="flex md:grid flex-wrap justify-between items-center file-list-main rounded-lg border-none"
+                      className="flex md:grid flex-wrap justify-between items-center file-list-main rounded-lg border-none w-full flex-wrap-class"
                       key={index}
                     >
-                      <div className="flex items-center file-list-item">
+                      <div className="flex items-center justify-between file-list-item">
                         {/* <img
                           src="../../static/img/picture.svg"
                           className="me-1"
                         /> */}
-                        <div className="">{file.fileName}</div>
+                        <div className="text-ellipsis overflow-hidden w-[100px] whitespace-nowrap width-50">{file.fileName}</div>
+                        <div className="file-list-item">{file.size}</div>
                       </div>
 
-                      <div className="file-list-item">{file.size}</div>
                       {/* dropdown start */}
-                      <div className="file-list-item">
+                  
+                      <div className="flex items-center justify-end">
+                        <div className="file-list-item">
                         <TEDropdown className="flex justify-center">
                           <TERipple rippleColor="light">
                             <TEDropdownToggle
@@ -486,11 +488,15 @@ function Home(): JSX.Element {
                             </TEDropdownToggle>
                           </TERipple>
 
+<<<<<<< Updated upstream
                           <TEDropdownMenu
                             style={{
                               transform: "translate3d(-120px, 31px, 0px)",
                             }}
                           >
+=======
+                          <TEDropdownMenu>
+>>>>>>> Stashed changes
                             <div className="p-2 custom-drop-menu border-0 mt-2 shadow-none`">
                               {/* Search Bar */}
                               <div className="dropdown-searchbar">
@@ -690,52 +696,54 @@ function Home(): JSX.Element {
                             </div>
                           </TEDropdownMenu>
                         </TEDropdown>
-                      </div>
+                        </div>
                       {/* dropdown end*/}
                       {/* close button */}
-                      <div className="file-list-item">
-                        <svg
-                          onClick={() => handleRemoveRow(file.fileName, index)}
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="1.5em"
-                          height="1.5em"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="#7987a1"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          className="cross-ic cursor-pointer"
-                          data-v-db7992bc=""
-                        >
-                          <circle
-                            cx="12"
-                            cy="12"
-                            r="10"
+                        <div className="file-list-item">
+                          <svg
+                            onClick={() => handleRemoveRow(file.fileName, index)}
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1.5em"
+                            height="1.5em"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#7987a1"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            className="cross-ic cursor-pointer"
                             data-v-db7992bc=""
-                          ></circle>
-                          <line
-                            x1="15"
-                            y1="9"
-                            x2="9"
-                            y2="15"
-                            data-v-db7992bc=""
-                          ></line>
-                          <line
-                            data-v-db7992bc=""
-                            x1="9"
-                            y1="9"
-                            x2="15"
-                            y2="15"
-                          ></line>
-                        </svg>
-                      </div>
+                          >
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              data-v-db7992bc=""
+                            ></circle>
+                            <line
+                              x1="15"
+                              y1="9"
+                              x2="9"
+                              y2="15"
+                              data-v-db7992bc=""
+                            ></line>
+                            <line
+                              data-v-db7992bc=""
+                              x1="9"
+                              y1="9"
+                              x2="15"
+                              y2="15"
+                            ></line>
+                          </svg>
+                        </div>
+                     </div>
+                   
                       {/* close button end*/}
                     </div>
                   ))}
                 </div>
 
-                <div className="flex justify-between items-center added-files flex-wrap">
+                <div className="flex justify-between  items-center added-files flex-wrap">
                   <div className="add-more-btn flex">
                     <div className="custom-import border-2 px-1 py-1 primary-border rounded-lg ms-3 ">
                       <span className="label px-4 text-nowrap flex items-center text-sm font-semibold primary-text ">
@@ -760,9 +768,9 @@ function Home(): JSX.Element {
                     </div>
                   </div>
 
-                  <div className="p-3 flex items-center conversion">
+                  <div className="p-3 flex items-center conversion justify-center">
                     {isFileExtension ? (
-                      <div className="flex items-center justify-between conversion-inside">
+                      <div className="flex items-center sm:justify-between justify-center conversion-inside">
                         <p className="mb-0">
                           Convert All ({uploadedFileList.length} ) to:{" "}
                         </p>
@@ -1133,3 +1141,5 @@ function Home(): JSX.Element {
 }
 
 export default Home;
+
+

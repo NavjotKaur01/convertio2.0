@@ -206,9 +206,13 @@ header .site-search ul li,
   /* border: 1px solid var(--add-file-bg-clr); */
   border-bottom: 0;
   min-height: 62px;
+  grid-template-columns: 17fr 7fr;
+}
+.file-list-main-download{
+  border-bottom: 0;
+  min-height: 62px;
   grid-template-columns: 17fr 7fr 2fr 2fr;
 }
-
 .file-list-main:last-child {
   border-bottom: 1px solid var(--add-file-bg-clr);
 }
@@ -376,4 +380,15 @@ header .site-search ul li,
 
 .custom-drop-menu .ease-linear {
   transition-timing-function: ease-in-out;
+}
+
+@media only screen and (min-width:350px) and (max-width:440px){ 
+.flex-wrap-class{
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: center;
+}
+.width-50{
+  width:60px;
+}
 }
