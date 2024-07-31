@@ -243,10 +243,10 @@ header .site-search ul li,
 
 .custom-drop-menu {
   /* padding: 20px; */
-  /* width: 345px;
-  max-width: 90vw; */
+  width: 345px;
+  max-width: 90vw;
   pointer-events: auto;
-  height: auto;
+  height: 300px;
   margin: 0 auto;
   background: #fff;
   /* box-shadow: 0 14px 50px rgba(0, 0, 0, 0.08); */
@@ -333,7 +333,7 @@ header .site-search ul li,
   .add-more-btn {
     width: 100%;
     justify-content: center;
- 
+
   }
 }
 
