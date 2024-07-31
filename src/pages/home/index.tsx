@@ -86,6 +86,9 @@ function Home(): JSX.Element {
         if (allExtensionsSame) {
           setExtensionName(fileExtensions[0]);
           setIsErrorShow(false);
+        } else {
+          setExtensionName("");
+          setIsErrorShow(true);
         }
       } else {
         setIsErrorShow(true);
@@ -118,19 +121,27 @@ function Home(): JSX.Element {
     if (uploadedFileList.length > 0 && possibleFormat) {
       const initialActiveState: { [fileName: string]: string } = {};
       const updateConversionList: ConversionFormat[] = [];
+
+      const fileExtensions = uploadedFileList.map((file) => file.fileExtension);
+      // Check if all file extensions are the same
+      const allExtensionsSame = fileExtensions.every(
+        (ext: any) => ext === fileExtensions[0]
+      );
       uploadedFileList.forEach((file) => {
         const format = file.fileExtension;
         if (possibleFormat.hasOwnProperty(format)) {
           const formatProperties = jsonFileData[format];
-          const allFormats = [
-            ...(formatProperties.images || []),
-            ...(formatProperties.documents || []),
-            ...(formatProperties.archive || []),
-          ];
+          const allFormats =
+            formatProperties.images ||
+            formatProperties.documents ||
+            formatProperties.archive ||
+            [];
 
           if (allFormats.length > 0) {
             const randomIndex = Math.floor(Math.random() * allFormats.length);
 
+            if (allExtensionsSame) {
+            }
             updateConversionList.push({
               fileName: file.fileName,
               conversionFormat: allFormats[randomIndex],
@@ -475,7 +486,11 @@ function Home(): JSX.Element {
                             </TEDropdownToggle>
                           </TERipple>
 
-                          <TEDropdownMenu  style={{ transform: "translate3d(-120px, 31px, 0px)"}}>
+                          <TEDropdownMenu
+                            style={{
+                              transform: "translate3d(-120px, 31px, 0px)",
+                            }}
+                          >
                             <div className="p-2 custom-drop-menu border-0 mt-2 shadow-none`">
                               {/* Search Bar */}
                               <div className="dropdown-searchbar">

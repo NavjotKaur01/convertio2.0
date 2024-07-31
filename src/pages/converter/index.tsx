@@ -108,12 +108,19 @@ function ImageConverter(): JSX.Element {
         if (allExtensionsSame) {
           setExtensionName(fileExtensions[0]);
           setIsErrorShow(false);
+        } else {
+          setExtensionName("");
+          setIsErrorShow(true);
         }
       } else {
         setIsErrorShow(true);
       }
     } else {
-      setIsErrorShow(false);
+      if (conversionFormat.length) {
+        setIsErrorShow(false);
+      } else {
+        setIsErrorShow(true);
+      }
     }
   }, [conversionFormat, isErrorShow]);
 
@@ -136,20 +143,30 @@ function ImageConverter(): JSX.Element {
     if (uploadedFileList.length > 0 && possibleFormat) {
       const initialActiveState: { [fileName: string]: string } = {};
       const updateConversionList: ConversionFormat[] = [];
+
+      const fileExtensions = uploadedFileList.map((file) => file.fileExtension);
+      // Check if all file extensions are the same
+      const allExtensionsSame = fileExtensions.every(
+        (ext: any) => ext === fileExtensions[0]
+      );
       uploadedFileList.forEach((file) => {
         const format = file.fileExtension;
         if (possibleFormat.hasOwnProperty(format)) {
           const formatProperties = jsonFileData[format];
-          const allFormats = [
-            ...(formatProperties.images || []),
-            ...(formatProperties.documents || []),
-            ...(formatProperties.archive || []),
-          ];
+          const allFormats =
+            formatProperties.images ||
+            formatProperties.documents ||
+            formatProperties.archive ||
+            [];
 
           if (allFormats.length > 0) {
+            const randomIndex = Math.floor(Math.random() * allFormats.length);
+
+            if (allExtensionsSame) {
+            }
             updateConversionList.push({
               fileName: file.fileName,
-              conversionFormat: allFormats[1],
+              conversionFormat: allFormats[randomIndex],
             });
           }
 
