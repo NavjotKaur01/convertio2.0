@@ -14,6 +14,7 @@ import axios from "axios";
 import possibleFormat from "../../utilities/possibleFileFormat.json";
 import { useNavigate } from "react-router-dom";
 import FAQ from "../../components/faq";
+import { decryptData, encryptDatawith1Days } from "../../utilities/utils";
 
 interface FileDetails {
   fileName: string;
@@ -42,9 +43,9 @@ function Home(): JSX.Element {
   const [filterFormattedList, setFilterFormattedList] = useState<string[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [hoveredTab, setHoveredTab] = useState<any>(null);
-
+  const [files, setFiles] = useState([]);
   const navigate = useNavigate();
-
+  const FileId = decryptData("files");
   useEffect(() => {
     if (Object.keys(possibleFormat).length) {
       setJsonFileData(possibleFormat);
@@ -217,13 +218,14 @@ function Home(): JSX.Element {
       return;
     }
     const newFilesArray = Array.from(files);
+    const newFiles: any = newFilesArray.map((file) => ({ file, format: "" }));
+    setFiles(newFiles);
     const totalFilesCount = uploadedFileList.length + newFilesArray.length;
     if (totalFilesCount > 10) {
       event.preventDefault();
       setErrorMsg(`Cannot upload more than 10 files.`);
       return;
     }
-    const fd = new FormData();
     const updatedFiles: FileDetails[] = [];
     const updateConversion: ConversionFormat[] = [];
     for (let i = 0; i < files.length; i++) {
@@ -233,7 +235,6 @@ function Home(): JSX.Element {
         console.log(`File extension is undefined for file: ${fileName}`);
         continue;
       }
-
       updatedFiles.push({
         fileName: files[i].name,
         size: formatBytes(files[i].size),
@@ -243,26 +244,12 @@ function Home(): JSX.Element {
         conversionFormat: extensionName,
         fileName: files[i].name,
       });
-
-      fd.append(`file${i + 1}`, files[i]);
     }
     setUploadedFileList((prevState) => [...prevState, ...updatedFiles]);
     if (conversionFormat.length) {
       setConversionFormat((prevState) => [...prevState, ...updateConversion]);
     }
     setErrorMsg("");
-    axios
-      .post("http://httpbin.org/post", fd, {
-        headers: {
-          "Custom-Header": "value",
-        },
-      })
-      .then((res: any) => {
-        console.log(res);
-      })
-      .catch((err: any) => {
-        console.error(err);
-      });
   };
 
   // calculate file size in bytes,KB,MB,GB
@@ -376,14 +363,37 @@ function Home(): JSX.Element {
   };
 
   // handle convert file
-  const handleConvert = () => {
+  const handleConvert = async () => {
     if (uploadedFileList.length === 0) {
       setErrorMsg("No files uploaded.");
       return;
     }
+
     if (conversionFormat.length) {
-      localStorage.setItem("files", JSON.stringify(uploadedFileList));
-      navigate("/download");
+      const formData = new FormData();
+      files.forEach((fileObj: any, index: number) => {
+        formData.append("files", fileObj.file);
+        formData.append("formats", conversionFormat[index].conversionFormat);
+      });
+      if (FileId) {
+        formData.append("id", FileId._id);
+      }
+      formData;
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/jobs",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        encryptDatawith1Days("files", response.data.Data, 1);
+        navigate("/download");
+      } catch (error) {
+        console.error("An error occurred while converting files:", error);
+      }
     } else {
       setIsErrorShow(true);
     }

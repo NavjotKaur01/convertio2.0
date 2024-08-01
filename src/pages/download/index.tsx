@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { decryptData } from "../../utilities/utils";
+import axios from "axios";
 
 function Download() {
   const navigate = useNavigate();
@@ -11,7 +13,7 @@ function Download() {
   const location = useLocation();
 
   useEffect(() => {
-    const storedFiles = localStorage.getItem("files");
+    const storedFiles = decryptData("files");
     if (storedFiles) {
       if (urlList.includes(location.state)) {
         navigate(`/${location.state}/download`);
@@ -24,9 +26,9 @@ function Download() {
   }, []);
 
   useEffect(() => {
-    const storedFiles = localStorage.getItem("files");
+    const storedFiles: any = decryptData("files");
     if (storedFiles) {
-      setFiles(JSON.parse(storedFiles));
+      setFiles(storedFiles.convertedFile);
     }
 
     let interval: NodeJS.Timeout | null = null;
@@ -58,12 +60,11 @@ function Download() {
   useEffect(() => {
     if (progress === 100) {
       setIsDone(true);
-      localStorage.removeItem("files");
     }
   }, [progress]);
 
   useEffect(() => {
-    const storedFiles = localStorage.getItem("files");
+    const storedFiles = decryptData("files");
     if (files.length === 0 && !storedFiles) {
       navigate("/");
     }
@@ -87,8 +88,24 @@ function Download() {
     }
   };
 
-  const handleDownload = () => {
-    console.log("Downloaded");
+  const handleDownload = async (fileName: string) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/jobs/${fileName}`,
+        {
+          responseType: "blob",
+        }
+      );
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Error downloading the files:", error);
+    }
   };
 
   return (
@@ -109,7 +126,7 @@ function Download() {
                     key={index}
                   >
                     <div className="flex items-center file-list-item w-full sm:w-fit ">
-                      <div >{file.fileName}</div>
+                      <div>{file.fileName}</div>
                     </div>
 
                     {isConverting ? (
@@ -126,7 +143,6 @@ function Download() {
                           </div>
                         </div>
                       </>
-                  
                     ) : isDone ? (
                       <div className="border border-[#1add72] text-[#1add72] px-7 py-1 w-fit rounded mx-5 sm:m-auto">
                         Done
@@ -134,7 +150,7 @@ function Download() {
                     ) : (
                       <div className="text-gray-700">{file.size}</div>
                     )}
-                    
+
                     <div
                       className={`text-white bg-[var(--primary-color)] px-5 py-3 w-28 rounded  xl:ml-[-53px] download ${
                         isConverting ? "opacity-75" : "opacity-100"
@@ -143,7 +159,7 @@ function Download() {
                       <button
                         disabled={isConverting}
                         className={`${isConverting ? "cursor-no-drop" : ""}`}
-                        onClick={() => handleDownload()}
+                        onClick={() => handleDownload(file.fileName)}
                       >
                         Download
                       </button>
