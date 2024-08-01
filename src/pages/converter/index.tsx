@@ -219,17 +219,12 @@ function ImageConverter(): JSX.Element {
       Object.keys(verticalActive).includes(fileName) &&
       searchStr
     ) {
-      const activeTabId = verticalActive[fileName];
-      const lastIndex = activeTabId.lastIndexOf("-");
-      let filterData = [];
-      if (lastIndex !== -1) {
-        const lastWord = activeTabId.substring(lastIndex + 1);
-        const activeTabData = jsonFileData[fileType][lastWord];
-        if (activeTabData.length) {
-          filterData = activeTabData.filter((item: string) =>
-            item.toLowerCase().includes(searchStr)
-          );
-        }
+      let filterData: any[] = [];
+      const activeTabData = Object.values(jsonFileData[fileType]).flat();
+      if (activeTabData.length) {
+        filterData = activeTabData.filter((item: any) =>
+          item.toLowerCase().includes(searchStr)
+        );
       }
       return filterData;
     } else {
@@ -440,7 +435,9 @@ function ImageConverter(): JSX.Element {
                           src="../../static/img/picture.svg"
                           className="me-1"
                         /> */}
-                        <div className="text-ellipsis overflow-hidden w-[100px] whitespace-nowrap">{file.fileName}</div>
+                        <div className="text-ellipsis overflow-hidden w-[100px] whitespace-nowrap">
+                          {file.fileName}
+                        </div>
                       </div>
 
                       <div className="file-list-item">{file.size}</div>
@@ -546,21 +543,23 @@ function ImageConverter(): JSX.Element {
                                     {!!filterFormattedList &&
                                       !!filterFormattedList.length &&
                                       filterFormattedList.map(
-                                        (item: any, idx: number) => (
-                                          <button
-                                            key={`${idx}`}
-                                            type="button"
-                                            className={`btn px-3 py-1 btn-custom mx-1 my-1`}
-                                            onClick={() =>
-                                              handleChooseConversion(
-                                                item,
-                                                file.fileName
-                                              )
-                                            }
-                                          >
-                                            {item.toUpperCase()}
-                                          </button>
-                                        )
+                                        (item: any, idx: number) => {
+                                          return (
+                                            <button
+                                              key={`${idx}`}
+                                              type="button"
+                                              className={`btn px-3 py-1 btn-custom mx-1 my-1`}
+                                              onClick={() =>
+                                                handleChooseConversion(
+                                                  item,
+                                                  file.fileName
+                                                )
+                                              }
+                                            >
+                                              {item.toUpperCase()}
+                                            </button>
+                                          );
+                                        }
                                       )}
                                   </TEDropdownItem>
                                 ) : (
@@ -756,7 +755,7 @@ function ImageConverter(): JSX.Element {
                             style={{ marginBottom: "4px" }}
                           />
                         </span>{" "}
-                        Add more Files 
+                        Add more Files
                       </span>
                       <span className="label-file"></span>
                       <input

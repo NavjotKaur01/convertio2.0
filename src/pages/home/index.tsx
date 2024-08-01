@@ -197,17 +197,12 @@ function Home(): JSX.Element {
       Object.keys(verticalActive).includes(fileName) &&
       searchStr
     ) {
-      const activeTabId = verticalActive[fileName];
-      const lastIndex = activeTabId.lastIndexOf("-");
-      let filterData = [];
-      if (lastIndex !== -1) {
-        const lastWord = activeTabId.substring(lastIndex + 1);
-        const activeTabData = jsonFileData[fileType][lastWord];
-        if (activeTabData.length) {
-          filterData = activeTabData.filter((item: string) =>
-            item.toLowerCase().includes(searchStr)
-          );
-        }
+      let filterData: any[] = [];
+      const activeTabData = Object.values(jsonFileData[fileType]).flat();
+      if (activeTabData.length) {
+        filterData = activeTabData.filter((item: any) =>
+          item.toLowerCase().includes(searchStr)
+        );
       }
       return filterData;
     } else {
