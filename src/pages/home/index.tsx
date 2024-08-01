@@ -122,11 +122,6 @@ function Home(): JSX.Element {
       const initialActiveState: { [fileName: string]: string } = {};
       const updateConversionList: ConversionFormat[] = [];
 
-      const fileExtensions = uploadedFileList.map((file) => file.fileExtension);
-      // Check if all file extensions are the same
-      const allExtensionsSame = fileExtensions.every(
-        (ext: any) => ext === fileExtensions[0]
-      );
       uploadedFileList.forEach((file) => {
         const format = file.fileExtension;
         if (possibleFormat.hasOwnProperty(format)) {
@@ -139,9 +134,6 @@ function Home(): JSX.Element {
 
           if (allFormats.length > 0) {
             const randomIndex = Math.floor(Math.random() * allFormats.length);
-
-            if (allExtensionsSame) {
-            }
             updateConversionList.push({
               fileName: file.fileName,
               conversionFormat: allFormats[randomIndex],
