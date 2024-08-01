@@ -435,309 +435,312 @@ function ImageConverter(): JSX.Element {
                           src="../../static/img/picture.svg"
                           className="me-1"
                         /> */}
-                        <div className="text-ellipsis overflow-hidden w-[100px] whitespace-nowrap custom-width-60">{file.fileName}</div>
-                        <div className="file-list-item">{file.size}</div> 
+                        <div className="text-ellipsis overflow-hidden w-[100px] whitespace-nowrap custom-width-60">
+                          {file.fileName}
+                        </div>
+                        <div className="file-list-item">{file.size}</div>
                       </div>
 
-                      
                       {/* dropdown start */}
                       <div className="flex items-center justify-end">
-                      <div className="file-list-item ">
-                        <TEDropdown className="flex justify-center">
-                          <TERipple rippleColor="light">
-                            <TEDropdownToggle
-                              className={`flex items-center whitespace-nowrap px-3 pb-1 pt-1 border rounded-lg w-20 ${
-                                isNotPossibleFormat(file.fileExtension)
-                                  ? "small-btn"
-                                  : "error-btn"
-                              }`}
-                            >
-                              {!!conversionFormat &&
-                              conversionFormat.length > 0 &&
-                              conversionFormat.some(
-                                (e: ConversionFormat) =>
-                                  e.fileName === file.fileName
-                              )
-                                ? (() => {
-                                    const conversionResult =
-                                      conversionFormat
-                                        .find(
-                                          (e: ConversionFormat) =>
-                                            e.fileName === file.fileName
-                                        )
-                                        ?.conversionFormat.toUpperCase() ??
-                                      "select";
-                                    const length = conversionResult?.length;
-                                    const space =
-                                      length > 1
-                                        ? "\u00A0".repeat(6 - length)
-                                        : "";
-                                    return (
-                                      <span>
-                                        {conversionResult}
-                                        {space}
-                                      </span>
-                                    );
-                                  })()
-                                : "select"}
-                              <span className="ml-2 [&>svg]:w-5 w-2 absolute right-4">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                              </span>
-                            </TEDropdownToggle>
-                          </TERipple>
-
-                          <TEDropdownMenu>
-                            <div className="p-2 custom-drop-menu border-0 mt-2 shadow-none`">
-                              {/* Search Bar */}
-                              <div className="dropdown-searchbar">
-                                <div className="search-bar-main relative">
-                                  <div className="search-bar-view relative">
-                                    <input
-                                      type="text"
-                                      placeholder="Search"
-                                      className="w-full"
-                                      onChange={(e: any) =>
-                                        handleSearchPossibleFormat(
-                                          file.fileName,
-                                          e.target.value,
-                                          file.fileExtension
-                                        )
-                                      }
+                        <div className="file-list-item ">
+                          <TEDropdown className="flex justify-center">
+                            <TERipple rippleColor="light">
+                              <TEDropdownToggle
+                                className={`flex items-center whitespace-nowrap px-3 pb-1 pt-1 border rounded-lg w-20 ${
+                                  isNotPossibleFormat(file.fileExtension)
+                                    ? "small-btn"
+                                    : "error-btn"
+                                }`}
+                              >
+                                {!!conversionFormat &&
+                                conversionFormat.length > 0 &&
+                                conversionFormat.some(
+                                  (e: ConversionFormat) =>
+                                    e.fileName === file.fileName
+                                )
+                                  ? (() => {
+                                      const conversionResult =
+                                        conversionFormat
+                                          .find(
+                                            (e: ConversionFormat) =>
+                                              e.fileName === file.fileName
+                                          )
+                                          ?.conversionFormat.toUpperCase() ??
+                                        "select";
+                                      const length = conversionResult?.length;
+                                      const space =
+                                        length > 1
+                                          ? "\u00A0".repeat(6 - length)
+                                          : "";
+                                      return (
+                                        <span>
+                                          {conversionResult}
+                                          {space}
+                                        </span>
+                                      );
+                                    })()
+                                  : "select"}
+                                <span className="ml-2 [&>svg]:w-5 w-2 absolute right-4">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                                      clipRule="evenodd"
                                     />
+                                  </svg>
+                                </span>
+                              </TEDropdownToggle>
+                            </TERipple>
 
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="1.5em"
-                                      height="1.5em"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      className="cursor-pointer"
-                                    >
-                                      <circle cx="11" cy="11" r="8"></circle>
-                                      <line
-                                        x1="21"
-                                        y1="21"
-                                        x2="16.65"
-                                        y2="16.65"
-                                      ></line>
-                                    </svg>
+                            <TEDropdownMenu>
+                              <div className="p-2 custom-drop-menu border-0 mt-2 shadow-none`">
+                                {/* Search Bar */}
+                                <div className="dropdown-searchbar">
+                                  <div className="search-bar-main relative">
+                                    <div className="search-bar-view relative">
+                                      <input
+                                        type="text"
+                                        placeholder="Search"
+                                        className="w-full"
+                                        onChange={(e: any) =>
+                                          handleSearchPossibleFormat(
+                                            file.fileName,
+                                            e.target.value,
+                                            file.fileExtension
+                                          )
+                                        }
+                                      />
+
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="1.5em"
+                                        height="1.5em"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        className="cursor-pointer"
+                                      >
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line
+                                          x1="21"
+                                          y1="21"
+                                          x2="16.65"
+                                          y2="16.65"
+                                        ></line>
+                                      </svg>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
 
-                              <div className="flex items-start">
-                                {searchQuery &&
-                                queryObject === file.fileName ? (
-                                  <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none`">
-                                    {!!filterFormattedList &&
-                                      !!filterFormattedList.length &&
-                                      filterFormattedList.map(
-                                        (item: any, idx: number) => {
-                                          return (
-                                            <button
-                                              key={`${idx}`}
-                                              type="button"
-                                              className={`btn px-3 py-1 btn-custom mx-1 my-1`}
-                                              onClick={() =>
-                                                handleChooseConversion(
-                                                  item,
-                                                  file.fileName
-                                                )
-                                              }
-                                            >
-                                              {item.toUpperCase()}
-                                            </button>
-                                          );
-                                        }
-                                      )}
-                                  </TEDropdownItem>
-                                ) : (
-                                  <>
-                                    {/* tabs */}
-                                    <TEDropdownItem preventCloseOnClick>
-                                      {Object.entries(possibleFormat).map(
-                                        ([key, formats], index) =>
-                                          file.fileExtension === key && (
-                                            <React.Fragment key={index}>
-                                              <TETabs
-                                                vertical
-                                                className="tabs-heading file-tabs"
+                                <div className="flex items-start">
+                                  {searchQuery &&
+                                  queryObject === file.fileName ? (
+                                    <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none`">
+                                      {!!filterFormattedList &&
+                                        !!filterFormattedList.length &&
+                                        filterFormattedList.map(
+                                          (item: any, idx: number) => {
+                                            return (
+                                              <button
+                                                key={`${idx}`}
+                                                type="button"
+                                                className={`btn px-3 py-1 btn-custom mx-1 my-1`}
+                                                onClick={() =>
+                                                  handleChooseConversion(
+                                                    item,
+                                                    file.fileName
+                                                  )
+                                                }
                                               >
-                                                {Object.keys(formats).map(
-                                                  (keyName, idx) => {
-                                                    return (
-                                                      <TETabsItem
-                                                        className={`tab-item ${
-                                                          verticalActive[
+                                                {item.toUpperCase()}
+                                              </button>
+                                            );
+                                          }
+                                        )}
+                                    </TEDropdownItem>
+                                  ) : (
+                                    <>
+                                      {/* tabs */}
+                                      <TEDropdownItem preventCloseOnClick>
+                                        {Object.entries(possibleFormat).map(
+                                          ([key, formats], index) =>
+                                            file.fileExtension === key && (
+                                              <React.Fragment key={index}>
+                                                <TETabs
+                                                  vertical
+                                                  className="tabs-heading file-tabs"
+                                                >
+                                                  {Object.keys(formats).map(
+                                                    (keyName, idx) => {
+                                                      return (
+                                                        <TETabsItem
+                                                          className={`tab-item ${
+                                                            verticalActive[
+                                                              file.fileName
+                                                            ] ===
+                                                              `tab-${file.fileName}-1-${keyName}` ||
+                                                            hoveredTab ===
+                                                              `tab-${file.fileName}-1-${keyName}`
+                                                              ? "primary-active"
+                                                              : ""
+                                                          }`}
+                                                          key={idx}
+                                                          onClick={() =>
+                                                            handleVerticalClick(
+                                                              `tab-${file.fileName}-1-${keyName}`,
+                                                              file.fileName
+                                                            )
+                                                          }
+                                                          active={
+                                                            verticalActive ===
+                                                            `tab-${file.fileName}-1-${keyName}`
+                                                          }
+                                                          onMouseEnter={() => {
+                                                            setHoveredTab(
+                                                              `tab-${file.fileName}-1-${keyName}`
+                                                            );
+                                                            handleVerticalClick(
+                                                              `tab-${file.fileName}-1-${keyName}`,
+                                                              file.fileName
+                                                            );
+                                                          }}
+                                                          onMouseLeave={() =>
+                                                            setHoveredTab(null)
+                                                          }
+                                                        >
+                                                          {keyName}
+                                                          {(verticalActive[
                                                             file.fileName
                                                           ] ===
                                                             `tab-${file.fileName}-1-${keyName}` ||
-                                                          hoveredTab ===
-                                                            `tab-${file.fileName}-1-${keyName}`
-                                                            ? "primary-active"
-                                                            : ""
-                                                        }`}
-                                                        key={idx}
-                                                        onClick={() =>
-                                                          handleVerticalClick(
-                                                            `tab-${file.fileName}-1-${keyName}`,
-                                                            file.fileName
-                                                          )
-                                                        }
-                                                        active={
-                                                          verticalActive ===
-                                                          `tab-${file.fileName}-1-${keyName}`
-                                                        }
-                                                        onMouseEnter={() => {
-                                                          setHoveredTab(
-                                                            `tab-${file.fileName}-1-${keyName}`
-                                                          );
-                                                          handleVerticalClick(
-                                                            `tab-${file.fileName}-1-${keyName}`,
-                                                            file.fileName
-                                                          );
-                                                        }}
-                                                        onMouseLeave={() =>
-                                                          setHoveredTab(null)
-                                                        }
-                                                      >
-                                                        {keyName}
-                                                        {(verticalActive[
-                                                          file.fileName
-                                                        ] ===
-                                                          `tab-${file.fileName}-1-${keyName}` ||
-                                                          hoveredTab ===
-                                                            `tab-${file.fileName}-1-${keyName}`) && (
-                                                          <img
-                                                            className="ms-2"
-                                                            src="../../static/img/right-arrow.svg"
-                                                            alt=""
-                                                          />
-                                                        )}
-                                                      </TETabsItem>
-                                                    );
-                                                  }
-                                                )}
-                                              </TETabs>
-                                            </React.Fragment>
-                                          )
-                                      )}
-                                    </TEDropdownItem>
-
-                                    <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none`">
-                                      <TETabsContent>
-                                        {Object.entries(possibleFormat).map(
-                                          ([key, formats], index) =>
-                                            file.fileExtension === key &&
-                                            Object.entries(formats).map(
-                                              (
-                                                [keyName, possibleFormats],
-                                                idx
-                                              ) => (
-                                                <TETabsPane
-                                                  className="grid grid-cols-12"
-                                                  key={`${idx}`}
-                                                  show={
-                                                    verticalActive[
-                                                      file.fileName
-                                                    ] ===
-                                                    `tab-${file.fileName}-1-${keyName}`
-                                                  }
-                                                >
-                                                  {possibleFormats.map(
-                                                    (
-                                                      fileExtension,
-                                                      innerIdx
-                                                    ) => (
-                                                      <button
-                                                        key={`${index}-${idx}-${innerIdx}`}
-                                                        type="button"
-                                                        className={`btn px-1 text-center py-1 mx-1 my-1 col-span-4 ${
-                                                          conversionFormat.find(
-                                                            (items: any) =>
-                                                              items.fileName ===
-                                                              file.fileName
-                                                          )
-                                                            ?.conversionFormat ===
-                                                          fileExtension
-                                                            ? "btn-custom-selected"
-                                                            : "btn-custom"
-                                                        }`}
-                                                        onClick={() =>
-                                                          handleChooseConversion(
-                                                            fileExtension,
-                                                            file.fileName
-                                                          )
-                                                        }
-                                                      >
-                                                        {fileExtension.toUpperCase()}
-                                                      </button>
-                                                    )
+                                                            hoveredTab ===
+                                                              `tab-${file.fileName}-1-${keyName}`) && (
+                                                            <img
+                                                              className="ms-2"
+                                                              src="../../static/img/right-arrow.svg"
+                                                              alt=""
+                                                            />
+                                                          )}
+                                                        </TETabsItem>
+                                                      );
+                                                    }
                                                   )}
-                                                </TETabsPane>
-                                              )
+                                                </TETabs>
+                                              </React.Fragment>
                                             )
                                         )}
-                                      </TETabsContent>
-                                    </TEDropdownItem>
-                                    {/* tabs end */}
-                                  </>
-                                )}
+                                      </TEDropdownItem>
+
+                                      <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none`">
+                                        <TETabsContent>
+                                          {Object.entries(possibleFormat).map(
+                                            ([key, formats], index) =>
+                                              file.fileExtension === key &&
+                                              Object.entries(formats).map(
+                                                (
+                                                  [keyName, possibleFormats],
+                                                  idx
+                                                ) => (
+                                                  <TETabsPane
+                                                    className="grid grid-cols-12"
+                                                    key={`${idx}`}
+                                                    show={
+                                                      verticalActive[
+                                                        file.fileName
+                                                      ] ===
+                                                      `tab-${file.fileName}-1-${keyName}`
+                                                    }
+                                                  >
+                                                    {possibleFormats.map(
+                                                      (
+                                                        fileExtension,
+                                                        innerIdx
+                                                      ) => (
+                                                        <button
+                                                          key={`${index}-${idx}-${innerIdx}`}
+                                                          type="button"
+                                                          className={`btn px-1 text-center py-1 mx-1 my-1 col-span-4 ${
+                                                            conversionFormat.find(
+                                                              (items: any) =>
+                                                                items.fileName ===
+                                                                file.fileName
+                                                            )
+                                                              ?.conversionFormat ===
+                                                            fileExtension
+                                                              ? "btn-custom-selected"
+                                                              : "btn-custom"
+                                                          }`}
+                                                          onClick={() =>
+                                                            handleChooseConversion(
+                                                              fileExtension,
+                                                              file.fileName
+                                                            )
+                                                          }
+                                                        >
+                                                          {fileExtension.toUpperCase()}
+                                                        </button>
+                                                      )
+                                                    )}
+                                                  </TETabsPane>
+                                                )
+                                              )
+                                          )}
+                                        </TETabsContent>
+                                      </TEDropdownItem>
+                                      {/* tabs end */}
+                                    </>
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          </TEDropdownMenu>
-                        </TEDropdown>
-                      </div>
-                      {/* dropdown end*/}
-                      {/* close button */}
-                      <div className="file-list-item">
-                        <svg
-                          onClick={() => handleRemoveRow(file.fileName, index)}
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="1.5em"
-                          height="1.5em"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="#7987a1"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          className="cross-ic cursor-pointer"
-                          data-v-db7992bc=""
-                        >
-                          <circle
-                            cx="12"
-                            cy="12"
-                            r="10"
+                            </TEDropdownMenu>
+                          </TEDropdown>
+                        </div>
+                        {/* dropdown end*/}
+                        {/* close button */}
+                        <div className="file-list-item">
+                          <svg
+                            onClick={() =>
+                              handleRemoveRow(file.fileName, index)
+                            }
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1.5em"
+                            height="1.5em"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#7987a1"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            className="cross-ic cursor-pointer"
                             data-v-db7992bc=""
-                          ></circle>
-                          <line
-                            x1="15"
-                            y1="9"
-                            x2="9"
-                            y2="15"
-                            data-v-db7992bc=""
-                          ></line>
-                          <line
-                            data-v-db7992bc=""
-                            x1="9"
-                            y1="9"
-                            x2="15"
-                            y2="15"
-                          ></line>
-                        </svg>
-                      </div>
+                          >
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              data-v-db7992bc=""
+                            ></circle>
+                            <line
+                              x1="15"
+                              y1="9"
+                              x2="9"
+                              y2="15"
+                              data-v-db7992bc=""
+                            ></line>
+                            <line
+                              data-v-db7992bc=""
+                              x1="9"
+                              y1="9"
+                              x2="15"
+                              y2="15"
+                            ></line>
+                          </svg>
+                        </div>
                       </div>
                       {/* close button end*/}
                     </div>

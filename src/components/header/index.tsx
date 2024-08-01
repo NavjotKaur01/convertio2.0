@@ -159,7 +159,11 @@ function Header(): JSX.Element {
         }`}
       >
         <div className="flex justify-between">
-          <Link className="text-xl mr-4 font-semibold" to="#">
+          <Link
+            className="text-xl mr-4 font-semibold"
+            to="/"
+            onClick={() => setIsExpanded(!isExpanded)}
+          >
             logo
           </Link>
           <img
@@ -171,14 +175,14 @@ function Header(): JSX.Element {
         <div className="">
           <ul className="gap-10 flex-col flex">
             <li className=""></li>
-            <li>
-              <Link to="#">Heif JPG </Link>
+            <li onClick={() => setIsExpanded(!isExpanded)}>
+              <Link to="/heif-jpg-converter">Heif JPG </Link>
             </li>
-            <li>
-              <Link to="#">Heif Converter </Link>
+            <li onClick={() => setIsExpanded(!isExpanded)}>
+              <Link to="/heif-converter">Heif Converter </Link>
             </li>
-            <li>
-              <Link to="#">Image Converter</Link>
+            <li onClick={() => setIsExpanded(!isExpanded)}>
+              <Link to="/image-converter">Image Converter</Link>
             </li>
           </ul>
         </div>
