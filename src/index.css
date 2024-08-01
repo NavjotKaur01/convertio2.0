@@ -383,12 +383,12 @@ header .site-search ul li,
 }
 
 @media only screen and (min-width:350px) and (max-width:440px){ 
-.flex-wrap-class{
+.custom-flex-nowrap-class{
   flex-wrap: nowrap;
   flex-direction: row;
   justify-content: center;
 }
-.width-50{
+.custom-width-60{
   width:60px;
 }
 }

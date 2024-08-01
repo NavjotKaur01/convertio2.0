@@ -427,21 +427,21 @@ function ImageConverter(): JSX.Element {
                 <div>
                   {uploadedFileList.map((file: FileDetails, index: number) => (
                     <div
-                      className="flex md:grid flex-wrap justify-between items-center file-list-main rounded-lg border-none w-full"
+                      className="flex md:grid flex-wrap justify-between items-center file-list-main rounded-lg border-none w-full custom-flex-nowrap-class"
                       key={index}
                     >
-                      <div className="flex items-center file-list-item">
+                      <div className="flex items-center justify-between file-list-item">
                         {/* <img
                           src="../../static/img/picture.svg"
                           className="me-1"
                         /> */}
-                        <div className="text-ellipsis overflow-hidden w-[100px] whitespace-nowrap">
-                          {file.fileName}
-                        </div>
+                        <div className="text-ellipsis overflow-hidden w-[100px] whitespace-nowrap custom-width-60">{file.fileName}</div>
+                        <div className="file-list-item">{file.size}</div> 
                       </div>
 
-                      <div className="file-list-item">{file.size}</div>
+                      
                       {/* dropdown start */}
+                      <div className="flex items-center justify-end">
                       <div className="file-list-item ">
                         <TEDropdown className="flex justify-center">
                           <TERipple rippleColor="light">
@@ -738,6 +738,7 @@ function ImageConverter(): JSX.Element {
                           ></line>
                         </svg>
                       </div>
+                      </div>
                       {/* close button end*/}
                     </div>
                   ))}
@@ -768,7 +769,7 @@ function ImageConverter(): JSX.Element {
                     </div>
                   </div>
 
-                  <div className="p-3 flex items-center justify-center conversion">
+                  <div className="p-3 flex items-center  conversion">
                     {isFileExtension ? (
                       <div className="flex items-center justify-between conversion-inside">
                         <p className="mb-0">

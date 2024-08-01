@@ -406,7 +406,7 @@ function Home(): JSX.Element {
                 <div>
                   {uploadedFileList.map((file: FileDetails, index: number) => (
                     <div
-                      className="flex md:grid flex-wrap justify-between items-center file-list-main rounded-lg border-none w-full flex-wrap-class"
+                      className="flex md:grid flex-wrap justify-between items-center file-list-main rounded-lg border-none w-full custom-flex-nowrap-class"
                       key={index}
                     >
                       <div className="flex items-center justify-between file-list-item">
@@ -414,7 +414,7 @@ function Home(): JSX.Element {
                           src="../../static/img/picture.svg"
                           className="me-1"
                         /> */}
-                        <div className="text-ellipsis overflow-hidden w-[100px] whitespace-nowrap width-50">
+                        <div className="text-ellipsis overflow-hidden w-[100px] whitespace-nowrap custom-width-60">
                           {file.fileName}
                         </div>
                         <div className="file-list-item">{file.size}</div>
@@ -757,7 +757,7 @@ function Home(): JSX.Element {
 
                   <div className="p-3 flex items-center conversion justify-center">
                     {isFileExtension ? (
-                      <div className="flex items-center sm:justify-between justify-center conversion-inside">
+                      <div className="flex items-center justify-between conversion-inside">
                         <p className="mb-0">
                           Convert All ({uploadedFileList.length} ) to:{" "}
                         </p>
