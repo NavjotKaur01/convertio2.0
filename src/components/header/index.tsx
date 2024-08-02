@@ -2,15 +2,26 @@ import { Link } from "react-router-dom";
 // import { TERipple } from "tw-elements-react";
 import searchList from "../../utilities/searchData.json";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 interface SearchItem {
   id: number;
   searchName: string;
 }
 function Header(): JSX.Element {
+  const languages = [
+    { code: "en", lang: "English" },
+    { code: "fr", lang: "French" },
+    { code: "hi", lang: "Hindi" },
+  ];
   const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
   const [searchResults, setSearchResults] = useState<SearchItem[]>([]);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [chooseSearchResult, setChooseSearchResult] = useState<string>("");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { i18n } = useTranslation();
+  const { t } = useTranslation("navigation");
+
+  const toggleDropdown = () => setIsOpen(!isOpen);
 
   // handle search functionality
   const handleInputChange = (event: string) => {
@@ -43,7 +54,11 @@ function Header(): JSX.Element {
     setSearchResults([]);
     setShowSearchResults(false);
   };
-
+  // choose language
+  const handleChooseLang = (lng: string) => {
+    setIsOpen(!isOpen);
+    i18n.changeLanguage(lng);
+  };
   return (
     <header className="h-[60px]">
       <div className="navbar bg-white z-30">
@@ -51,18 +66,18 @@ function Header(): JSX.Element {
         <nav className="flex lg:container px-5 lg:px-10 mx-auto justify-between py-4">
           <div className="flex items-center xl:gap-72 gap-10">
             <Link className="text-xl lg:mx-24 font-semibold m-0" to="/">
-              logo
+              {t("brand")}
             </Link>
             <ul className="gap-10 items-center hidden lg:flex">
               <li className=""></li>
               <li>
-                <Link to="/heif-jpg-converter">Heif JPG </Link>
+                <Link to="/heif-jpg-converter">{t("nav.heifJpg")} </Link>
               </li>
               <li>
-                <Link to="/heif-converter">Heif Converter </Link>
+                <Link to="/heif-converter">{t("nav.heifConverter")} </Link>
               </li>
               <li>
-                <Link to="/image-converter">Image Converter</Link>
+                <Link to="/image-converter">{t("nav.imageConverter")}</Link>
               </li>
             </ul>
           </div>
@@ -71,7 +86,7 @@ function Header(): JSX.Element {
             <div className="search-bar-view relative">
               <input
                 type="text"
-                placeholder="Search"
+                placeholder={t("searchPlaceholder")}
                 className="w-full"
                 value={chooseSearchResult}
                 onChange={(e: any) => handleInputChange(e.target.value)}
@@ -150,6 +165,36 @@ function Header(): JSX.Element {
               onClick={() => menuToggleHandler()}
             />
           </div>
+          {/* Add dropdown for language translation */}
+          <div className="relative px-4 flex items-center justify-center">
+            <div
+              className="flex items-center cursor-pointer"
+              onClick={toggleDropdown}
+            >
+              <img
+                className="h-6 w-6 rounded-full object-cover"
+                src="../../static/img/ic-world.svg"
+                alt="Language selector"
+              />
+              <span className="text-white font-semibold ml-3">Language</span>
+            </div>
+
+            {isOpen && (
+              <div className="mt-4 absolute right-0 bg-gray-800 border border-gray-600 rounded-md w-48 -translate-x-[65px] translate-y-[75px]">
+                {languages.map((lng: any, index: number) => (
+                  <div
+                    key={index}
+                    className={`block text-gray-400 hover:text-white px-4 py-2 ${
+                      lng.code === i18n.language ? "text-white" : ""
+                    }`}
+                    onClick={() => handleChooseLang(lng.code)}
+                  >
+                    {lng.lang}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </nav>
       </div>
       {/* Mobile Design  */}
@@ -164,7 +209,7 @@ function Header(): JSX.Element {
             to="/"
             onClick={() => setIsExpanded(!isExpanded)}
           >
-            logo
+            {t("brand")}
           </Link>
           <img
             src="../../static/img/close.svg"
@@ -176,13 +221,13 @@ function Header(): JSX.Element {
           <ul className="gap-10 flex-col flex">
             <li className=""></li>
             <li onClick={() => setIsExpanded(!isExpanded)}>
-              <Link to="/heif-jpg-converter">Heif JPG </Link>
+              <Link to="/heif-jpg-converter"> {t("nav.heifJpg")}</Link>
             </li>
             <li onClick={() => setIsExpanded(!isExpanded)}>
-              <Link to="/heif-converter">Heif Converter </Link>
+              <Link to="/heif-converter">{t("nav.heifConverter")}</Link>
             </li>
             <li onClick={() => setIsExpanded(!isExpanded)}>
-              <Link to="/image-converter">Image Converter</Link>
+              <Link to="/image-converter">{t("nav.imageConverter")}</Link>
             </li>
           </ul>
         </div>
@@ -192,7 +237,7 @@ function Header(): JSX.Element {
           <div className="search-bar-view relative">
             <input
               type="text"
-              placeholder="Search"
+              placeholder={t("searchPlaceholder")}
               className="w-full"
               value={chooseSearchResult}
               onChange={(e: any) => handleInputChange(e.target.value)}

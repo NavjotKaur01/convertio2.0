@@ -14,6 +14,7 @@ import axios from "axios";
 import possibleFormat from "../../utilities/possibleFileFormat.json";
 import { useNavigate } from "react-router-dom";
 import FAQ from "../../components/faq";
+import { useTranslation } from "react-i18next";
 
 interface FileDetails {
   fileName: string;
@@ -27,6 +28,7 @@ interface ConversionFormat {
 }
 
 function Home(): JSX.Element {
+  const { t } = useTranslation("home");
   const [uploadedFileList, setUploadedFileList] = useState<FileDetails[]>([]);
   const [conversionFormat, setConversionFormat] = useState<ConversionFormat[]>(
     []
@@ -44,6 +46,12 @@ function Home(): JSX.Element {
   const [hoveredTab, setHoveredTab] = useState<any>(null);
 
   const navigate = useNavigate();
+
+  const cards = t("cards", { returnObjects: true }) as Array<{
+    title: string;
+    description: string;
+    imgName: string;
+  }>;
 
   useEffect(() => {
     if (Object.keys(possibleFormat).length) {
@@ -394,10 +402,8 @@ function Home(): JSX.Element {
         <div className="bg-gray-50 h-36 lg:h-full mx-5 rounded-lg"></div>
         <div className="lg:col-span-3 py-2 px-5">
           <div className="mb-12 text-center">
-            <h1 className="text-4xl font-bold">File Converter</h1>
-            <p className="text-sm pt-2">
-              Easily convert files from one format to another, online.
-            </p>
+            <h1 className="text-4xl font-bold">{t("pageTitle")}</h1>
+            <p className="text-sm pt-2">{t("description")}</p>
           </div>
           {!!uploadedFileList && !!uploadedFileList.length ? (
             <>
@@ -1023,7 +1029,7 @@ function Home(): JSX.Element {
                           style={{ marginBottom: "4px" }}
                         />
                       </span>{" "}
-                      Choose Files
+                      {t("inputLabel")}
                     </span>
                     <span className="label-file"></span>
 
@@ -1050,72 +1056,21 @@ function Home(): JSX.Element {
           {/* cards section */}
           <div className="grid grid-cols-1 lg:grid-cols-3 p-6 my-6  rounded-lg card-box">
             {/* card-1 */}
-            <div className="text-center px-2 py-3 lg:py-2  rounded-lg mx-3 mb-2 lg:mb-0">
-              <svg
-                viewBox="0 0 24 24"
-                width="36"
-                height="36"
-                stroke="#468585"
-                stroke-width="1"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="css-i6dzq1 mx-auto"
-              >
-                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-                <polyline points="13 2 13 9 20 9"></polyline>
-              </svg>
-              <h4 className="text-xl my-4">Convert Any File</h4>
-              <p className="text-sm">
-                FreeConvert supports more than 1500 file conversions. You can
-                convert videos, images, audio files, or e-books. There are tons
-                of Advanced Options to fine-tune your conversions.
-              </p>
-            </div>
-            {/* card-2 */}
-            <div className="text-center px-2 py-3 lg:py-2 rounded-lg mx-3 mb-2 lg:mb-0">
-              <svg
-                viewBox="0 0 24 24"
-                width="36"
-                height="36"
-                stroke="#468585"
-                stroke-width="1"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="css-i6dzq1 mx-auto"
-              >
-                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
-              </svg>
-              <h4 className="text-xl my-4">Works Anywhere</h4>
-              <p className="text-sm">
-                FreeConvert supports more than 1500 file conversions. You can
-                convert videos, images, audio files, or e-books. There are tons
-                of Advanced Options to fine-tune your conversions.
-              </p>
-            </div>
-            {/* card-3 */}
-            <div className="text-center px-2 py-3 lg:py-2 rounded-lg mx-3 mb-2 lg:mb-0">
-              <svg
-                viewBox="0 0 24 24"
-                width="36"
-                height="36"
-                stroke="#468585"
-                stroke-width="1"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="css-i6dzq1 mx-auto"
-              >
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-              </svg>
-              <h4 className="text-xl my-4">Works Anywhere</h4>
-              <p className="text-sm">
-                FreeConvert supports more than 1500 file conversions. You can
-                convert videos, images, audio files, or e-books. There are tons
-                of Advanced Options to fine-tune your conversions.
-              </p>
-            </div>
+            {!!cards &&
+              !!cards.length &&
+              cards.map((card: any, index: number) => (
+                <div
+                  key={index}
+                  className="text-center px-2 py-3 lg:py-2  rounded-lg mx-3 mb-2 lg:mb-0"
+                >
+                  <img
+                    src={`../static/img/Frame${card.imgName}.svg`}
+                    className="w-16 h-16 mx-auto"
+                  />
+                  <h4 className="text-xl my-4">{card.title}</h4>
+                  <p className="text-sm">{card.description}</p>
+                </div>
+              ))}
           </div>
           {/* accordion */}
           <FAQ />

@@ -1,0 +1,9 @@
+{
+    "brand": "Logo",
+    "nav": {
+        "heifJpg": "Heif JPG",
+        "heifConverter": "Heif Converter",
+        "imageConverter": "Image Converter"
+    },
+    "searchPlaceholder": "Search"
+}

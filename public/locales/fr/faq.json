@@ -1,0 +1,12 @@
+{
+    "faqList": [
+        {
+            "question": "Combien de couleurs dois-je choisir ?",
+            "answer": "Il s'agit du corps d'accordéon du premier article. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu rhoncus purus, vitae tincidunt nibh. Vivamus elementum egestas ligula in varius. Proin ac erat pretium, ultricies leo at, cursus ante. Pellentesque à odio euismod, mattis urna ac, accumsan metus. Nam nisi leo, malesuada vitae pretium et, laoreet à lorem. Curabitur non sollicitudin neque."
+        },
+        {
+            "question": "Comment fonctionne le vérificateur de contraste ?",
+            "answer": "Il s'agit du corps d'accordéon du deuxième article. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu rhoncus purus, vitae tincidunt nibh. Vivamus elementum egestas ligula in varius. Proin ac erat pretium, ultricies leo at, cursus ante. Pellentesque à odio euismod, mattis urna ac, accumsan metus. Nam nisi leo, malesuada vitae pretium et, laoreet à lorem. Curabitur non sollicitudin neque."
+        }
+    ]
+}

@@ -1,0 +1,34 @@
+{
+    "pageTitle": "Convertisseur d'images",
+    "description": "Convertissez une image en ligne, gratuitement.",
+    "inputLabel": "Choisir des fichiers",
+    "howTitle": "Comment convertir une image",
+    "how": [
+        {
+            "id": 1,
+            "line1": "Cliquez sur le bouton Choisir les fichiers pour télécharger vos fichiers."
+        },
+        {
+            "id": 2,
+            "line1": "Sélectionnez un format d'image cible dans la liste déroulante Convertir en."
+        },
+        {
+            "id": 3,
+            "line1": "Cliquez sur le bouton vert Convertir pour lancer la conversion."
+        }
+    ],
+    "cards": [
+        {
+            "title": "Convertir n'importe quelle image",
+            "description": "Convertissez plus de 500 formats d'image en formats populaires tels que JPG, PNG, WebP, etc. Vous pouvez également convertir les fichiers d'images RAW de l'appareil photo."
+        },
+        {
+            "title": "Meilleur convertisseur d'images",
+            "description": "Convertissez votre image avec une qualité, une taille et une compression parfaites. De plus, vous pouvez également convertir par lots une image à l'aide de cet outil."
+        },
+        {
+            "title": "Gratuit et sécurisé",
+            "description": "Notre convertisseur d'images est gratuit et fonctionne sur n'importe quel navigateur Web. Nous garantissons la sécurité et la confidentialité des fichiers. Les fichiers sont protégés par un cryptage SSL 256 bits et sont automatiquement supprimés après quelques heures."
+        }
+    ]
+}

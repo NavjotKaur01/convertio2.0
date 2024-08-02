@@ -17,6 +17,7 @@ import pageData from "../../utilities/pageData.json";
 import imageFormat from "../../utilities/imageFormat.json";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import FAQ from "../../components/faq";
+import { useTranslation } from "react-i18next";
 
 interface FileDetails {
   fileName: string;
@@ -30,6 +31,7 @@ interface ConversionFormat {
 }
 
 function ImageConverter(): JSX.Element {
+  const { t } = useTranslation("imageConverter");
   const [activeElement, setActiveElement] = useState<string>("section1");
   const [uploadedFileList, setUploadedFileList] = useState<FileDetails[]>([]);
   const [conversionFormat, setConversionFormat] = useState<ConversionFormat[]>(
@@ -48,7 +50,14 @@ function ImageConverter(): JSX.Element {
   const [dataList, setDataList] = useState<any>({});
   const [pageTitle, setPageTitle] = useState<string>("");
   const [hoveredTab, setHoveredTab] = useState<any>(null);
-
+  const how = t("how", { returnObjects: true }) as Array<{
+    id: number;
+    line1: string;
+  }>;
+  const cards = t("cards", { returnObjects: true }) as Array<{
+    title: string;
+    description: string;
+  }>;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -415,10 +424,10 @@ function ImageConverter(): JSX.Element {
         <div className="bg-gray-50 h-36 lg:h-full mx-5 rounded-lg"></div>
         <div className="lg:col-span-3 py-2 px-5">
           <div className="mb-12 text-center">
-            <h1 className="text-4xl font-bold">{pageTitle} Converter</h1>
-            <p className="text-sm pt-2">
-              Convert {pageTitle} online, for free.
-            </p>
+            <h1 className="text-4xl font-bold">
+              {t("pageTitle", { pageTitle })}
+            </h1>
+            <p className="text-sm pt-2">{t("description", { pageTitle })}</p>
           </div>
           {!!uploadedFileList && !!uploadedFileList.length ? (
             <>
@@ -1040,7 +1049,7 @@ function ImageConverter(): JSX.Element {
                           style={{ marginBottom: "4px" }}
                         />
                       </span>{" "}
-                      Choose Files
+                      {t("inputLabel")}
                     </span>
                     <span className="label-file"></span>
 
@@ -1090,15 +1099,18 @@ function ImageConverter(): JSX.Element {
           <div className="card-box md:p-6 p-3 my-6 rounded-lg">
             <div className="mb-3">
               <h2 className="text-[23px] font-bold md:px-5 px-3 py-4">
-                How to Convert {pageTitle}
+                {t("howTitle", { pageTitle })}
               </h2>
               <ol className="text-base mt-1 list-decimal px-5 py-4 md:ml-10 ml-1">
-                <li className="leading-8">
-                  Click the <span className="font-bold">"Choose Files"</span>{" "}
-                  button to upload your files.
-                </li>
+                {!!how &&
+                  !!how.length &&
+                  how.map((item: any, index: number) => (
+                    <li className="leading-8" key={index}>
+                      {item.line1}
+                    </li>
+                  ))}
 
-                <li className="leading-8">
+                {/* <li className="leading-8">
                   Select a target {pageTitle} format from the{" "}
                   <span className="font-bold">“Convert to"</span>{" "}
                   drop-down-list.
@@ -1107,74 +1119,36 @@ function ImageConverter(): JSX.Element {
                   Click on the green{" "}
                   <span className="font-bold">"Convert"</span> button to start
                   the conversion.
-                </li>
+                </li> */}
               </ol>
             </div>
             <div className="grid xl:grid-cols-3 sm:grid-cols-2 mt-10">
-              {/* card-1 */}
-              <div>
-                <div>
-                  <img
-                    src="/static/img/happy-user/converto.png"
-                    className="mx-auto"
-                    style={{}}
-                  />
-                </div>
-                <div className="md:px-5 px-3">
-                  <h2 className="text-center mb-[16px] mt-5 text-[23px] font-bold min-h-[52px]">
-                    Convert Any {pageTitle}
-                  </h2>
-                  <p className="leading-relaxed text-base py-4">
-                    {" "}
-                    Convert more than 500+ {pageTitle} formats into popular
-                    formats like JPG, PNG, WebP, and more. You can also convert
-                    camera RAW {pageTitle} files.
-                  </p>
-                </div>
-              </div>
-
-              {/* card-2 */}
-              <div>
-                <div>
-                  <img
-                    src="/static/img/happy-user/image-converter.png"
-                    className="mx-auto"
-                    style={{}}
-                  />
-                </div>
-                <div className="md:px-5 px-3">
-                  <h2 className="text-center mb-[16px] mt-4 text-[23px] font-bold min-h-[52px]">
-                    Best {pageTitle} Converter
-                  </h2>
-                  <p className="leading-relaxed text-base">
-                    Convert your {pageTitle} with perfect quality, size, and
-                    compression. Plus, you can also batch convert {pageTitle}{" "}
-                    using this tool.
-                  </p>
-                </div>
-              </div>
-
-              {/* card-3*/}
-              <div className="xl:mt-0 mt-3">
-                <div>
-                  <img
-                    src="/static/img/happy-user/free&secure.png"
-                    className="mx-auto"
-                    style={{}}
-                  />
-                </div>
-                <div className="md:px-5 px-3">
-                  <h2 className="text-center mb-[16px] mt-4 text-[23px] font-bold min-h-[52px]">
-                    Free & Secure
-                  </h2>
-                  <p className="leading-relaxed text-base py-4">
-                    Our {pageTitle} Converter is free and works on any web
-                    browser. We guarantee file security and privacy. Files are
-                    protected with 256-bit SSL encryption and automatically
-                    delete after a few hours.
-                  </p>
-                </div>
-              </div>
+              {cards &&
+                cards.length > 0 &&
+                cards.map((card, idx) => (
+                  <div key={idx} className="p-4 border rounded-lg shadow-lg">
+                    <div>
+                      <img
+                        src={`/static/img/happy-user/${
+                          idx === 0
+                            ? "converto.png"
+                            : idx === 1
+                            ? "image-converter.png"
+                            : "free&secure.png"
+                        }`}
+                        className="mx-auto"
+                      />
+                    </div>
+                    <div className="md:px-5 px-3">
+                      <h2 className="text-center mb-[16px] mt-5 text-[23px] font-bold min-h-[52px]">
+                        {card.title}
+                      </h2>
+                      <p className="leading-relaxed text-base py-4">
+                        {card.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
             </div>
           </div>
 
