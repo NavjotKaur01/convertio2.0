@@ -45,12 +45,12 @@ function Header(): JSX.Element {
   };
 
   return (
-    <header>
+    <header className="h-[60px]">
       <div className="navbar bg-white z-30">
         {/* Destop design */}
         <nav className="flex lg:container px-5 lg:px-10 mx-auto justify-between py-4">
           <div className="flex items-center xl:gap-72 gap-10">
-            <Link className="text-xl lg:mx-24 font-semibold" to="/">
+            <Link className="text-xl lg:mx-24 font-semibold m-0" to="/">
               logo
             </Link>
             <ul className="gap-10 items-center hidden lg:flex">
@@ -154,11 +154,11 @@ function Header(): JSX.Element {
       </div>
       {/* Mobile Design  */}
       <div
-        className={`fixed bg-white top-0 bottom-0 left-0 right-0 z-40 px-5 py-3 ${
+        className={`fixed bg-white top-0 bottom-0 left-0 right-0 z-40 px-5 pb-3 pt-0 ${
           isExpanded ? "block" : "hidden"
         }`}
       >
-        <div className="flex justify-between">
+        <div className="flex justify-between h-[60px] items-center">
           <Link
             className="text-xl mr-4 font-semibold"
             to="/"
