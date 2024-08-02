@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { decryptData } from "../../utilities/utils";
-import axios from "axios";
+import { rootUrl } from "../../utilities/services/convertFileAPI.services";
 
+import axios from "axios";
 function Download() {
+  const storedFiles = decryptData("files");
   const navigate = useNavigate();
   const [files, setFiles] = useState<any[]>([]);
   const [isConverting, setIsConverting] = useState(true);
@@ -88,18 +90,37 @@ function Download() {
     }
   };
 
-  const handleDownload = async (fileName: string) => {
+  // const handleDownload = async (fileName: string) => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:5000/api/jobs/${fileName}`,
+  //       {
+  //         responseType: "blob",
+  //       }
+  //     );
+  //     const url = window.URL.createObjectURL(new Blob([response.data]));
+  //     const link = document.createElement("a");
+  //     link.href = url;
+  //     link.setAttribute("download", fileName);
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     link.remove();
+  //   } catch (error) {
+  //     console.error("Error downloading the files:", error);
+  //   }
+  // };
+  const handleDownloadAllFiles = async () => {
+    const payload = {
+      convertedFile: storedFiles && storedFiles.convertedFile,
+    };
     try {
-      const response = await axios.get(
-        `http://localhost:5000/api/jobs/${fileName}`,
-        {
-          responseType: "blob",
-        }
-      );
+      const response = await axios.post(`${rootUrl}/allZip`, payload, {
+        responseType: "blob",
+      });
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", fileName);
+      link.setAttribute("download", "ALLfiles.zip");
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -107,7 +128,6 @@ function Download() {
       console.error("Error downloading the files:", error);
     }
   };
-
   return (
     <div className="lg:container mx-auto grid grid-cols-1 lg:grid-cols-5 mb-8 mt-24">
       <div className="bg-gray-50 h-36 lg:h-full mx-5 rounded-lg"></div>
@@ -159,9 +179,14 @@ function Download() {
                       <button
                         disabled={isConverting}
                         className={`${isConverting ? "cursor-no-drop" : ""}`}
-                        onClick={() => handleDownload(file.fileName)}
+                        // onClick={() => handleDownload(file.fileName)}
                       >
-                        Download
+                        <a
+                          className="text-decoration-none"
+                          href={`${rootUrl}/jobs/${file.fileName}`}
+                        >
+                          Download
+                        </a>
                       </button>
                     </div>
                     <div className="file-list-item">
@@ -223,6 +248,14 @@ function Download() {
                     </span>
                     <span className="label-file"></span>
                   </div>
+                </div>
+                <div className="me-3">
+                  <button
+                    className="text-white bg-[var(--primary-color)] px-5 py-3 rounded download opacity-100 text-nowrap"
+                    onClick={() => handleDownloadAllFiles()}
+                  >
+                    Download All Files
+                  </button>
                 </div>
               </div>
             </div>

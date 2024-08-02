@@ -1,5 +1,14 @@
 export interface ConvertedFileStateModel {
   isLoading: boolean;
   isSuccess: boolean;
-  error: string;
+  FileExtension: FileExtensions;
+}
+export interface FileExtensions {
+  image: {
+    images: string[];
+    documents: string[];
+  };
+  video: {
+    Audio: string[];
+  };
 }

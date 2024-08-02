@@ -10,24 +10,36 @@ import {
   TETabsItem,
   TETabsPane,
 } from "tw-elements-react";
-import axios from "axios";
-import possibleFormat from "../../utilities/possibleFileFormat.json";
+// import possibleFormat from "../../utilities/possibleFileFormat.json";
 import { useNavigate } from "react-router-dom";
 import FAQ from "../../components/faq";
-import { decryptData, encryptDatawith1Days } from "../../utilities/utils";
+import { decryptData } from "../../utilities/utils";
+import { useDispatch } from "react-redux";
+import {
+  convertedFileActions,
+  SelectFileExtension,
+  SelectIsSuccess,
+} from "../../store/reducers/convertedFileSlice";
+import { useAppSelector } from "../../store/hooks";
+import { FileExtensions } from "../../models/convertedFileModel";
 
 interface FileDetails {
   fileName: string;
   size: string;
   fileExtension: string;
+  fileType: string;
 }
 
 interface ConversionFormat {
   fileName: string;
   conversionFormat: string;
+  fileType: string;
 }
 
 function Home(): JSX.Element {
+  const dispatch = useDispatch();
+  const isSuccess = useAppSelector(SelectIsSuccess);
+  const possibleFormat: FileExtensions = useAppSelector(SelectFileExtension);
   const [uploadedFileList, setUploadedFileList] = useState<FileDetails[]>([]);
   const [conversionFormat, setConversionFormat] = useState<ConversionFormat[]>(
     []
@@ -46,12 +58,30 @@ function Home(): JSX.Element {
   const [files, setFiles] = useState([]);
   const navigate = useNavigate();
   const FileId = decryptData("files");
-  useEffect(() => {
-    if (Object.keys(possibleFormat).length) {
-      setJsonFileData(possibleFormat);
+  function getConverter(format: string) {
+    switch (format.toLowerCase()) {
+      // Image formats
+      case "image":
+        return "image";
+      //video format
+      case "video":
+        return "video";
+      // Default case for unknown formats
+      default:
+        return "unknownFormat";
     }
+  }
+  useEffect(() => {
+    dispatch(convertedFileActions.resetConvertedState());
+    dispatch(convertedFileActions.getFileExtension());
   }, []);
-
+  useEffect(() => {
+    if (possibleFormat) {
+      if (Object.keys(possibleFormat).length) {
+        setJsonFileData(possibleFormat);
+      }
+    }
+  }, [possibleFormat]);
   useEffect(() => {
     if (searchResults.length) {
       let s = searchResults.find(
@@ -124,13 +154,16 @@ function Home(): JSX.Element {
       const updateConversionList: ConversionFormat[] = [];
 
       uploadedFileList.forEach((file) => {
-        const format = file.fileExtension;
-        if (possibleFormat.hasOwnProperty(format)) {
-          const formatProperties = jsonFileData[format];
+        const format = file.fileType;
+
+        const type = getConverter(format);
+        if (possibleFormat.hasOwnProperty(type)) {
+          const formatProperties = jsonFileData[type];
+
           const allFormats =
             formatProperties.images ||
             formatProperties.documents ||
-            formatProperties.archive ||
+            formatProperties.Audio ||
             [];
 
           if (allFormats.length > 0) {
@@ -138,12 +171,16 @@ function Home(): JSX.Element {
             updateConversionList.push({
               fileName: file.fileName,
               conversionFormat: allFormats[randomIndex],
+              fileType: file.fileType,
             });
           }
 
           const propertyToUse = formatProperties.images
             ? "images"
-            : "documents";
+            : "documents"
+            ? "Audio"
+            : [];
+
           initialActiveState[
             file.fileName
           ] = `tab-${file.fileName}-1-${propertyToUse}`;
@@ -158,12 +195,12 @@ function Home(): JSX.Element {
   const handleSearchPossibleFormat = (
     fileName: string,
     searchStr: string,
-    extension: string
+    fileType: string
   ) => {
     const searchString = searchStr.trim().toLowerCase();
     setQueryObject(fileName);
     setSearchQuery(searchString);
-    const filteredData = filterFileType(extension, fileName, searchString);
+    const filteredData = filterFileType(fileName, searchString, fileType);
 
     const updateSearchResults = (fileName: string, filteredData: string[]) => {
       setSearchResults((prevState) => {
@@ -188,18 +225,15 @@ function Home(): JSX.Element {
     }
   };
 
-  function filterFileType(
-    fileType: string,
-    fileName: string,
-    searchStr: string
-  ) {
+  function filterFileType(fileName: string, searchStr: string, type: string) {
     if (
-      possibleFormat.hasOwnProperty(fileType) &&
+      possibleFormat &&
+      possibleFormat.hasOwnProperty(type) &&
       Object.keys(verticalActive).includes(fileName) &&
       searchStr
     ) {
       let filterData: any[] = [];
-      const activeTabData = Object.values(jsonFileData[fileType]).flat();
+      const activeTabData = Object.values(jsonFileData[type]).flat();
       if (activeTabData.length) {
         filterData = activeTabData.filter((item: any) =>
           item.toLowerCase().includes(searchStr)
@@ -217,7 +251,9 @@ function Home(): JSX.Element {
     if (!files || files.length === 0) {
       return;
     }
+
     const newFilesArray = Array.from(files);
+
     const newFiles: any = newFilesArray.map((file) => ({ file, format: "" }));
     setFiles(newFiles);
     const totalFilesCount = uploadedFileList.length + newFilesArray.length;
@@ -239,10 +275,12 @@ function Home(): JSX.Element {
         fileName: files[i].name,
         size: formatBytes(files[i].size),
         fileExtension: fileExtension,
+        fileType: files[i].type.split("/")[0],
       });
       updateConversion.push({
         conversionFormat: extensionName,
         fileName: files[i].name,
+        fileType: files[i].type.split("/")[0],
       });
     }
     setUploadedFileList((prevState) => [...prevState, ...updatedFiles]);
@@ -318,6 +356,7 @@ function Home(): JSX.Element {
         (uploadedFile: FileDetails) => ({
           conversionFormat: conversionExtension,
           fileName: uploadedFile.fileName,
+          fileType: uploadedFile.fileType,
         })
       );
       setConversionFormat(newConversionFormat);
@@ -338,6 +377,7 @@ function Home(): JSX.Element {
             return {
               conversionFormat: conversionExtension,
               fileName: uploadedFile.fileName,
+              fileType: uploadedFile.fileType,
             };
           }
         }
@@ -368,7 +408,7 @@ function Home(): JSX.Element {
       setErrorMsg("No files uploaded.");
       return;
     }
-
+    console.log(files);
     if (conversionFormat.length) {
       const formData = new FormData();
       files.forEach((fileObj: any, index: number) => {
@@ -378,26 +418,15 @@ function Home(): JSX.Element {
       if (FileId) {
         formData.append("id", FileId._id);
       }
-      formData;
-      try {
-        const response = await axios.post(
-          "http://localhost:5000/api/jobs",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        encryptDatawith1Days("files", response.data.Data, 1);
-        navigate("/download");
-      } catch (error) {
-        console.error("An error occurred while converting files:", error);
-      }
+      dispatch(convertedFileActions.FilesToConvert(formData));
     } else {
       setIsErrorShow(true);
     }
   };
+  useEffect(() => {
+    if (isSuccess) navigate("/download");
+  }, [isSuccess]);
+
   return (
     <>
       <div className="lg:container mx-auto grid grid-cols-1 lg:grid-cols-5 mb-8 mt-24">
@@ -438,7 +467,7 @@ function Home(): JSX.Element {
                             <TERipple rippleColor="light">
                               <TEDropdownToggle
                                 className={`flex items-center whitespace-nowrap px-3 pb-1 pt-1 border rounded-lg w-20 ${
-                                  isNotPossibleFormat(file.fileExtension)
+                                  isNotPossibleFormat(file.fileType)
                                     ? "small-btn"
                                     : "error-btn"
                                 }`}
@@ -505,7 +534,8 @@ function Home(): JSX.Element {
                                           handleSearchPossibleFormat(
                                             file.fileName,
                                             e.target.value,
-                                            file.fileExtension
+
+                                            file.fileType
                                           )
                                         }
                                       />
@@ -561,7 +591,7 @@ function Home(): JSX.Element {
                                       <TEDropdownItem preventCloseOnClick>
                                         {Object.entries(possibleFormat).map(
                                           ([key, formats], index) =>
-                                            file.fileExtension === key && (
+                                            file.fileType === key && (
                                               <React.Fragment key={index}>
                                                 <TETabs
                                                   vertical
@@ -632,10 +662,13 @@ function Home(): JSX.Element {
                                         <TETabsContent>
                                           {Object.entries(possibleFormat).map(
                                             ([key, formats], index) =>
-                                              file.fileExtension === key &&
+                                              file.fileType === key &&
                                               Object.entries(formats).map(
                                                 (
-                                                  [keyName, possibleFormats],
+                                                  [keyName, possibleFormats]: [
+                                                    string,
+                                                    any
+                                                  ],
                                                   idx
                                                 ) => (
                                                   <TETabsPane
@@ -648,10 +681,10 @@ function Home(): JSX.Element {
                                                       `tab-${file.fileName}-1-${keyName}`
                                                     }
                                                   >
-                                                    {possibleFormats.map(
+                                                    {possibleFormats?.map(
                                                       (
-                                                        fileExtension,
-                                                        innerIdx
+                                                        fileExtension: any,
+                                                        innerIdx: number
                                                       ) => (
                                                         <button
                                                           key={`${index}-${idx}-${innerIdx}`}
@@ -705,9 +738,8 @@ function Home(): JSX.Element {
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="#7987a1"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeLinejoin="round"
                             className="cross-ic cursor-pointer"
                             data-v-db7992bc=""
                           >
@@ -818,7 +850,8 @@ function Home(): JSX.Element {
                                         handleSearchPossibleFormat(
                                           uploadedFileList[0].fileName,
                                           e.target.value,
-                                          uploadedFileList[0].fileExtension
+
+                                          uploadedFileList[0].fileType
                                         )
                                       }
                                     />
@@ -951,7 +984,10 @@ function Home(): JSX.Element {
                                               .fileExtension === key &&
                                             Object.entries(formats).map(
                                               (
-                                                [keyName, possibleFormats],
+                                                [keyName, possibleFormats]: [
+                                                  string,
+                                                  any
+                                                ],
                                                 idx
                                               ) => (
                                                 <TETabsPane
@@ -965,25 +1001,26 @@ function Home(): JSX.Element {
                                                     `tab-${uploadedFileList[0].fileName}-1-${keyName}`
                                                   }
                                                 >
-                                                  {possibleFormats.map(
-                                                    (
-                                                      fileExtension,
-                                                      innerIdx
-                                                    ) => (
-                                                      <button
-                                                        key={`${index}-${idx}-${innerIdx}`}
-                                                        type="button"
-                                                        className="btn px-1 text-center py-1 btn-custom mx-1 my-1 col-span-4"
-                                                        onClick={() =>
-                                                          handleSameFileExtensionConversion(
-                                                            fileExtension
-                                                          )
-                                                        }
-                                                      >
-                                                        {fileExtension.toUpperCase()}
-                                                      </button>
-                                                    )
-                                                  )}
+                                                  {possibleFormats &&
+                                                    possibleFormats.map(
+                                                      (
+                                                        fileExtension: any,
+                                                        innerIdx: number
+                                                      ) => (
+                                                        <button
+                                                          key={`${index}-${idx}-${innerIdx}`}
+                                                          type="button"
+                                                          className="btn px-1 text-center py-1 btn-custom mx-1 my-1 col-span-4"
+                                                          onClick={() =>
+                                                            handleSameFileExtensionConversion(
+                                                              fileExtension
+                                                            )
+                                                          }
+                                                        >
+                                                          {fileExtension.toUpperCase()}
+                                                        </button>
+                                                      )
+                                                    )}
                                                 </TETabsPane>
                                               )
                                             )
@@ -1066,10 +1103,9 @@ function Home(): JSX.Element {
                 width="36"
                 height="36"
                 stroke="#468585"
-                stroke-width="1"
+                strokeWidth="1"
                 fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinejoin="round"
                 className="css-i6dzq1 mx-auto"
               >
                 <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
@@ -1089,10 +1125,9 @@ function Home(): JSX.Element {
                 width="36"
                 height="36"
                 stroke="#468585"
-                stroke-width="1"
+                strokeWidth="1"
                 fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinejoin="round"
                 className="css-i6dzq1 mx-auto"
               >
                 <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
@@ -1111,10 +1146,9 @@ function Home(): JSX.Element {
                 width="36"
                 height="36"
                 stroke="#468585"
-                stroke-width="1"
+                strokeWidth="1"
                 fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinejoin="round"
                 className="css-i6dzq1 mx-auto"
               >
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
