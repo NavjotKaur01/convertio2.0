@@ -240,6 +240,7 @@ function ImageConverter(): JSX.Element {
       return [];
     }
   }
+  // console?""
 
   // handle multiple file uploading
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
