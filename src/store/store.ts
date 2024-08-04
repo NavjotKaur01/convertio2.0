@@ -7,9 +7,11 @@ import {
 import createSagaMiddleware from "redux-saga";
 import rootSaga from "./sagas/rootSaga";
 import convertedFileReducer from "./reducers/convertedFileSlice";
+import uploadedFileReducer from "./reducers/uploadedFileSlice";
 
 export const rootReducer = combineReducers({
   convertedFileData: convertedFileReducer,
+  uploadedFileData:uploadedFileReducer
 });
 
 const sagaMiddleware = createSagaMiddleware();

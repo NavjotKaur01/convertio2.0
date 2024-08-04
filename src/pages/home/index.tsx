@@ -10,7 +10,6 @@ import {
   TETabsItem,
   TETabsPane,
 } from "tw-elements-react";
-// import possibleFormat from "../../utilities/possibleFileFormat.json";
 import { useNavigate } from "react-router-dom";
 import FAQ from "../../components/faq";
 import { decryptData } from "../../utilities/utils";
@@ -22,34 +21,20 @@ import {
 } from "../../store/reducers/convertedFileSlice";
 import { useAppSelector } from "../../store/hooks";
 import { FileExtensions } from "../../models/convertedFileModel";
-
-interface FileDetails {
-  fileName: string;
-  size: string;
-  fileExtension: string;
-  fileType: string;
-}
-
-interface ConversionFormat {
-  fileName: string;
-  conversionFormat: string;
-  fileType: string;
-}
+import { SelectConversionFormat, SelectUploadedFile, SelectVerticalActive, uploadedFileActions } from "../../store/reducers/uploadedFileSlice";
+import { ConversionFormat, FileDetails } from "../../models/uploadedFileModal";
 
 function Home(): JSX.Element {
   const dispatch = useDispatch();
   const isSuccess = useAppSelector(SelectIsSuccess);
-  const possibleFormat: FileExtensions = useAppSelector(SelectFileExtension);
-  const [uploadedFileList, setUploadedFileList] = useState<FileDetails[]>([]);
-  const [conversionFormat, setConversionFormat] = useState<ConversionFormat[]>(
-    []
-  );
+  const possibleFormat: FileExtensions  = useAppSelector(SelectFileExtension);
+  const uploadedFileList =useAppSelector(SelectUploadedFile)
+  const conversionFormat =useAppSelector(SelectConversionFormat)
+  const verticalActive:any =useAppSelector(SelectVerticalActive)
   const [extensionName, setExtensionName] = useState<string>("");
   const [isFileExtension, setIsFileExtension] = useState<boolean>(false);
   const [isErrorShow, setIsErrorShow] = useState<boolean>(false);
-  const [verticalActive, setVerticalActive] = useState<any>({});
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [jsonFileData, setJsonFileData] = useState<any>(null);
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [queryObject, setQueryObject] = useState<string>("");
   const [filterFormattedList, setFilterFormattedList] = useState<string[]>([]);
@@ -58,30 +43,11 @@ function Home(): JSX.Element {
   const [files, setFiles] = useState([]);
   const navigate = useNavigate();
   const FileId = decryptData("files");
-  function getConverter(format: string) {
-    switch (format.toLowerCase()) {
-      // Image formats
-      case "image":
-        return "image";
-      //video format
-      case "video":
-        return "video";
-      // Default case for unknown formats
-      default:
-        return "unknownFormat";
-    }
-  }
+
   useEffect(() => {
     dispatch(convertedFileActions.resetConvertedState());
     dispatch(convertedFileActions.getFileExtension());
   }, []);
-  useEffect(() => {
-    if (possibleFormat) {
-      if (Object.keys(possibleFormat).length) {
-        setJsonFileData(possibleFormat);
-      }
-    }
-  }, [possibleFormat]);
   useEffect(() => {
     if (searchResults.length) {
       let s = searchResults.find(
@@ -147,55 +113,11 @@ function Home(): JSX.Element {
     }
   }, [extensionName]);
 
-  // Set default active tab IDs for each file extension
-  useEffect(() => {
-    if (uploadedFileList.length > 0 && possibleFormat) {
-      const initialActiveState: { [fileName: string]: string } = {};
-      const updateConversionList: ConversionFormat[] = [];
-
-      uploadedFileList.forEach((file) => {
-        const format = file.fileType;
-
-        const type = getConverter(format);
-        if (possibleFormat.hasOwnProperty(type)) {
-          const formatProperties = jsonFileData[type];
-
-          const allFormats =
-            formatProperties.images ||
-            formatProperties.documents ||
-            formatProperties.Audio ||
-            [];
-
-          if (allFormats.length > 0) {
-            const randomIndex = Math.floor(Math.random() * allFormats.length);
-            updateConversionList.push({
-              fileName: file.fileName,
-              conversionFormat: allFormats[randomIndex],
-              fileType: file.fileType,
-            });
-          }
-
-          const propertyToUse = formatProperties.images
-            ? "images"
-            : "documents"
-            ? "Audio"
-            : [];
-
-          initialActiveState[
-            file.fileName
-          ] = `tab-${file.fileName}-1-${propertyToUse}`;
-        }
-      });
-
-      setVerticalActive(initialActiveState);
-      setConversionFormat(updateConversionList);
-    }
-  }, [uploadedFileList]);
 
   const handleSearchPossibleFormat = (
     fileName: string,
     searchStr: string,
-    fileType: string
+    fileType: keyof FileExtensions
   ) => {
     const searchString = searchStr.trim().toLowerCase();
     setQueryObject(fileName);
@@ -225,18 +147,19 @@ function Home(): JSX.Element {
     }
   };
 
-  function filterFileType(fileName: string, searchStr: string, type: string) {
+  function filterFileType(fileName: string, searchStr: string, type: keyof FileExtensions): string[] {
     if (
       possibleFormat &&
-      possibleFormat.hasOwnProperty(type) &&
+      possibleFormat[type] &&
       Object.keys(verticalActive).includes(fileName) &&
       searchStr
     ) {
-      let filterData: any[] = [];
-      const activeTabData = Object.values(jsonFileData[type]).flat();
+      let filterData: string[] = [];
+      // Access the correct key within the type
+      const activeTabData: string[] = Object.values(possibleFormat[type]).flat();
       if (activeTabData.length) {
-        filterData = activeTabData.filter((item: any) =>
-          item.toLowerCase().includes(searchStr)
+        filterData = activeTabData.filter((item: string) =>
+          item.toLowerCase().includes(searchStr.toLowerCase())
         );
       }
       return filterData;
@@ -246,59 +169,29 @@ function Home(): JSX.Element {
   }
 
   // handle multiple file uploading
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
+  const handleFileUpload =  (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files:any = event.target.files;
     if (!files || files.length === 0) {
       return;
     }
-
-    const newFilesArray = Array.from(files);
-
-    const newFiles: any = newFilesArray.map((file) => ({ file, format: "" }));
-    setFiles(newFiles);
-    const totalFilesCount = uploadedFileList.length + newFilesArray.length;
+    const UploadedFiles:any = Array.from(files);
+    const totalFilesCount = uploadedFileList.length + UploadedFiles.length;
     if (totalFilesCount > 10) {
       event.preventDefault();
       setErrorMsg(`Cannot upload more than 10 files.`);
       return;
     }
-    const updatedFiles: FileDetails[] = [];
-    const updateConversion: ConversionFormat[] = [];
-    for (let i = 0; i < files.length; i++) {
-      const fileName = files[i]?.name;
-      const fileExtension = fileName?.split(".").pop()?.toLowerCase();
-      if (!fileExtension) {
-        console.log(`File extension is undefined for file: ${fileName}`);
-        continue;
-      }
-      updatedFiles.push({
-        fileName: files[i].name,
-        size: formatBytes(files[i].size),
-        fileExtension: fileExtension,
-        fileType: files[i].type.split("/")[0],
-      });
-      updateConversion.push({
-        conversionFormat: extensionName,
-        fileName: files[i].name,
-        fileType: files[i].type.split("/")[0],
-      });
+    const payload ={
+      UploadedFiles,
+      possibleFormat
     }
-    setUploadedFileList((prevState) => [...prevState, ...updatedFiles]);
-    if (conversionFormat.length) {
-      setConversionFormat((prevState) => [...prevState, ...updateConversion]);
-    }
+     dispatch(uploadedFileActions.uploadFileListData(payload));
+    const newFiles: any = UploadedFiles.map((file:any) => ({ file, format: "" }));
+    setFiles(newFiles);
     setErrorMsg("");
   };
 
-  // calculate file size in bytes,KB,MB,GB
-  const formatBytes = (bytes: number, decimals = 2): string => {
-    if (!+bytes) return "0 Bytes";
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
-  };
+ 
 
   // Handle choose conversion format
   const handleChooseConversion = (
@@ -306,84 +199,26 @@ function Home(): JSX.Element {
     fileName: string,
     isComman?: boolean
   ) => {
-    let fileIndex = conversionFormat.findIndex(
-      (item: ConversionFormat) => item.fileName === fileName
-    );
-    if (fileIndex != -1) {
-      setConversionFormat((prevFormats: any) => {
-        const updatedFormats = [...prevFormats];
-        updatedFormats[fileIndex] = {
-          ...updatedFormats[fileIndex],
-          conversionFormat: format,
-        };
-        return updatedFormats;
-      });
-    } else {
-      setConversionFormat((prevState: any) => [
-        ...prevState,
-        { conversionFormat: format, fileName: fileName },
-      ]);
-    }
+    dispatch(uploadedFileActions.chooseConversionFormat({ format, fileName, isComman }));
     if (isComman) {
       handleSameFileExtensionConversion(format);
     }
     setExtensionName(format);
     setFilterFormattedList([]);
     setSearchQuery("");
-
     setIsErrorShow(true);
   };
 
   // Remove uploaded file
   const handleRemoveRow = (fileName: string, idx: number) => {
-    const updatedDetails = uploadedFileList.filter((_, index) => index !== idx);
-    const updatedConversionFormatted = conversionFormat.filter(
-      (conversion: ConversionFormat) => conversion.fileName !== fileName
-    );
-    setConversionFormat(updatedConversionFormatted);
-    setUploadedFileList(updatedDetails);
-    if (uploadedFileList.length <= 10) {
-      setErrorMsg("");
-    }
+    dispatch(uploadedFileActions.removeFile({ fileName, idx }));
   };
 
   // handle same file extension conversion
   const handleSameFileExtensionConversion = (conversionExtension: string) => {
     setExtensionName(conversionExtension);
     setIsErrorShow(false);
-    if (conversionFormat.length === 0) {
-      const newConversionFormat = uploadedFileList.map(
-        (uploadedFile: FileDetails) => ({
-          conversionFormat: conversionExtension,
-          fileName: uploadedFile.fileName,
-          fileType: uploadedFile.fileType,
-        })
-      );
-      setConversionFormat(newConversionFormat);
-    } else {
-      const updatedConversionFormat = uploadedFileList.map(
-        (uploadedFile: FileDetails) => {
-          const existingFormat = conversionFormat.find(
-            (format: ConversionFormat) => {
-              format.fileName === uploadedFile.fileName;
-            }
-          );
-          if (existingFormat) {
-            return {
-              ...existingFormat,
-              conversionFormat: conversionExtension,
-            };
-          } else {
-            return {
-              conversionFormat: conversionExtension,
-              fileName: uploadedFile.fileName,
-              fileType: uploadedFile.fileType,
-            };
-          }
-        }
-      );
-      setConversionFormat(updatedConversionFormat);
-    }
+    dispatch(uploadedFileActions.updateConversionFormat(conversionExtension));
   };
 
   // Uploaded file is not converted to another format
@@ -397,9 +232,7 @@ function Home(): JSX.Element {
     ObjectKeyName: string
     // keyName: string
   ) => {
-    const updatedState = { ...verticalActive };
-    updatedState[ObjectKeyName] = tabName;
-    setVerticalActive(updatedState);
+    dispatch(uploadedFileActions.setVerticalActive({ [ObjectKeyName]: tabName }));
   };
 
   // handle convert file
@@ -408,7 +241,6 @@ function Home(): JSX.Element {
       setErrorMsg("No files uploaded.");
       return;
     }
-    console.log(files);
     if (conversionFormat.length) {
       const formData = new FormData();
       files.forEach((fileObj: any, index: number) => {
@@ -534,7 +366,6 @@ function Home(): JSX.Element {
                                           handleSearchPossibleFormat(
                                             file.fileName,
                                             e.target.value,
-
                                             file.fileType
                                           )
                                         }

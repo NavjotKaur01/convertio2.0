@@ -11,4 +11,5 @@ export interface FileExtensions {
   video: {
     Audio: string[];
   };
+  unknownFormat: {};
 }

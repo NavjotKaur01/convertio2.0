@@ -46,3 +46,29 @@ const saveCookie = (
     "; expires = " +
     currentDate.toUTCString();
 };
+//file converted format
+export function getConverter(format: string) {
+  switch (format.toLowerCase()) {
+    // Image formats
+    case "image":
+      return "image";
+    //video format
+    case "video":
+      return "video";
+    // Default case for unknown formats
+    default:
+      return "unknownFormat";
+  }
+} 
+
+
+//
+ // calculate file size in bytes,KB,MB,GB
+export const formatBytes = (bytes: number, decimals = 2): string => {
+  if (!+bytes) return "0 Bytes";
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+};
