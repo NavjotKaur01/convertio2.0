@@ -14,10 +14,9 @@ import {
 import axios from "axios";
 import possibleFormat from "../../utilities/possibleImageFormat.json";
 import pageData from "../../utilities/pageData.json";
-import imageFormat from "../../utilities/imageFormat.json";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import FAQ from "../../components/faq";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 interface FileDetails {
   fileName: string;
@@ -58,6 +57,7 @@ function ImageConverter(): JSX.Element {
     title: string;
     description: string;
   }>;
+  const formats = (t("formats") as unknown as string[]) || [];
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -240,7 +240,6 @@ function ImageConverter(): JSX.Element {
       return [];
     }
   }
-  // console?""
 
   // handle multiple file uploading
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -1075,27 +1074,6 @@ function ImageConverter(): JSX.Element {
             </>
           )}
 
-          {/* get-it on-mobile */}
-          {/* <div className="card-box md:p-6 p-3 my-6 rounded-lg">
-            <div>
-              <h2 className="font-bold text-center text-xl">
-                Get it on Mobile
-              </h2>
-              <p className="text-base">
-                {" "}
-                Convert images directly on your mobile device using our{" "}
-                <span className="text-[var(--primary-color)]">
-                  <a href="#"> Android image Converter</a>
-                </span>
-                &nbsp;
-                <span className="font-bold">or</span>
-                <span className="text-[var(--primary-color)]">
-                  <a href="#"> iOS image Converter</a>
-                </span>
-              </p>
-            </div>
-          </div> */}
-
           {/* how-to-convert-image */}
           <div className="card-box md:p-6 p-3 my-6 rounded-lg">
             <div className="mb-3">
@@ -1105,27 +1083,20 @@ function ImageConverter(): JSX.Element {
               <ol className="text-base mt-1 list-decimal px-5 py-4 md:ml-10 ml-1">
                 {!!how &&
                   !!how.length &&
-                  how.map((item: any, index: number) => (
-                    <li className="leading-8" key={index}>
-                      {item.line1}
+                  how.map((item) => (
+                    <li className="leading-8" key={item.id}>
+                      <Trans
+                        i18nKey={item.line1}
+                        values={{ pageTitle }}
+                        components={{ b: <b /> }}
+                      />
                     </li>
                   ))}
-
-                {/* <li className="leading-8">
-                  Select a target {pageTitle} format from the{" "}
-                  <span className="font-bold">“Convert to"</span>{" "}
-                  drop-down-list.
-                </li>
-                <li className="leading-8">
-                  Click on the green{" "}
-                  <span className="font-bold">"Convert"</span> button to start
-                  the conversion.
-                </li> */}
               </ol>
             </div>
             <div className="grid xl:grid-cols-3 sm:grid-cols-2 mt-10">
-              {cards &&
-                cards.length > 0 &&
+              {!!cards &&
+                !!cards.length &&
                 cards.map((card, idx) => (
                   <div key={idx} className="p-4 border rounded-lg shadow-lg">
                     <div>
@@ -1142,66 +1113,16 @@ function ImageConverter(): JSX.Element {
                     </div>
                     <div className="md:px-5 px-3">
                       <h2 className="text-center mb-[16px] mt-5 text-[23px] font-bold min-h-[52px]">
-                        {card.title}
+                        {t(card.title, { pageTitle })}
                       </h2>
                       <p className="leading-relaxed text-base py-4">
-                        {card.description}
+                        {t(card.description, { pageTitle })}
                       </p>
                     </div>
                   </div>
                 ))}
             </div>
           </div>
-
-          {/*valueable-image-tool*/}
-          {/* <div className="card-box md:p-6 p-3 my-6 rounded-lg">
-            <div>
-              <div>
-                <h2 className="text-[23px] font-bold px-5 py-4 ">
-                  Valuable Image Tools
-                </h2>
-                <div className="px-5 py-4">
-                  <p className="text-base">
-                    Here is a list of image tools to further edit your images.
-                  </p>
-                  <ol className="text-base mt-2 list-decimal px-5 py-4 md:ml-5 ml-1">
-                    <li className="leading-8">
-                      <a href="#" className="text-[var(--primary-color)]">
-                        Image-Resizer-
-                      </a>
-                      &nbsp;Use this tool to crop unwanted areas from your image
-                    </li>
-                    <li className="leading-8">
-                      <a href="#" className="text-[var(--primary-color)]">
-                        Crop Image-
-                      </a>
-                      &nbsp;Quick and easy way to resize an image to any size
-                    </li>
-                    <li className="leading-8">
-                      <a href="#" className="text-[var(--primary-color)]">
-                        Image-Compressor-
-                      </a>
-                      &nbsp;Reduce image files size by up to 80 to 90% using
-                      this tool
-                    </li>
-                    <li className="leading-8">
-                      <a href="#" className="text-[var(--primary-color)]">
-                        Color-Picker-
-                      </a>
-                      &nbsp;Quickly pick a color from the color wheel or from
-                      your image online
-                    </li>
-                    <li className="leading-8">
-                      <a href="#" className="text-[var(--primary-color)]">
-                        Image-Enlarger-
-                      </a>
-                      &nbsp;A fast way to make your images bigger
-                    </li>
-                  </ol>
-                </div>
-              </div>
-            </div>
-          </div> */}
 
           <div className="card-box md:p-6 p-3 my-6 rounded-lg">
             <div>
@@ -1217,7 +1138,7 @@ function ImageConverter(): JSX.Element {
                     aria-expanded="true"
                     aria-controls="collapseOne1"
                   >
-                    Specific {pageTitle} converters
+                    {t("formatTitle", { pageTitle })}
                     <span
                       className={`${
                         activeElement === "section1"
@@ -1248,19 +1169,16 @@ function ImageConverter(): JSX.Element {
                 >
                   <div className="my-4">
                     <ul className="grid md:grid-cols-3 sm:grid-cols-2">
-                      {imageFormat &&
-                        imageFormat.formats.map(
-                          (format: string, indx: number) => (
-                            <li
-                              key={indx}
-                              className="text-[var(--primary-color)] text-base px-5 py-4"
-                            >
-                              <Link to="#">
-                                {format.toUpperCase()} Converter
-                              </Link>
-                            </li>
-                          )
-                        )}
+                      {!!formats &&
+                        !!formats.length &&
+                        formats.map((format: string, indx: number) => (
+                          <li
+                            key={indx}
+                            className="text-[var(--primary-color)] text-base px-5 py-4"
+                          >
+                            <Link to="#">{format}</Link>
+                          </li>
+                        ))}
                     </ul>
                   </div>
                 </TECollapse>

@@ -66,7 +66,7 @@ function Header(): JSX.Element {
         <nav className="flex lg:container px-5 lg:px-10 mx-auto justify-between py-4">
           <div className="flex items-center xl:gap-72 gap-10">
             <Link className="text-xl lg:mx-24 font-semibold m-0" to="/">
-              {t("brand")}
+              Logo
             </Link>
             <ul className="gap-10 items-center hidden lg:flex">
               <li className=""></li>
@@ -209,7 +209,7 @@ function Header(): JSX.Element {
             to="/"
             onClick={() => setIsExpanded(!isExpanded)}
           >
-            {t("brand")}
+            Logo
           </Link>
           <img
             src="../../static/img/close.svg"

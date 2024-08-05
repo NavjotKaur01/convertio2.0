@@ -1,34 +1,45 @@
 {
-    "pageTitle": "Convertisseur d'images",
-    "description": "Convertissez une image en ligne, gratuitement.",
+    "pageTitle": "Convertisseur {{pageTitle}}",
+    "description": "Convertissez une {{pageTitle}} en ligne, gratuitement.",
     "inputLabel": "Choisir des fichiers",
-    "howTitle": "Comment convertir une image",
+    "howTitle": "Comment convertir une {{pageTitle}}",
     "how": [
         {
             "id": 1,
-            "line1": "Cliquez sur le bouton Choisir les fichiers pour télécharger vos fichiers."
+            "line1": "Cliquez sur le bouton <b>“Choisir les fichiers”</b> pour télécharger vos fichiers."
         },
         {
             "id": 2,
-            "line1": "Sélectionnez un format d'image cible dans la liste déroulante Convertir en."
+            "line1": "Sélectionnez un format {{pageTitle}} cible dans la liste déroulante <b>“Convertir”</b> en."
         },
         {
             "id": 3,
-            "line1": "Cliquez sur le bouton vert Convertir pour lancer la conversion."
+            "line1": "Cliquez sur le bouton vert <b>“Convertir”</b> pour lancer la conversion."
         }
     ],
     "cards": [
         {
-            "title": "Convertir n'importe quelle image",
-            "description": "Convertissez plus de 500 formats d'image en formats populaires tels que JPG, PNG, WebP, etc. Vous pouvez également convertir les fichiers d'images RAW de l'appareil photo."
+            "title": "Convertir n'importe quelle {{pageTitle}}",
+            "description": "Convertissez plus de 500 formats {{pageTitle}} en formats populaires tels que JPG, PNG, WebP, etc. Vous pouvez également convertir les fichiers {{pageTitle}} RAW de l'appareil photo."
         },
         {
-            "title": "Meilleur convertisseur d'images",
-            "description": "Convertissez votre image avec une qualité, une taille et une compression parfaites. De plus, vous pouvez également convertir par lots une image à l'aide de cet outil."
+            "title": "Meilleur convertisseur {{pageTitle}}",
+            "description": "Convertissez votre {{pageTitle}} avec une qualité, une taille et une compression parfaites. De plus, vous pouvez également convertir par lots une {{pageTitle}} à l'aide de cet outil."
         },
         {
             "title": "Gratuit et sécurisé",
-            "description": "Notre convertisseur d'images est gratuit et fonctionne sur n'importe quel navigateur Web. Nous garantissons la sécurité et la confidentialité des fichiers. Les fichiers sont protégés par un cryptage SSL 256 bits et sont automatiquement supprimés après quelques heures."
+            "description": "Notre convertisseur {{pageTitle}} est gratuit et fonctionne sur n'importe quel navigateur Web. Nous garantissons la sécurité et la confidentialité des fichiers. Les fichiers sont protégés par un cryptage SSL 256 bits et sont automatiquement supprimés après quelques heures."
         }
+    ],
+    "formatTitle": "Convertisseurs {{pageTitle}} spécifiques",
+    "formats": [
+        "Convertisseur DNG",
+        "Convertisseur DRF",
+        "Convertisseur ARW",
+        "Convertisseur X3F",
+        "Convertisseur CR3",
+        "Convertisseur NRW",
+        "Convertisseur CANON RAW",
+        "Convertisseur KDC"
     ]
 }

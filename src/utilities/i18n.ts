@@ -15,6 +15,9 @@ i18n
     ns: ["imageConverter", "navigation", "faq", "home"],
     fallbackLng: "en",
     returnObjects: true,
+    interpolation: {
+      escapeValue: false,
+    },
   });
 
 export default i18n;
