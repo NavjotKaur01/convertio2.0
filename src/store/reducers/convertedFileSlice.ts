@@ -1,7 +1,10 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  AllConvertedFiles,
+  ChangeStatusPayload,
   ConvertedFileStateModel,
+  DeleteFilePayload,
   FileExtensions,
 } from "../../models/convertedFileModel";
 import { RootState } from "../store";
@@ -11,6 +14,8 @@ const initialState: ConvertedFileStateModel = {
   isLoading: false,
   isSuccess: false,
   FileExtension: {} as FileExtensions,
+  allConvertedFiles: [],
+  isDelete: false,
 };
 
 // Create a Redux slice for Converted File
@@ -45,16 +50,54 @@ const convertedFileSlice = createSlice({
     getFileExtensionFailed(state, _action) {
       state.isLoading = false;
     },
-    //Reducer to convert files
-    getAllFiles(state, _action) {
+    //Reducer to get files
+    getFiles(state, _action: PayloadAction<{ _id: string }>) {
       state.isLoading = true;
     },
-    //Reducer to handle convert files success
-    getAllFilesSuccess(state) {
+    //Reducer to handle get files success
+    getFilesSuccess(
+      state,
+      action: PayloadAction<{ convertedFile: AllConvertedFiles[] }>
+    ) {
+      state.isLoading = false;
+      state.allConvertedFiles = action.payload?.convertedFile;
+    },
+    //Reducer to handle get files failure
+    getFilesFailed(state, _action) {
       state.isLoading = false;
     },
-    //Reducer to handle convert files failure
-    getAllFilesFailed(state, _action) {
+    //Reducer to delete single file files
+    deleteSingleFile(state, _action: PayloadAction<DeleteFilePayload>) {
+      state.isLoading = true;
+      state.isDelete = false;
+    },
+    //Reducer to handle delete files success
+    deleteSingleFileSuccess(
+      state,
+      action: PayloadAction<{ convertedFile: AllConvertedFiles[] }>
+    ) {
+      state.isLoading = false;
+      state.isDelete = true;
+      state.allConvertedFiles = action.payload?.convertedFile;
+    },
+    //Reducer to handle delete files failure
+    deleteSingleFileFailed(state, _action) {
+      state.isLoading = false;
+    },
+    //Reducer to change status file
+    changeStatusFile(state, _action: PayloadAction<ChangeStatusPayload>) {
+      state.isLoading = true;
+    },
+    //Reducer to change status file  success
+    changeStatusFileSuccess(
+      state,
+      action: PayloadAction<{ convertedFile: AllConvertedFiles[] }>
+    ) {
+      state.isLoading = false;
+      state.allConvertedFiles = action.payload?.convertedFile;
+    },
+    //Reducer to change status file  failure
+    changeStatusFileFailed(state, _action) {
       state.isLoading = false;
     },
 
@@ -73,6 +116,15 @@ export const SelectIsSuccess = (state: RootState) => {
 };
 export const SelectFileExtension = (state: RootState) => {
   return state.convertedFileData.FileExtension;
+};
+export const SelectAllConvertedFile = (state: RootState) => {
+  return state.convertedFileData.allConvertedFiles;
+};
+export const SelectIsDelete = (state: RootState) => {
+  return state.convertedFileData.isDelete;
+};
+export const SelectIsLoading = (state: RootState) => {
+  return state.convertedFileData.isLoading;
 };
 // Export the reducer
 const convertedFileReducer = convertedFileSlice.reducer;

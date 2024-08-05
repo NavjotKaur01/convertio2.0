@@ -4,49 +4,78 @@ import { decryptData } from "../../utilities/utils";
 import { rootUrl } from "../../utilities/services/convertFileAPI.services";
 
 import axios from "axios";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  convertedFileActions,
+  SelectAllConvertedFile,
+  SelectIsDelete,
+  SelectIsLoading,
+} from "../../store/reducers/convertedFileSlice";
+import { AllConvertedFiles } from "../../models/convertedFileModel";
+import Loader from "../../components/loaders";
 function Download() {
+  const dispatch = useAppDispatch();
+  const isDelete = useAppSelector(SelectIsDelete);
+  const isLoading = useAppSelector(SelectIsLoading);
+  const AllConvertedFile = useAppSelector(SelectAllConvertedFile);
   const storedFiles = decryptData("files");
   const navigate = useNavigate();
-  const [files, setFiles] = useState<any[]>([]);
-  const [isConverting, setIsConverting] = useState(true);
-  const [progress, setProgress] = useState(0);
-  const [isDone, setIsDone] = useState(false);
+  const [isConverting, setIsConverting] = useState<boolean>(true);
+  const [progress, setProgress] = useState<number>(0);
   const urlList = ["image-converter", "heif-converter", "heif-jpg-converter"];
   const location = useLocation();
 
   useEffect(() => {
-    const storedFiles = decryptData("files");
     if (storedFiles) {
       if (urlList.includes(location.state)) {
         navigate(`/${location.state}/download`);
       } else {
         navigate("/download");
       }
+      dispatch(convertedFileActions.getFiles({ _id: storedFiles?._id }));
     } else {
       navigate("/");
     }
   }, []);
-
   useEffect(() => {
-    const storedFiles: any = decryptData("files");
-    if (storedFiles) {
-      setFiles(storedFiles.convertedFile);
+    if (AllConvertedFile?.length === 0 && isDelete) {
+      navigate("/");
     }
-
+  }, [isDelete, AllConvertedFile]);
+  useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
 
-    if (isConverting) {
-      interval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 100) {
-            clearInterval(interval!);
-            setIsConverting(false);
-            return 100;
-          }
-          return prev + 10;
+    // Check if any file is still converting
+    const filesInProgress = AllConvertedFile.filter(
+      (file: AllConvertedFiles) => !file.status
+    );
+
+    if (filesInProgress.length > 0) {
+      if (isConverting) {
+        // Start the progress interval for files still being converted
+        interval = setInterval(() => {
+          setProgress((prev) => {
+            if (prev >= 100) {
+              clearInterval(interval!); // Clear the interval once progress reaches 100%
+              setIsConverting(false); // Stop the conversion process
+              return 100;
+            }
+            return prev + 20;
+          });
+        }, 1000);
+      } else {
+        // Once not converting, update file statuses
+        filesInProgress.forEach((file: AllConvertedFiles) => {
+          dispatch(
+            convertedFileActions.changeStatusFile({
+              fileId: file._id,
+              newStatus: true,
+            })
+          );
         });
-      }, 500);
+      }
     } else {
+      // If no files are in progress, clean up the interval if it exists
       if (interval) {
         clearInterval(interval);
       }
@@ -57,61 +86,16 @@ function Download() {
         clearInterval(interval);
       }
     };
-  }, [isConverting, navigate]);
-
-  useEffect(() => {
-    if (progress === 100) {
-      setIsDone(true);
-    }
-  }, [progress]);
-
-  useEffect(() => {
-    const storedFiles = decryptData("files");
-    if (files.length === 0 && !storedFiles) {
-      navigate("/");
-    }
-  }, [files]);
-
-  if (!files || files.length === 0) {
-    return null;
-  }
+  }, [isConverting, AllConvertedFile, dispatch]); // Added `AllConvertedFile` and `dispatch` to the dependency array
 
   // Remove uploaded file
-  const handleRemoveRow = (idx: number) => {
-    const updatedFiles = files.filter((_, index: number) => index !== idx);
-    setFiles(updatedFiles);
-    if (updatedFiles.length === 0) {
-      localStorage.removeItem("files");
-      if (location.pathname.includes("image-converter")) {
-        navigate("/image-converter");
-      } else {
-        navigate("/");
-      }
-    }
+  const handleRemoveRow = (fileId: string) => {
+    dispatch(convertedFileActions.deleteSingleFile({ fileId: fileId }));
   };
 
-  // const handleDownload = async (fileName: string) => {
-  //   try {
-  //     const response = await axios.get(
-  //       `http://localhost:5000/api/jobs/${fileName}`,
-  //       {
-  //         responseType: "blob",
-  //       }
-  //     );
-  //     const url = window.URL.createObjectURL(new Blob([response.data]));
-  //     const link = document.createElement("a");
-  //     link.href = url;
-  //     link.setAttribute("download", fileName);
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     link.remove();
-  //   } catch (error) {
-  //     console.error("Error downloading the files:", error);
-  //   }
-  // };
   const handleDownloadAllFiles = async () => {
     const payload = {
-      convertedFile: storedFiles && storedFiles.convertedFile,
+      convertedFile: AllConvertedFile,
     };
     try {
       const response = await axios.post(`${rootUrl}/allZip`, payload, {
@@ -128,6 +112,9 @@ function Download() {
       console.error("Error downloading the files:", error);
     }
   };
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <div className="lg:container mx-auto grid grid-cols-1 lg:grid-cols-5 mb-8 mt-24">
       <div className="bg-gray-50 h-36 lg:h-full mx-5 rounded-lg"></div>
@@ -135,99 +122,100 @@ function Download() {
         <div className="mb-12 text-center">
           <h1 className="text-4xl font-bold">Conversion Results</h1>
         </div>
-        {!!files && !!files.length && (
+        {!!AllConvertedFile && !!AllConvertedFile.length && (
           <>
             {/* UI after file upload */}
             <div className="mt-5 border rounded-lg">
               <div>
-                {files.map((file: any, index: number) => (
-                  <div
-                    className="flex md:grid flex-wrap sm:justify-between items-center file-list-main-download rounded-lg border-none"
-                    key={index}
-                  >
-                    <div className="flex items-center file-list-item w-full sm:w-fit ">
-                      <div>{file.fileName}</div>
-                    </div>
-
-                    {isConverting ? (
-                      <>
-                        <div>
-                          <p className="text-green-500 font-semibold text-md">
-                            Converting
-                          </p>
-                          <div className="relative w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <div
-                              className="absolute top-0 left-0 h-full bg-green-500 rounded-full"
-                              style={{ width: `${progress}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      </>
-                    ) : isDone ? (
-                      <div className="border border-[#1add72] text-[#1add72] px-7 py-1 w-fit rounded mx-5 sm:m-auto">
-                        Done
-                      </div>
-                    ) : (
-                      <div className="text-gray-700">{file.size}</div>
-                    )}
-
+                {AllConvertedFile.map(
+                  (file: AllConvertedFiles, index: number) => (
                     <div
-                      className={`text-white bg-[var(--primary-color)] px-5 py-3 w-28 rounded  xl:ml-[-53px] download ${
-                        isConverting ? "opacity-75" : "opacity-100"
-                      }`}
+                      className="flex md:grid flex-wrap sm:justify-between items-center file-list-main-download rounded-lg border-none"
+                      key={index}
                     >
-                      <button
-                        disabled={isConverting}
-                        className={`${isConverting ? "cursor-no-drop" : ""}`}
-                        // onClick={() => handleDownload(file.fileName)}
+                      <div className="flex items-center file-list-item w-full sm:w-fit ">
+                        <div>{file.fileName}</div>
+                      </div>
+
+                      {!file.status ? (
+                        <>
+                          <div>
+                            <p className="text-green-500 font-semibold text-md">
+                              Converting
+                            </p>
+                            <div className="relative w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                              <div
+                                className="absolute top-0 left-0 h-full bg-green-500 rounded-full"
+                                style={{ width: `${progress}%` }}
+                              ></div>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="border border-[#1add72] text-[#1add72] px-7 py-1 w-fit rounded mx-5 sm:m-auto">
+                          Done
+                        </div>
+                      )}
+
+                      <div
+                        className={`text-white bg-[var(--primary-color)] px-5 py-3 w-28 rounded  xl:ml-[-53px] download ${
+                          !file.status ? "opacity-75" : "opacity-100"
+                        }`}
                       >
-                        <a
-                          className="text-decoration-none"
-                          href={`${rootUrl}/jobs/${file.fileName}`}
+                        <button
+                          disabled={file.status}
+                          className={`${file.status ? "cursor-no-drop" : ""}`}
                         >
-                          Download
-                        </a>
-                      </button>
+                          <a
+                            className="text-decoration-none"
+                            {...(file.status
+                              ? { href: `${rootUrl}/jobs/${file.fileName}` }
+                              : {})}
+                          >
+                            Download
+                          </a>
+                        </button>
+                      </div>
+                      <div className="file-list-item">
+                        <svg
+                          onClick={() => handleRemoveRow(file._id)}
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="1.5em"
+                          height="1.5em"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#7987a1"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          className="cross-ic cursor-pointer"
+                          data-v-db7992bc=""
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            data-v-db7992bc=""
+                          ></circle>
+                          <line
+                            x1="15"
+                            y1="9"
+                            x2="9"
+                            y2="15"
+                            data-v-db7992bc=""
+                          ></line>
+                          <line
+                            data-v-db7992bc=""
+                            x1="9"
+                            y1="9"
+                            x2="15"
+                            y2="15"
+                          ></line>
+                        </svg>
+                      </div>
                     </div>
-                    <div className="file-list-item">
-                      <svg
-                        onClick={() => handleRemoveRow(index)}
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="1.5em"
-                        height="1.5em"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#7987a1"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        className="cross-ic cursor-pointer"
-                        data-v-db7992bc=""
-                      >
-                        <circle
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          data-v-db7992bc=""
-                        ></circle>
-                        <line
-                          x1="15"
-                          y1="9"
-                          x2="9"
-                          y2="15"
-                          data-v-db7992bc=""
-                        ></line>
-                        <line
-                          data-v-db7992bc=""
-                          x1="9"
-                          y1="9"
-                          x2="15"
-                          y2="15"
-                        ></line>
-                      </svg>
-                    </div>
-                  </div>
-                ))}
+                  )
+                )}
               </div>
 
               <div className="flex justify-between items-center added-files flex-wrap">
@@ -249,17 +237,25 @@ function Download() {
                     <span className="label-file"></span>
                   </div>
                 </div>
+
                 <div className="me-3">
                   <button
-                    className="text-white bg-[var(--primary-color)] px-5 py-3 rounded download opacity-100 text-nowrap"
-                    onClick={() => handleDownloadAllFiles()}
+                    className={`text-white bg-[var(--primary-color)] px-5 py-3 rounded download  text-nowrap ${
+                      AllConvertedFile[AllConvertedFile.length - 1].status
+                        ? "opacity-100"
+                        : "opacity-75"
+                    }`}
+                    onClick={() => {
+                      AllConvertedFile[AllConvertedFile.length - 1].status &&
+                        handleDownloadAllFiles();
+                    }}
                   >
                     Download All Files
                   </button>
                 </div>
               </div>
             </div>
-            {!isConverting && (
+            {
               <div className="bg-gray-50 mx-5 rounded-lg">
                 <div className="p-6 my-6  rounded-lg card-box">
                   <div className="border border-[var(--light-grey)] ">
@@ -436,7 +432,7 @@ function Download() {
                   </div>
                 </div>
               </div>
-            )}
+            }
 
             {/* UI after file upload ends */}
           </>

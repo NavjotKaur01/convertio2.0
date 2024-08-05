@@ -21,29 +21,43 @@ import {
 } from "../../store/reducers/convertedFileSlice";
 import { useAppSelector } from "../../store/hooks";
 import { FileExtensions } from "../../models/convertedFileModel";
-import { SelectConversionFormat, SelectUploadedFile, SelectVerticalActive, uploadedFileActions } from "../../store/reducers/uploadedFileSlice";
+import {
+  SelectConversionFormat,
+  SelectExtensionName,
+  SelectIsErrorShow,
+  SelectIsFileExtension,
+  SelectIsLoading,
+  SelectUploadedFile,
+  SelectVerticalActive,
+  uploadedFileActions,
+} from "../../store/reducers/uploadedFileSlice";
 import { ConversionFormat, FileDetails } from "../../models/uploadedFileModal";
+import {
+  filterFileType,
+  isNotPossibleFormat,
+} from "../../utilities/fileconverterFunction";
+import Loader from "../../components/loaders";
 
 function Home(): JSX.Element {
   const dispatch = useDispatch();
   const isSuccess = useAppSelector(SelectIsSuccess);
-  const possibleFormat: FileExtensions  = useAppSelector(SelectFileExtension);
-  const uploadedFileList =useAppSelector(SelectUploadedFile)
-  const conversionFormat =useAppSelector(SelectConversionFormat)
-  const verticalActive:any =useAppSelector(SelectVerticalActive)
-  const [extensionName, setExtensionName] = useState<string>("");
-  const [isFileExtension, setIsFileExtension] = useState<boolean>(false);
-  const [isErrorShow, setIsErrorShow] = useState<boolean>(false);
+  const isloading = useAppSelector(SelectIsLoading);
+  const possibleFormat: FileExtensions = useAppSelector(SelectFileExtension);
+  const uploadedFileList = useAppSelector(SelectUploadedFile);
+  const conversionFormat = useAppSelector(SelectConversionFormat);
+  const verticalActive: any = useAppSelector(SelectVerticalActive);
+  const extensionName: any = useAppSelector(SelectExtensionName);
+  const isFileExtension = useAppSelector(SelectIsFileExtension);
+  const isErrorShow = useAppSelector(SelectIsErrorShow);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [queryObject, setQueryObject] = useState<string>("");
   const [filterFormattedList, setFilterFormattedList] = useState<string[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [hoveredTab, setHoveredTab] = useState<any>(null);
-  const [files, setFiles] = useState([]);
+
   const navigate = useNavigate();
   const FileId = decryptData("files");
-
   useEffect(() => {
     dispatch(convertedFileActions.resetConvertedState());
     dispatch(convertedFileActions.getFileExtension());
@@ -57,63 +71,6 @@ function Home(): JSX.Element {
     }
   }, [searchResults]);
 
-  //UseEffect for uploadedFileList
-  useEffect(() => {
-    if (uploadedFileList.length) {
-      const fileExtensions = uploadedFileList.map(
-        (file: FileDetails) => file.fileExtension
-      );
-      const allExtensionsSame = fileExtensions.every(
-        (ext: string) => ext === fileExtensions[0]
-      );
-      setIsFileExtension(allExtensionsSame);
-    }
-  }, [uploadedFileList]);
-
-  // show error when we select the same file and change specific conversion format
-  useEffect(() => {
-    if (conversionFormat.length !== 0) {
-      if (conversionFormat.length === uploadedFileList.length) {
-        const fileExtensions = conversionFormat.map(
-          (file: ConversionFormat | undefined) => file?.conversionFormat || ""
-        );
-        const allExtensionsSame = fileExtensions.every(
-          (ext: string) => ext === fileExtensions[0]
-        );
-        if (allExtensionsSame) {
-          setExtensionName(fileExtensions[0]);
-          setIsErrorShow(false);
-        } else {
-          setExtensionName("");
-          setIsErrorShow(true);
-        }
-      } else {
-        setIsErrorShow(true);
-      }
-    } else {
-      if (conversionFormat.length) {
-        setIsErrorShow(false);
-      } else {
-        setIsErrorShow(true);
-      }
-    }
-  }, [conversionFormat, isErrorShow]);
-
-  useEffect(() => {
-    if (extensionName) {
-      const fileExtensions = conversionFormat.map(
-        (file: ConversionFormat | undefined) => file?.conversionFormat || ""
-      );
-      const allExtensionsSame = fileExtensions.every(
-        (ext: string) => ext === extensionName
-      );
-      if (!allExtensionsSame) {
-        setIsErrorShow(true);
-      }
-    }
-  }, [extensionName]);
-
-
   const handleSearchPossibleFormat = (
     fileName: string,
     searchStr: string,
@@ -122,7 +79,13 @@ function Home(): JSX.Element {
     const searchString = searchStr.trim().toLowerCase();
     setQueryObject(fileName);
     setSearchQuery(searchString);
-    const filteredData = filterFileType(fileName, searchString, fileType);
+    const filteredData = filterFileType(
+      fileName,
+      searchString,
+      fileType,
+      possibleFormat,
+      verticalActive
+    );
 
     const updateSearchResults = (fileName: string, filteredData: string[]) => {
       setSearchResults((prevState) => {
@@ -146,52 +109,26 @@ function Home(): JSX.Element {
       updateSearchResults(fileName, filteredData);
     }
   };
-
-  function filterFileType(fileName: string, searchStr: string, type: keyof FileExtensions): string[] {
-    if (
-      possibleFormat &&
-      possibleFormat[type] &&
-      Object.keys(verticalActive).includes(fileName) &&
-      searchStr
-    ) {
-      let filterData: string[] = [];
-      // Access the correct key within the type
-      const activeTabData: string[] = Object.values(possibleFormat[type]).flat();
-      if (activeTabData.length) {
-        filterData = activeTabData.filter((item: string) =>
-          item.toLowerCase().includes(searchStr.toLowerCase())
-        );
-      }
-      return filterData;
-    } else {
-      return [];
-    }
-  }
-
   // handle multiple file uploading
-  const handleFileUpload =  (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files:any = event.target.files;
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files: any = event.target.files;
     if (!files || files.length === 0) {
       return;
     }
-    const UploadedFiles:any = Array.from(files);
+    const UploadedFiles: any = Array.from(files);
     const totalFilesCount = uploadedFileList.length + UploadedFiles.length;
     if (totalFilesCount > 10) {
       event.preventDefault();
       setErrorMsg(`Cannot upload more than 10 files.`);
       return;
     }
-    const payload ={
+    const payload = {
       UploadedFiles,
-      possibleFormat
-    }
-     dispatch(uploadedFileActions.uploadFileListData(payload));
-    const newFiles: any = UploadedFiles.map((file:any) => ({ file, format: "" }));
-    setFiles(newFiles);
+      possibleFormat,
+    };
+    dispatch(uploadedFileActions.uploadFileListData(payload));
     setErrorMsg("");
   };
-
- 
 
   // Handle choose conversion format
   const handleChooseConversion = (
@@ -199,14 +136,14 @@ function Home(): JSX.Element {
     fileName: string,
     isComman?: boolean
   ) => {
-    dispatch(uploadedFileActions.chooseConversionFormat({ format, fileName, isComman }));
+    dispatch(
+      uploadedFileActions.chooseConversionFormat({ format, fileName, isComman })
+    );
     if (isComman) {
       handleSameFileExtensionConversion(format);
     }
-    setExtensionName(format);
     setFilterFormattedList([]);
     setSearchQuery("");
-    setIsErrorShow(true);
   };
 
   // Remove uploaded file
@@ -216,14 +153,7 @@ function Home(): JSX.Element {
 
   // handle same file extension conversion
   const handleSameFileExtensionConversion = (conversionExtension: string) => {
-    setExtensionName(conversionExtension);
-    setIsErrorShow(false);
     dispatch(uploadedFileActions.updateConversionFormat(conversionExtension));
-  };
-
-  // Uploaded file is not converted to another format
-  const isNotPossibleFormat = (fileExtension: string): boolean => {
-    return Object.keys(possibleFormat).includes(fileExtension);
   };
 
   // Active and deactive tabs navigation
@@ -232,7 +162,9 @@ function Home(): JSX.Element {
     ObjectKeyName: string
     // keyName: string
   ) => {
-    dispatch(uploadedFileActions.setVerticalActive({ [ObjectKeyName]: tabName }));
+    dispatch(
+      uploadedFileActions.setVerticalActive({ [ObjectKeyName]: tabName })
+    );
   };
 
   // handle convert file
@@ -243,8 +175,9 @@ function Home(): JSX.Element {
     }
     if (conversionFormat.length) {
       const formData = new FormData();
-      files.forEach((fileObj: any, index: number) => {
-        formData.append("files", fileObj.file);
+      uploadedFileList.forEach((fileObj: any, index: number) => {
+        console.log(fileObj.fileDetails);
+        formData.append("files", fileObj.fileDetails);
         formData.append("formats", conversionFormat[index].conversionFormat);
       });
       if (FileId) {
@@ -252,13 +185,15 @@ function Home(): JSX.Element {
       }
       dispatch(convertedFileActions.FilesToConvert(formData));
     } else {
-      setIsErrorShow(true);
+      dispatch(uploadedFileActions.setIsErrorShow());
     }
   };
   useEffect(() => {
     if (isSuccess) navigate("/download");
   }, [isSuccess]);
-
+  if (isloading) {
+    return <Loader />;
+  }
   return (
     <>
       <div className="lg:container mx-auto grid grid-cols-1 lg:grid-cols-5 mb-8 mt-24">
@@ -299,7 +234,10 @@ function Home(): JSX.Element {
                             <TERipple rippleColor="light">
                               <TEDropdownToggle
                                 className={`flex items-center whitespace-nowrap px-3 pb-1 pt-1 border rounded-lg w-20 ${
-                                  isNotPossibleFormat(file.fileType)
+                                  isNotPossibleFormat(
+                                    file.fileType,
+                                    possibleFormat
+                                  )
                                     ? "small-btn"
                                     : "error-btn"
                                 }`}
@@ -681,7 +619,6 @@ function Home(): JSX.Element {
                                         handleSearchPossibleFormat(
                                           uploadedFileList[0].fileName,
                                           e.target.value,
-
                                           uploadedFileList[0].fileType
                                         )
                                       }
@@ -739,7 +676,7 @@ function Home(): JSX.Element {
                                     <TEDropdownItem preventCloseOnClick>
                                       {Object.entries(possibleFormat).map(
                                         ([key, formats], index) =>
-                                          uploadedFileList[0].fileExtension ===
+                                          uploadedFileList[0].fileType ===
                                             key && (
                                             <React.Fragment key={index}>
                                               <TETabs
@@ -811,8 +748,8 @@ function Home(): JSX.Element {
                                       <TETabsContent>
                                         {Object.entries(possibleFormat).map(
                                           ([key, formats], index) =>
-                                            uploadedFileList[0]
-                                              .fileExtension === key &&
+                                            uploadedFileList[0].fileType ===
+                                              key &&
                                             Object.entries(formats).map(
                                               (
                                                 [keyName, possibleFormats]: [

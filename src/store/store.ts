@@ -11,7 +11,7 @@ import uploadedFileReducer from "./reducers/uploadedFileSlice";
 
 export const rootReducer = combineReducers({
   convertedFileData: convertedFileReducer,
-  uploadedFileData:uploadedFileReducer
+  uploadedFileData: uploadedFileReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();
@@ -19,7 +19,9 @@ const sagaMiddleware = createSagaMiddleware();
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(sagaMiddleware),
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).concat(sagaMiddleware),
 });
 
 export function setupStore(preloadedState?: RootState) {
@@ -27,7 +29,9 @@ export function setupStore(preloadedState?: RootState) {
     reducer: rootReducer,
     preloadedState,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({ serializableCheck: false }).concat(sagaMiddleware),
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }).concat(sagaMiddleware),
   });
 }
 

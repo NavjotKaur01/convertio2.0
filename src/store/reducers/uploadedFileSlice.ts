@@ -26,6 +26,7 @@ const uploadedFileSlice = createSlice({
   reducers: {
     //store upload files
     uploadFileListData(state, action: PayloadAction<any>) {
+      state.isLoading = true;
       const { newFiles, updateConversion, initialActiveState } = processFiles(
         action.payload.UploadedFiles,
         action.payload.possibleFormat
@@ -33,6 +34,26 @@ const uploadedFileSlice = createSlice({
       state.uploadedFileList = [...state.uploadedFileList, ...newFiles];
       state.conversionFormat = [...state.conversionFormat, ...updateConversion];
       state.verticalActive = initialActiveState;
+      const hasConversionFormat = state.conversionFormat.length !== 0;
+      const allFilesConverted =
+        state.conversionFormat.length === state.uploadedFileList.length;
+      if (hasConversionFormat && allFilesConverted) {
+        const fileExtensions = state.conversionFormat.map(
+          (file: ConversionFormat) => file?.fileType || ""
+        );
+        const allExtensionsSame = fileExtensions.every(
+          (ext: any) => ext === fileExtensions[0]
+        );
+        state.IsFileExtension = allExtensionsSame;
+        state.ExtensionName = allExtensionsSame
+          ? updateConversion[0].conversionFormat
+          : "";
+
+        state.IsErrorShow = !allExtensionsSame;
+      } else {
+        state.IsErrorShow = !hasConversionFormat || !allFilesConverted;
+      }
+      state.isLoading = false;
     },
     chooseConversionFormat(
       state,
@@ -54,6 +75,8 @@ const uploadedFileSlice = createSlice({
       } else {
         state.conversionFormat.push({ conversionFormat: format, fileName });
       }
+      state.ExtensionName = format;
+      state.IsErrorShow = true;
     },
     removeFile(
       state,
@@ -85,9 +108,14 @@ const uploadedFileSlice = createSlice({
         }
       );
       state.conversionFormat = updatedConversionFormat;
+      state.ExtensionName = conversionExtension;
+      state.IsErrorShow = false;
     },
     setVerticalActive(state, action: PayloadAction<{ [key: string]: string }>) {
       state.verticalActive = { ...state.verticalActive, ...action.payload };
+    },
+    setIsErrorShow(state) {
+      state.IsErrorShow = true;
     },
   },
 });
@@ -99,8 +127,16 @@ export const SelectUploadedFile = (state: RootState) => {
 };
 export const SelectConversionFormat = (state: RootState) =>
   state.uploadedFileData.conversionFormat;
+export const SelectExtensionName = (state: RootState) =>
+  state.uploadedFileData.ExtensionName;
+export const SelectIsErrorShow = (state: RootState) =>
+  state.uploadedFileData.IsErrorShow;
+export const SelectIsFileExtension = (state: RootState) =>
+  state.uploadedFileData.IsFileExtension;
+// Export the reducer
 export const SelectVerticalActive = (state: RootState) =>
   state.uploadedFileData.verticalActive;
-// Export the reducer
+export const SelectIsLoading = (state: RootState) =>
+  state.uploadedFileData.isLoading;
 const uploadedFileReducer = uploadedFileSlice.reducer;
 export default uploadedFileReducer;
