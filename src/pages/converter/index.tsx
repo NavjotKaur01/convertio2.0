@@ -1075,7 +1075,7 @@ function ImageConverter(): JSX.Element {
           )}
 
           {/* how-to-convert-image */}
-          <div className="card-box md:p-6 p-3 my-6 rounded-lg">
+          <div className="card-box md:p-6 p-3 my-6 rounded-lg hidden">
             <div className="mb-3">
               <h2 className="text-[23px] font-bold md:px-5 px-3 py-4">
                 {t("howTitle", { pageTitle })}

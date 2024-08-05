@@ -64,8 +64,8 @@ function Header(): JSX.Element {
       <div className="navbar bg-white z-30">
         {/* Destop design */}
         <nav className="flex lg:container px-5 lg:px-10 mx-auto justify-between py-4">
-          <div className="flex items-center xl:gap-72 gap-10">
-            <Link className="text-xl lg:mx-24 font-semibold m-0" to="/">
+          <div className="flex items-center xl:gap-56 gap-10">
+            <Link className="text-xl lg:mx-20 font-semibold m-0" to="/">
               Logo
             </Link>
             <ul className="gap-10 items-center hidden lg:flex">
@@ -81,6 +81,7 @@ function Header(): JSX.Element {
               </li>
             </ul>
           </div>
+          <div className="flex items-center gap-2">
           <div className="search-bar-main relative hidden lg:block lg:ml-10">
             {/* Search Bar */}
             <div className="search-bar-view relative">
@@ -166,7 +167,7 @@ function Header(): JSX.Element {
             />
           </div>
           {/* Add dropdown for language translation */}
-          <div className="relative px-4 flex items-center justify-center">
+          <div className="relative px-4 flex items-center">
             <div
               className="flex items-center cursor-pointer"
               onClick={toggleDropdown}
@@ -176,7 +177,7 @@ function Header(): JSX.Element {
                 src="../../static/img/ic-world.svg"
                 alt="Language selector"
               />
-              <span className="text-white font-semibold ml-3">Language</span>
+              <span className="text-white font-semibold ml-0 hidden">Language</span>
             </div>
 
             {isOpen && (
@@ -188,12 +189,13 @@ function Header(): JSX.Element {
                       lng.code === i18n.language ? "text-white" : ""
                     }`}
                     onClick={() => handleChooseLang(lng.code)}
-                  >
+                  >+
                     {lng.lang}
                   </div>
                 ))}
               </div>
             )}
+          </div>
           </div>
         </nav>
       </div>
@@ -217,6 +219,7 @@ function Header(): JSX.Element {
             onClick={() => menuToggleHandler()}
           />
         </div>
+   
         <div className="">
           <ul className="gap-10 flex-col flex">
             <li className=""></li>
@@ -305,6 +308,7 @@ function Header(): JSX.Element {
             </ul>
           </div>
         </div>
+       
       </div>
     </header>
   );
