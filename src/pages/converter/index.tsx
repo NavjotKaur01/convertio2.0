@@ -1075,7 +1075,7 @@ function ImageConverter(): JSX.Element {
           )}
 
           {/* how-to-convert-image */}
-          <div className="card-box md:p-6 p-3 my-6 rounded-lg hidden">
+          <div className="card-box md:p-6 p-3 my-6 rounded-lg">
             <div className="mb-3">
               <h2 className="text-[23px] font-bold md:px-5 px-3 py-4">
                 {t("howTitle", { pageTitle })}
@@ -1098,7 +1098,7 @@ function ImageConverter(): JSX.Element {
               {!!cards &&
                 !!cards.length &&
                 cards.map((card, idx) => (
-                  <div key={idx} className="p-4 border rounded-lg shadow-lg">
+                  <div key={idx} className="p-4">
                     <div>
                       <img
                         src={`/static/img/happy-user/${
@@ -1108,14 +1108,14 @@ function ImageConverter(): JSX.Element {
                             ? "image-converter.png"
                             : "free&secure.png"
                         }`}
-                        className="mx-auto"
+                        className="mx-auto h-[34px]"
                       />
                     </div>
                     <div className="md:px-5 px-3">
-                      <h2 className="text-center mb-[16px] mt-5 text-[23px] font-bold min-h-[52px]">
+                      <h2 className="text-center mb-[16px] mt-5 text-[23px] font-bold min-h-[69px]">
                         {t(card.title, { pageTitle })}
                       </h2>
-                      <p className="leading-relaxed text-base py-4">
+                      <p className="leading-relaxed text-base">
                         {t(card.description, { pageTitle })}
                       </p>
                     </div>
