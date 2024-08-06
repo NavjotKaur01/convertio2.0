@@ -136,7 +136,7 @@ function Download() {
                     )}
                     
                     <div
-                      className={`text-white bg-[var(--primary-color)] px-5 py-3 w-28 rounded  xl:ml-[-53px] download custom-import primary-btn !justify-center !shadow-none ${
+                      className={`text-white bg-[var(--primary-color)] !h-[40px] rounded  xl:ml-[-53px] download custom-import primary-btn !justify-center !shadow-none ${
                         isConverting ? "opacity-75" : "opacity-100"
                       }`}
                     >
