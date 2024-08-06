@@ -136,7 +136,7 @@ function Download() {
                     )}
                     
                     <div
-                      className={`text-white bg-[var(--primary-color)] px-5 py-3 w-28 rounded  xl:ml-[-53px] download ${
+                      className={`text-white bg-[var(--primary-color)] px-5 py-3 w-28 rounded  xl:ml-[-53px] download custom-import primary-btn ${
                         isConverting ? "opacity-75" : "opacity-100"
                       }`}
                     >
@@ -189,7 +189,7 @@ function Download() {
                 ))}
               </div>
 
-              <div className="flex justify-between items-center added-files flex-wrap">
+              <div className="flex justify-between items-center added-files flex-wrap py-3">
                 <div className="add-more-btn flex items-center">
                   <div className="custom-import border-2 px-1 py-1 primary-border rounded-lg ms-3 ">
                     <span
