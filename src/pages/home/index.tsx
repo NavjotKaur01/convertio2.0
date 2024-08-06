@@ -10,14 +10,13 @@ import {
   TETabsItem,
   TETabsPane,
 } from "tw-elements-react";
-import { useNavigate } from "react-router-dom";
+
 import FAQ from "../../components/faq";
 import { decryptData } from "../../utilities/utils";
 import { useDispatch } from "react-redux";
 import {
   convertedFileActions,
   SelectFileExtension,
-  SelectIsSuccess,
 } from "../../store/reducers/convertedFileSlice";
 import { useAppSelector } from "../../store/hooks";
 import { FileExtensions } from "../../models/convertedFileModel";
@@ -37,10 +36,11 @@ import {
   isNotPossibleFormat,
 } from "../../utilities/fileconverterFunction";
 import Loader from "../../components/loaders";
+import { useNavigate } from "react-router-dom";
 
 function Home(): JSX.Element {
   const dispatch = useDispatch();
-  const isSuccess = useAppSelector(SelectIsSuccess);
+  const navigate = useNavigate();
   const isloading = useAppSelector(SelectIsLoading);
   const possibleFormat: FileExtensions = useAppSelector(SelectFileExtension);
   const uploadedFileList = useAppSelector(SelectUploadedFile);
@@ -56,9 +56,9 @@ function Home(): JSX.Element {
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [hoveredTab, setHoveredTab] = useState<any>(null);
 
-  const navigate = useNavigate();
   const FileId = decryptData("files");
   useEffect(() => {
+    dispatch(uploadedFileActions.resetUploadFileState());
     dispatch(convertedFileActions.resetConvertedState());
     dispatch(convertedFileActions.getFileExtension());
   }, []);
@@ -184,13 +184,12 @@ function Home(): JSX.Element {
         formData.append("id", FileId._id);
       }
       dispatch(convertedFileActions.FilesToConvert(formData));
+      navigate("/download");
     } else {
       dispatch(uploadedFileActions.setIsErrorShow());
     }
   };
-  useEffect(() => {
-    if (isSuccess) navigate("/download");
-  }, [isSuccess]);
+
   if (isloading) {
     return <Loader />;
   }

@@ -29,7 +29,9 @@ const uploadedFileSlice = createSlice({
       state.isLoading = true;
       const { newFiles, updateConversion, initialActiveState } = processFiles(
         action.payload.UploadedFiles,
-        action.payload.possibleFormat
+        action.payload.possibleFormat,
+        action.payload?.pageName,
+        action.payload?.type
       );
       state.uploadedFileList = [...state.uploadedFileList, ...newFiles];
       state.conversionFormat = [...state.conversionFormat, ...updateConversion];
@@ -116,6 +118,16 @@ const uploadedFileSlice = createSlice({
     },
     setIsErrorShow(state) {
       state.IsErrorShow = true;
+    },
+    resetUploadFileState(state) {
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.uploadedFileList = [];
+      state.conversionFormat = [];
+      state.verticalActive = {};
+      state.ExtensionName = "";
+      state.IsErrorShow = false;
+      state.IsFileExtension = false;
     },
   },
 });

@@ -1,11 +1,8 @@
 function Loader() {
   return (
-    <div
-      className="d-flex justify-content-center align-items-center"
-      style={{ height: "100vh", width: "100vw" }}
-    >
-      <div className="spinner-border " role="status">
-        <span className="visually-hidden">Loading...</span>
+    <div className="flex justify-center items-center h-screen w-screen">
+      <div className="border-t-4 border-blue-200 border-solid border-4 rounded-full animate-spin h-16 w-16">
+        <span className="sr-only">Loading...</span>
       </div>
     </div>
   );

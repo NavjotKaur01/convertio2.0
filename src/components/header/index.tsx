@@ -1,14 +1,18 @@
-import { Link } from "react-router-dom";
-// import { TERipple } from "tw-elements-react";
-import searchList from "../../utilities/searchData.json";
-import { useState } from "react";
-interface SearchItem {
-  id: number;
-  searchName: string;
-}
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  searchActions,
+  selectAllConversion,
+} from "../../store/reducers/searchSlice";
+import { AllConversion } from "../../models/searchModel";
+
 function Header(): JSX.Element {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const allConversions = useAppSelector(selectAllConversion);
   const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
-  const [searchResults, setSearchResults] = useState<SearchItem[]>([]);
+  const [searchResults, setSearchResults] = useState<AllConversion[]>([]);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [chooseSearchResult, setChooseSearchResult] = useState<string>("");
 
@@ -18,32 +22,30 @@ function Header(): JSX.Element {
     setChooseSearchResult(searchString);
     if (searchString.length > 0) {
       setShowSearchResults(true);
-      searchData(searchString);
+      const filterData: AllConversion[] =
+        searchString && allConversions
+          ? allConversions.filter((item: AllConversion) =>
+              item.format.toLowerCase().includes(searchString)
+            )
+          : [];
+      setSearchResults(filterData);
     } else {
       setShowSearchResults(false);
       setSearchResults([]);
     }
   };
-
-  // set data in dropdown
-  const searchData = (inputSearchString: string) => {
-    const filterData: SearchItem[] = inputSearchString
-      ? searchList.lists.filter((item: SearchItem) =>
-          item.searchName.toLowerCase().includes(inputSearchString)
-        )
-      : [];
-    setSearchResults(filterData);
-  };
   const menuToggleHandler = () => {
     setIsExpanded(!isExpanded);
   };
-  // select search results
-  const handleSelectedSearchResult = (selectName: string) => {
-    setChooseSearchResult(selectName);
-    setSearchResults([]);
+  const handleSelectedSearchResult = (item: AllConversion) => {
+    dispatch(searchActions.handleSelectedPage(item));
+    navigate(item.format);
     setShowSearchResults(false);
+    setChooseSearchResult("");
   };
-
+  useEffect(() => {
+    dispatch(searchActions.allConversion());
+  }, []);
   return (
     <header>
       <div className="navbar bg-white z-30">
@@ -64,6 +66,7 @@ function Header(): JSX.Element {
               <li>
                 <Link to="/image-converter">Image Converter</Link>
               </li>
+              <li onClick={() => navigate("downlaod")}>Download</li>
             </ul>
           </div>
           <div className="search-bar-main relative hidden lg:block lg:ml-10">
@@ -124,16 +127,14 @@ function Header(): JSX.Element {
                 }`}
               >
                 {!!searchResults && !!searchResults.length ? (
-                  searchResults.map((item: any, index: number) => (
+                  searchResults.map((item: AllConversion, index: number) => (
                     <li
                       key={index}
                       className="py-[12px] px-[24px]"
-                      onClick={() =>
-                        handleSelectedSearchResult(item.searchName)
-                      }
+                      onClick={() => handleSelectedSearchResult(item)}
                     >
                       <Link to="#" className="text-decoration-none">
-                        {item.searchName}
+                        {item.format}
                       </Link>
                     </li>
                   ))
@@ -243,14 +244,14 @@ function Header(): JSX.Element {
               }`}
             >
               {!!searchResults && !!searchResults.length ? (
-                searchResults.map((item: any, index: number) => (
+                searchResults.map((item: AllConversion, index: number) => (
                   <li
                     key={index}
                     className="py-[12px] px-[24px]"
-                    onClick={() => handleSelectedSearchResult(item.searchName)}
+                    onClick={() => handleSelectedSearchResult(item)}
                   >
                     <Link to="#" className="text-decoration-none">
-                      {item.searchName}
+                      {item.format}
                     </Link>
                   </li>
                 ))

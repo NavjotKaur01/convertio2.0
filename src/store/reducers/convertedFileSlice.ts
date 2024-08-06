@@ -105,6 +105,8 @@ const convertedFileSlice = createSlice({
     resetConvertedState(state) {
       state.isLoading = false;
       state.isSuccess = false;
+      state.allConvertedFiles = [];
+      state.isDelete = false;
     },
   },
 });
@@ -126,6 +128,7 @@ export const SelectIsDelete = (state: RootState) => {
 export const SelectIsLoading = (state: RootState) => {
   return state.convertedFileData.isLoading;
 };
+
 // Export the reducer
 const convertedFileReducer = convertedFileSlice.reducer;
 export default convertedFileReducer;

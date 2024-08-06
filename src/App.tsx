@@ -17,9 +17,8 @@ function App() {
             <Route path="/heif-jpg-converter" element={<ImageConverter />} />
             <Route path="/heif-converter" element={<ImageConverter />} />
             <Route path="/download" element={<Download />} />
-            <Route path="/image-converter/download" element={<Download />} />
-            <Route path="/heif-converter/download" element={<Download />} />
-            <Route path="/heif-jpg-converter/download" element={<Download />} />
+            <Route path={"/:pageName/download"} element={<Download />} />
+            <Route path={"/:search"} element={<ImageConverter />} />
           </Routes>
         </div>
 

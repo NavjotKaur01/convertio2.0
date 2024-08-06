@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { decryptData } from "../../utilities/utils";
 import { rootUrl } from "../../utilities/services/convertFileAPI.services";
 
@@ -10,6 +10,7 @@ import {
   SelectAllConvertedFile,
   SelectIsDelete,
   SelectIsLoading,
+  SelectIsSuccess,
 } from "../../store/reducers/convertedFileSlice";
 import { AllConvertedFiles } from "../../models/convertedFileModel";
 import Loader from "../../components/loaders";
@@ -17,26 +18,18 @@ function Download() {
   const dispatch = useAppDispatch();
   const isDelete = useAppSelector(SelectIsDelete);
   const isLoading = useAppSelector(SelectIsLoading);
+  const isSuccess = useAppSelector(SelectIsSuccess);
   const AllConvertedFile = useAppSelector(SelectAllConvertedFile);
   const storedFiles = decryptData("files");
   const navigate = useNavigate();
   const [isConverting, setIsConverting] = useState<boolean>(true);
   const [progress, setProgress] = useState<number>(0);
-  const urlList = ["image-converter", "heif-converter", "heif-jpg-converter"];
-  const location = useLocation();
 
   useEffect(() => {
-    if (storedFiles) {
-      if (urlList.includes(location.state)) {
-        navigate(`/${location.state}/download`);
-      } else {
-        navigate("/download");
-      }
+    if (isSuccess) {
       dispatch(convertedFileActions.getFiles({ _id: storedFiles?._id }));
-    } else {
-      navigate("/");
     }
-  }, []);
+  }, [isSuccess]);
   useEffect(() => {
     if (AllConvertedFile?.length === 0 && isDelete) {
       navigate("/");
@@ -151,9 +144,19 @@ function Download() {
                             </div>
                           </div>
                         </>
-                      ) : (
+                      ) : file.converted ? (
                         <div className="border border-[#1add72] text-[#1add72] px-7 py-1 w-fit rounded mx-5 sm:m-auto">
                           Done
+                        </div>
+                      ) : (
+                        <div
+                          className={`border px-5 py-1 rounded  sm:m-auto !mr-[4.25rem] w-fit  ${
+                            file.converted
+                              ? "border-[#1add72] text-[#1add72]"
+                              : "border-[#f36] text-[#f36]"
+                          } `}
+                        >
+                          Not Converted
                         </div>
                       )}
 
@@ -164,11 +167,13 @@ function Download() {
                       >
                         <button
                           disabled={file.status}
-                          className={`${file.status ? "cursor-no-drop" : ""}`}
+                          className={`${
+                            file.status && file.status ? "cursor-no-drop" : ""
+                          }`}
                         >
                           <a
                             className="text-decoration-none"
-                            {...(file.status
+                            {...(file.status && file.converted
                               ? { href: `${rootUrl}/jobs/${file.fileName}` }
                               : {})}
                           >
@@ -178,39 +183,25 @@ function Download() {
                       </div>
                       <div className="file-list-item">
                         <svg
-                          onClick={() => handleRemoveRow(file._id)}
+                          onClick={
+                            file.status
+                              ? () => handleRemoveRow(file._id)
+                              : undefined
+                          }
                           xmlns="http://www.w3.org/2000/svg"
                           width="1.5em"
                           height="1.5em"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="#7987a1"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           className="cross-ic cursor-pointer"
-                          data-v-db7992bc=""
                         >
-                          <circle
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            data-v-db7992bc=""
-                          ></circle>
-                          <line
-                            x1="15"
-                            y1="9"
-                            x2="9"
-                            y2="15"
-                            data-v-db7992bc=""
-                          ></line>
-                          <line
-                            data-v-db7992bc=""
-                            x1="9"
-                            y1="9"
-                            x2="15"
-                            y2="15"
-                          ></line>
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="15" y1="9" x2="9" y2="15"></line>
+                          <line x1="9" y1="9" x2="15" y2="15"></line>
                         </svg>
                       </div>
                     </div>
@@ -223,7 +214,7 @@ function Download() {
                   <div className="custom-import border-2 px-1 py-1 primary-border rounded-lg ms-3 ">
                     <span
                       className="label px-4 text-nowrap flex items-center text-sm font-semibold primary-text"
-                      onClick={() => window.open("/", "_blank")}
+                      onClick={() => navigate(-1)}
                     >
                       <span>
                         <img

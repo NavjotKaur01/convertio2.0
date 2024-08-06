@@ -11,60 +11,68 @@ import {
   TETabsPane,
   TECollapse,
 } from "tw-elements-react";
-import axios from "axios";
-import possibleFormat from "../../utilities/possibleImageFormat.json";
 import pageData from "../../utilities/pageData.json";
 import imageFormat from "../../utilities/imageFormat.json";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import FAQ from "../../components/faq";
-
-interface FileDetails {
-  fileName: string;
-  size: string;
-  fileExtension: string;
-}
-
-interface ConversionFormat {
-  fileName: string;
-  conversionFormat: string;
-}
+import {
+  SelectConversionFormat,
+  SelectExtensionName,
+  SelectIsErrorShow,
+  SelectIsFileExtension,
+  SelectUploadedFile,
+  SelectVerticalActive,
+  uploadedFileActions,
+} from "../../store/reducers/uploadedFileSlice";
+import {
+  filterFileType,
+  isNotPossibleFormat,
+} from "../../utilities/fileconverterFunction";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  convertedFileActions,
+  SelectFileExtension,
+} from "../../store/reducers/convertedFileSlice";
+import { FileExtensions } from "../../models/convertedFileModel";
+import { decryptData } from "../../utilities/utils";
+import { ConversionFormat, FileDetails } from "../../models/uploadedFileModal";
+import { selectCurrentPage } from "../../store/reducers/searchSlice";
 
 function ImageConverter(): JSX.Element {
+  const pageHeading = useAppSelector(selectCurrentPage);
+  const possibleFormat: FileExtensions = useAppSelector(SelectFileExtension);
+  const dispatch = useAppDispatch();
+  const FileId = decryptData("files");
   const [activeElement, setActiveElement] = useState<string>("section1");
-  const [uploadedFileList, setUploadedFileList] = useState<FileDetails[]>([]);
-  const [conversionFormat, setConversionFormat] = useState<ConversionFormat[]>(
-    []
-  );
-  const [extensionName, setExtensionName] = useState<string>("");
-  const [isFileExtension, setIsFileExtension] = useState<boolean>(false);
-  const [isErrorShow, setIsErrorShow] = useState<boolean>(false);
-  const [verticalActive, setVerticalActive] = useState<any>({});
+  const uploadedFileList = useAppSelector(SelectUploadedFile);
+  const conversionFormat = useAppSelector(SelectConversionFormat);
+  const verticalActive: any = useAppSelector(SelectVerticalActive);
+  const extensionName: any = useAppSelector(SelectExtensionName);
+  const isFileExtension = useAppSelector(SelectIsFileExtension);
+  const isErrorShow = useAppSelector(SelectIsErrorShow);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [jsonFileData, setJsonFileData] = useState<any>(null);
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [queryObject, setQueryObject] = useState<string>("");
   const [filterFormattedList, setFilterFormattedList] = useState<string[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [hoveredTab, setHoveredTab] = useState<any>(null);
   const [dataList, setDataList] = useState<any>({});
   const [pageTitle, setPageTitle] = useState<string>("");
-  const [hoveredTab, setHoveredTab] = useState<any>(null);
-
   const navigate = useNavigate();
   const location = useLocation();
-
+  const pageName = location.pathname;
   useEffect(() => {
     setDataList(pageData);
     if (Object.keys(dataList).includes(location.pathname)) {
       setPageTitle(dataList[location.pathname].title);
-      setUploadedFileList([]);
+    } else {
+      if (pageHeading) {
+        const title = pageHeading?.format?.split("-").join(" ");
+        setPageTitle(title);
+      }
     }
-  }, [dataList, pageTitle, location.pathname]);
+  }, [dataList, pageTitle, location.pathname, pageHeading]);
 
-  useEffect(() => {
-    if (Object.keys(possibleFormat).length) {
-      setJsonFileData(possibleFormat);
-    }
-  }, []);
   useEffect(() => {
     if (searchResults.length) {
       let s = searchResults.find(
@@ -83,108 +91,21 @@ function ImageConverter(): JSX.Element {
     }
   };
 
-  //UseEffect for uploadedFileList
-  useEffect(() => {
-    if (uploadedFileList.length) {
-      const fileExtensions = uploadedFileList.map(
-        (file: FileDetails) => file.fileExtension
-      );
-      const allExtensionsSame = fileExtensions.every(
-        (ext: string) => ext === fileExtensions[0]
-      );
-      setIsFileExtension(allExtensionsSame);
-    }
-  }, [uploadedFileList]);
-  // show error when we select the same file and change specific conversion format
-  useEffect(() => {
-    if (conversionFormat.length !== 0) {
-      if (conversionFormat.length === uploadedFileList.length) {
-        const fileExtensions = conversionFormat.map(
-          (file: ConversionFormat | undefined) => file?.conversionFormat || ""
-        );
-        const allExtensionsSame = fileExtensions.every(
-          (ext: string) => ext === fileExtensions[0]
-        );
-        if (allExtensionsSame) {
-          setExtensionName(fileExtensions[0]);
-          setIsErrorShow(false);
-        } else {
-          setExtensionName("");
-          setIsErrorShow(true);
-        }
-      } else {
-        setIsErrorShow(true);
-      }
-    } else {
-      if (conversionFormat.length) {
-        setIsErrorShow(false);
-      } else {
-        setIsErrorShow(true);
-      }
-    }
-  }, [conversionFormat, isErrorShow]);
-
-  useEffect(() => {
-    if (extensionName) {
-      const fileExtensions = conversionFormat.map(
-        (file: ConversionFormat | undefined) => file?.conversionFormat || ""
-      );
-      const allExtensionsSame = fileExtensions.every(
-        (ext: string) => ext === extensionName
-      );
-      if (!allExtensionsSame) {
-        setIsErrorShow(true);
-      }
-    }
-  }, [extensionName]);
-
-  // Set default active tab IDs for each file extension
-  useEffect(() => {
-    if (uploadedFileList.length > 0 && possibleFormat) {
-      const initialActiveState: { [fileName: string]: string } = {};
-      const updateConversionList: ConversionFormat[] = [];
-      uploadedFileList.forEach((file) => {
-        const format = file.fileExtension;
-        if (possibleFormat.hasOwnProperty(format)) {
-          const formatProperties = jsonFileData[format];
-          const allFormats =
-            formatProperties.images ||
-            formatProperties.documents ||
-            formatProperties.archive ||
-            [];
-
-          if (allFormats.length > 0) {
-            const randomIndex = Math.floor(Math.random() * allFormats.length);
-
-            updateConversionList.push({
-              fileName: file.fileName,
-              conversionFormat: allFormats[randomIndex],
-            });
-          }
-
-          const propertyToUse = formatProperties.images
-            ? "images"
-            : "documents";
-          initialActiveState[
-            file.fileName
-          ] = `tab-${file.fileName}-1-${propertyToUse}`;
-        }
-      });
-
-      setVerticalActive(initialActiveState);
-      setConversionFormat(updateConversionList);
-    }
-  }, [uploadedFileList]);
-
   const handleSearchPossibleFormat = (
     fileName: string,
     searchStr: string,
-    extension: string
+    fileType: keyof FileExtensions
   ) => {
     const searchString = searchStr.trim().toLowerCase();
     setQueryObject(fileName);
     setSearchQuery(searchString);
-    const filteredData = filterFileType(extension, fileName, searchString);
+    const filteredData = filterFileType(
+      fileName,
+      searchString,
+      fileType,
+      possibleFormat,
+      verticalActive
+    );
 
     const updateSearchResults = (fileName: string, filteredData: string[]) => {
       setSearchResults((prevState) => {
@@ -209,93 +130,27 @@ function ImageConverter(): JSX.Element {
     }
   };
 
-  function filterFileType(
-    fileType: string,
-    fileName: string,
-    searchStr: string
-  ) {
-    if (
-      possibleFormat.hasOwnProperty(fileType) &&
-      Object.keys(verticalActive).includes(fileName) &&
-      searchStr
-    ) {
-      let filterData: any[] = [];
-      const activeTabData = Object.values(jsonFileData[fileType]).flat();
-      if (activeTabData.length) {
-        filterData = activeTabData.filter((item: any) =>
-          item.toLowerCase().includes(searchStr)
-        );
-      }
-      return filterData;
-    } else {
-      return [];
-    }
-  }
-
   // handle multiple file uploading
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
+    const files: any = event.target.files;
     if (!files || files.length === 0) {
       return;
     }
-
-    const newFilesArray = Array.from(files);
-    const totalFilesCount = uploadedFileList.length + newFilesArray.length;
+    const UploadedFiles: any = Array.from(files);
+    const totalFilesCount = uploadedFileList.length + UploadedFiles.length;
     if (totalFilesCount > 10) {
       event.preventDefault();
       setErrorMsg(`Cannot upload more than 10 files.`);
       return;
     }
-    const fd = new FormData();
-    const updatedFiles: FileDetails[] = [];
-    const updateConversion: ConversionFormat[] = [];
-    for (let i = 0; i < files.length; i++) {
-      const fileName = files[i]?.name;
-      const fileExtension = fileName?.split(".").pop()?.toLowerCase();
-      if (!fileExtension) {
-        console.log(`File extension is undefined for file: ${fileName}`);
-        continue;
-      }
-
-      updatedFiles.push({
-        fileName: files[i].name,
-        size: formatBytes(files[i].size),
-        fileExtension: fileExtension,
-      });
-      updateConversion.push({
-        conversionFormat: extensionName,
-        fileName: files[i].name,
-      });
-
-      fd.append(`file${i + 1}`, files[i]);
-    }
-    setUploadedFileList((prevState) => [...prevState, ...updatedFiles]);
-    if (conversionFormat.length) {
-      setConversionFormat((prevState) => [...prevState, ...updateConversion]);
-    }
+    const payload = {
+      UploadedFiles,
+      possibleFormat,
+      pageName,
+      type: "image",
+    };
+    dispatch(uploadedFileActions.uploadFileListData(payload));
     setErrorMsg("");
-    axios
-      .post("http://httpbin.org/post", fd, {
-        headers: {
-          "Custom-Header": "value",
-        },
-      })
-      .then((res: any) => {
-        console.log(res);
-      })
-      .catch((err: any) => {
-        console.error(err);
-      });
-  };
-
-  // calculate file size in bytes,KB,MB,GB
-  const formatBytes = (bytes: number, decimals = 2): string => {
-    if (!+bytes) return "0 Bytes";
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
   };
 
   // Handle choose conversion format
@@ -304,111 +159,64 @@ function ImageConverter(): JSX.Element {
     fileName: string,
     isComman?: boolean
   ) => {
-    let fileIndex = conversionFormat.findIndex(
-      (item: ConversionFormat) => item.fileName === fileName
+    dispatch(
+      uploadedFileActions.chooseConversionFormat({ format, fileName, isComman })
     );
-    if (fileIndex != -1) {
-      setConversionFormat((prevFormats: any) => {
-        const updatedFormats = [...prevFormats];
-        updatedFormats[fileIndex] = {
-          ...updatedFormats[fileIndex],
-          conversionFormat: format,
-        };
-        return updatedFormats;
-      });
-    } else {
-      setConversionFormat((prevState: any) => [
-        ...prevState,
-        { conversionFormat: format, fileName: fileName },
-      ]);
-    }
     if (isComman) {
       handleSameFileExtensionConversion(format);
     }
-    setExtensionName(format);
     setFilterFormattedList([]);
     setSearchQuery("");
-
-    setIsErrorShow(true);
   };
 
   // Remove uploaded file
   const handleRemoveRow = (fileName: string, idx: number) => {
-    const updatedDetails = uploadedFileList.filter((_, index) => index !== idx);
-    const updatedConversionFormatted = conversionFormat.filter(
-      (conversion: ConversionFormat) => conversion.fileName !== fileName
-    );
-    setConversionFormat(updatedConversionFormatted);
-    setUploadedFileList(updatedDetails);
-    if (uploadedFileList.length <= 10) {
-      setErrorMsg("");
-    }
+    dispatch(uploadedFileActions.removeFile({ fileName, idx }));
   };
 
   // handle same file extension conversion
   const handleSameFileExtensionConversion = (conversionExtension: string) => {
-    setExtensionName(conversionExtension);
-    setIsErrorShow(false);
-    if (conversionFormat.length === 0) {
-      const newConversionFormat = uploadedFileList.map(
-        (uploadedFile: FileDetails) => ({
-          conversionFormat: conversionExtension,
-          fileName: uploadedFile.fileName,
-        })
-      );
-      setConversionFormat(newConversionFormat);
-    } else {
-      const updatedConversionFormat = uploadedFileList.map(
-        (uploadedFile: FileDetails) => {
-          const existingFormat = conversionFormat.find(
-            (format: ConversionFormat) => {
-              format.fileName === uploadedFile.fileName;
-            }
-          );
-          if (existingFormat) {
-            return {
-              ...existingFormat,
-              conversionFormat: conversionExtension,
-            };
-          } else {
-            return {
-              conversionFormat: conversionExtension,
-              fileName: uploadedFile.fileName,
-            };
-          }
-        }
-      );
-      setConversionFormat(updatedConversionFormat);
-    }
-  };
-
-  // Uploaded file is not converted to another format
-  const isNotPossibleFormat = (fileExtension: string): boolean => {
-    return Object.keys(possibleFormat).includes(fileExtension);
+    dispatch(uploadedFileActions.updateConversionFormat(conversionExtension));
   };
 
   // Active and deactive tabs navigation
-  const handleVerticalClick = (tabName: string, ObjectKeyName: string) => {
-    const updatedState = { ...verticalActive };
-    updatedState[ObjectKeyName] = tabName;
-    setVerticalActive(updatedState);
+  const handleVerticalClick = (
+    tabName: string,
+    ObjectKeyName: string
+    // keyName: string
+  ) => {
+    dispatch(
+      uploadedFileActions.setVerticalActive({ [ObjectKeyName]: tabName })
+    );
   };
 
   // handle convert file
-  const handleConvert = () => {
+  const handleConvert = async () => {
     if (uploadedFileList.length === 0) {
       setErrorMsg("No files uploaded.");
       return;
     }
     if (conversionFormat.length) {
-      localStorage.setItem("files", JSON.stringify(uploadedFileList));
-      navigate(`${location.pathname}/download`, {
-        state: location.pathname.replace("/", ""),
+      const formData = new FormData();
+      uploadedFileList.forEach((fileObj: any, index: number) => {
+        console.log(fileObj.fileDetails);
+        formData.append("files", fileObj.fileDetails);
+        formData.append("formats", conversionFormat[index].conversionFormat);
       });
+      if (FileId) {
+        formData.append("id", FileId._id);
+      }
+      dispatch(convertedFileActions.FilesToConvert(formData));
+      navigate(`${pageName}/download`);
     } else {
-      setIsErrorShow(true);
+      dispatch(uploadedFileActions.setIsErrorShow());
     }
   };
+  useEffect(() => {
+    dispatch(convertedFileActions.resetConvertedState());
+    dispatch(convertedFileActions.getFileExtension());
+    dispatch(uploadedFileActions.resetUploadFileState());
+  }, []);
   return (
     <>
       <div className="lg:container mx-auto grid grid-cols-1 lg:grid-cols-5 mb-8 mt-24">
@@ -442,13 +250,17 @@ function ImageConverter(): JSX.Element {
                       </div>
 
                       {/* dropdown start */}
+
                       <div className="flex items-center justify-end">
-                        <div className="file-list-item ">
+                        <div className="file-list-item">
                           <TEDropdown className="flex justify-center">
                             <TERipple rippleColor="light">
                               <TEDropdownToggle
                                 className={`flex items-center whitespace-nowrap px-3 pb-1 pt-1 border rounded-lg w-20 ${
-                                  isNotPossibleFormat(file.fileExtension)
+                                  isNotPossibleFormat(
+                                    file.fileType,
+                                    possibleFormat
+                                  )
                                     ? "small-btn"
                                     : "error-btn"
                                 }`}
@@ -497,7 +309,11 @@ function ImageConverter(): JSX.Element {
                               </TEDropdownToggle>
                             </TERipple>
 
-                            <TEDropdownMenu>
+                            <TEDropdownMenu
+                              style={{
+                                transform: "translate3d(-120px, 31px, 0px)",
+                              }}
+                            >
                               <div className="p-2 custom-drop-menu border-0 mt-2 shadow-none`">
                                 {/* Search Bar */}
                                 <div className="dropdown-searchbar">
@@ -511,7 +327,7 @@ function ImageConverter(): JSX.Element {
                                           handleSearchPossibleFormat(
                                             file.fileName,
                                             e.target.value,
-                                            file.fileExtension
+                                            file.fileType
                                           )
                                         }
                                       />
@@ -544,23 +360,21 @@ function ImageConverter(): JSX.Element {
                                       {!!filterFormattedList &&
                                         !!filterFormattedList.length &&
                                         filterFormattedList.map(
-                                          (item: any, idx: number) => {
-                                            return (
-                                              <button
-                                                key={`${idx}`}
-                                                type="button"
-                                                className={`btn px-3 py-1 btn-custom mx-1 my-1`}
-                                                onClick={() =>
-                                                  handleChooseConversion(
-                                                    item,
-                                                    file.fileName
-                                                  )
-                                                }
-                                              >
-                                                {item.toUpperCase()}
-                                              </button>
-                                            );
-                                          }
+                                          (item: any, idx: number) => (
+                                            <button
+                                              key={`${idx}`}
+                                              type="button"
+                                              className={`btn px-3 py-1 btn-custom mx-1 my-1`}
+                                              onClick={() =>
+                                                handleChooseConversion(
+                                                  item,
+                                                  file.fileName
+                                                )
+                                              }
+                                            >
+                                              {item.toUpperCase()}
+                                            </button>
+                                          )
                                         )}
                                     </TEDropdownItem>
                                   ) : (
@@ -569,7 +383,7 @@ function ImageConverter(): JSX.Element {
                                       <TEDropdownItem preventCloseOnClick>
                                         {Object.entries(possibleFormat).map(
                                           ([key, formats], index) =>
-                                            file.fileExtension === key && (
+                                            file.fileType === key && (
                                               <React.Fragment key={index}>
                                                 <TETabs
                                                   vertical
@@ -640,10 +454,13 @@ function ImageConverter(): JSX.Element {
                                         <TETabsContent>
                                           {Object.entries(possibleFormat).map(
                                             ([key, formats], index) =>
-                                              file.fileExtension === key &&
+                                              file.fileType === key &&
                                               Object.entries(formats).map(
                                                 (
-                                                  [keyName, possibleFormats],
+                                                  [keyName, possibleFormats]: [
+                                                    string,
+                                                    any
+                                                  ],
                                                   idx
                                                 ) => (
                                                   <TETabsPane
@@ -656,10 +473,10 @@ function ImageConverter(): JSX.Element {
                                                       `tab-${file.fileName}-1-${keyName}`
                                                     }
                                                   >
-                                                    {possibleFormats.map(
+                                                    {possibleFormats?.map(
                                                       (
-                                                        fileExtension,
-                                                        innerIdx
+                                                        fileExtension: any,
+                                                        innerIdx: number
                                                       ) => (
                                                         <button
                                                           key={`${index}-${idx}-${innerIdx}`}
@@ -713,9 +530,8 @@ function ImageConverter(): JSX.Element {
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="#7987a1"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeLinejoin="round"
                             className="cross-ic cursor-pointer"
                             data-v-db7992bc=""
                           >
@@ -742,12 +558,13 @@ function ImageConverter(): JSX.Element {
                           </svg>
                         </div>
                       </div>
+
                       {/* close button end*/}
                     </div>
                   ))}
                 </div>
 
-                <div className="flex sm:justify-between justify-center items-center added-files flex-wrap">
+                <div className="flex justify-between  items-center added-files flex-wrap">
                   <div className="add-more-btn flex">
                     <div className="custom-import border-2 px-1 py-1 primary-border rounded-lg ms-3 ">
                       <span className="label px-4 text-nowrap flex items-center text-sm font-semibold primary-text ">
@@ -772,7 +589,7 @@ function ImageConverter(): JSX.Element {
                     </div>
                   </div>
 
-                  <div className="p-3 flex items-center  conversion">
+                  <div className="p-3 flex items-center conversion justify-center">
                     {isFileExtension ? (
                       <div className="flex items-center justify-between conversion-inside">
                         <p className="mb-0">
@@ -825,7 +642,7 @@ function ImageConverter(): JSX.Element {
                                         handleSearchPossibleFormat(
                                           uploadedFileList[0].fileName,
                                           e.target.value,
-                                          uploadedFileList[0].fileExtension
+                                          uploadedFileList[0].fileType
                                         )
                                       }
                                     />
@@ -882,7 +699,7 @@ function ImageConverter(): JSX.Element {
                                     <TEDropdownItem preventCloseOnClick>
                                       {Object.entries(possibleFormat).map(
                                         ([key, formats], index) =>
-                                          uploadedFileList[0].fileExtension ===
+                                          uploadedFileList[0].fileType ===
                                             key && (
                                             <React.Fragment key={index}>
                                               <TETabs
@@ -929,7 +746,7 @@ function ImageConverter(): JSX.Element {
                                                         setHoveredTab(null)
                                                       }
                                                     >
-                                                      {keyName}{" "}
+                                                      {keyName}
                                                       {verticalActive[
                                                         uploadedFileList[0]
                                                           .fileName
@@ -954,11 +771,14 @@ function ImageConverter(): JSX.Element {
                                       <TETabsContent>
                                         {Object.entries(possibleFormat).map(
                                           ([key, formats], index) =>
-                                            uploadedFileList[0]
-                                              .fileExtension === key &&
+                                            uploadedFileList[0].fileType ===
+                                              key &&
                                             Object.entries(formats).map(
                                               (
-                                                [keyName, possibleFormats],
+                                                [keyName, possibleFormats]: [
+                                                  string,
+                                                  any
+                                                ],
                                                 idx
                                               ) => (
                                                 <TETabsPane
@@ -972,25 +792,26 @@ function ImageConverter(): JSX.Element {
                                                     `tab-${uploadedFileList[0].fileName}-1-${keyName}`
                                                   }
                                                 >
-                                                  {possibleFormats.map(
-                                                    (
-                                                      fileExtension,
-                                                      innerIdx
-                                                    ) => (
-                                                      <button
-                                                        key={`${index}-${idx}-${innerIdx}`}
-                                                        type="button"
-                                                        className="btn px-1 text-center py-1 btn-custom mx-1 my-1 col-span-4"
-                                                        onClick={() =>
-                                                          handleSameFileExtensionConversion(
-                                                            fileExtension
-                                                          )
-                                                        }
-                                                      >
-                                                        {fileExtension.toUpperCase()}
-                                                      </button>
-                                                    )
-                                                  )}
+                                                  {possibleFormats &&
+                                                    possibleFormats.map(
+                                                      (
+                                                        fileExtension: any,
+                                                        innerIdx: number
+                                                      ) => (
+                                                        <button
+                                                          key={`${index}-${idx}-${innerIdx}`}
+                                                          type="button"
+                                                          className="btn px-1 text-center py-1 btn-custom mx-1 my-1 col-span-4"
+                                                          onClick={() =>
+                                                            handleSameFileExtensionConversion(
+                                                              fileExtension
+                                                            )
+                                                          }
+                                                        >
+                                                          {fileExtension.toUpperCase()}
+                                                        </button>
+                                                      )
+                                                    )}
                                                 </TETabsPane>
                                               )
                                             )
