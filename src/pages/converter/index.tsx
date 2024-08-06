@@ -9,7 +9,6 @@ import {
   TETabsContent,
   TETabsItem,
   TETabsPane,
-  TECollapse,
 } from "tw-elements-react";
 import axios from "axios";
 import possibleFormat from "../../utilities/possibleImageFormat.json";
@@ -31,7 +30,7 @@ interface ConversionFormat {
 
 function ImageConverter(): JSX.Element {
   const { t } = useTranslation("imageConverter");
-  const [activeElement, setActiveElement] = useState<string>("section1");
+  const [activeElement, setActiveElement] = useState<string>("section2");
   const [uploadedFileList, setUploadedFileList] = useState<FileDetails[]>([]);
   const [conversionFormat, setConversionFormat] = useState<ConversionFormat[]>(
     []
@@ -1131,7 +1130,7 @@ function ImageConverter(): JSX.Element {
                   <button
                     className={`${
                       activeElement === "section1" &&
-                      `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)]  primary-text `
+                      `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)]`
                     } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left font-bold text-[23px] transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white text-xl `}
                     type="button"
                     onClick={() => handleClick("section1")}
@@ -1139,7 +1138,7 @@ function ImageConverter(): JSX.Element {
                     aria-controls="collapseOne1"
                   >
                     {t("formatTitle", { pageTitle })}
-                    <span
+                    {/* <span
                       className={`${
                         activeElement === "section1"
                           ? `rotate-[-180deg] -mr-1`
@@ -1160,10 +1159,26 @@ function ImageConverter(): JSX.Element {
                           d="M19.5 8.25l-7.5 7.5-7.5-7.5"
                         />
                       </svg>
-                    </span>
+                    </span> */}
                   </button>
                 </h2>
-                <TECollapse
+               
+                  <div className="my-4">
+                    <ul className="grid md:grid-cols-3 sm:grid-cols-2">
+                      {!!formats &&
+                        !!formats.length &&
+                        formats.map((format: string, indx: number) => (
+                          <li
+                            key={indx}
+                            className="text-[var(--primary-color)] text-base px-5 py-4"
+                          >
+                            <Link to="#">{format}</Link>
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                {/* </TECollapse> */}
+                {/* <TECollapse
                   show={activeElement === "section1"}
                   className="!mt-0 !rounded-b-none !shadow-none"
                 >
@@ -1181,7 +1196,7 @@ function ImageConverter(): JSX.Element {
                         ))}
                     </ul>
                   </div>
-                </TECollapse>
+                </TECollapse> */}
               </div>
             </div>
           </div>
