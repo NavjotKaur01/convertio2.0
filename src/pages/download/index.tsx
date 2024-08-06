@@ -136,7 +136,7 @@ function Download() {
                     )}
                     
                     <div
-                      className={`text-white bg-[var(--primary-color)] !h-[40px] rounded  xl:ml-[-53px] download custom-import primary-btn !justify-center !shadow-none ${
+                      className={`text-white bg-[var(--primary-color)] w-fit !h-[40px] rounded  xl:ml-[-53px] download custom-import primary-btn !justify-center !shadow-none ${
                         isConverting ? "opacity-75" : "opacity-100"
                       }`}
                     >
@@ -281,7 +281,7 @@ function Download() {
                           <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3 rounded">
                             <img
                               className=""
-                              src="/static/img/happy-user/diamond.svg"
+                              src="/static/img/happy-user/fb.svg"
                               style={{}}
                             />
 
@@ -294,7 +294,7 @@ function Download() {
                           <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3 rounded">
                             <img
                               className=""
-                              src="/static/img/happy-user/offer.svg"
+                              src="/static/img/happy-user/twitter.svg"
                               style={{}}
                             />
 
