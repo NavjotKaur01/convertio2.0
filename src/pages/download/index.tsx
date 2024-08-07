@@ -135,9 +135,7 @@ function Download() {
                 {AllConvertedFile.map(
                   (file: AllConvertedFiles, index: number) => (
                     <div
-                      className={`text-white bg-[--primary-color] w-fit !h-[40px] rounded  xl:ml-[-53px] download custom-import primary-btn !justify-center !shadow-none ${
-                        isConverting ? "opacity-75" : "opacity-100"
-                      }`}
+                      className="flex md:grid flex-wrap sm:justify-between items-center file-list-main-download rounded-lg border-none"
                       key={index}
                     >
                       <div className="flex items-center file-list-item w-full sm:w-fit ">
