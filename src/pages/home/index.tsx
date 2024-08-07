@@ -13,7 +13,7 @@ import {
 } from "tw-elements-react";
 
 import FAQ from "../../components/faq";
-import { decryptData } from "../../utilities/utils";
+import { decryptData, encryptData } from "../../utilities/utils";
 import { useDispatch } from "react-redux";
 import {
   convertedFileActions,
@@ -176,6 +176,7 @@ function Home(): JSX.Element {
 
   // handle convert file
   const handleConvert = async () => {
+    encryptData("isClicked", true);
     if (uploadedFileList.length === 0) {
       setErrorMsg("No files uploaded.");
       return;
