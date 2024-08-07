@@ -76,8 +76,14 @@ function ImageConverter(): JSX.Element {
       setPageTitle(dataList[location.pathname].title);
     } else {
       if (pageHeading) {
-        const title = pageHeading?.format?.split("-").join(" ");
-        setPageTitle(title);
+        const title = pageHeading?.format?.split("-");
+        if (title.length > 0) {
+          title[0] = title[0].toUpperCase();
+          if (title.length > 1) {
+            title[title.length - 1] = title[title.length - 1].toUpperCase();
+          }
+          setPageTitle(title.join(" "));
+        }
       }
     }
   }, [dataList, pageTitle, location.pathname, pageHeading]);
