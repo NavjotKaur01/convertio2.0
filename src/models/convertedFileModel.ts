@@ -29,4 +29,5 @@ export interface ChangeStatusPayload {
 }
 export interface DeleteFilePayload {
   fileId: string;
+  outputFileName: string;
 }

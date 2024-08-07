@@ -27,12 +27,14 @@ const uploadedFileSlice = createSlice({
     //store upload files
     uploadFileListData(state, action: PayloadAction<any>) {
       state.isLoading = true;
-      const { newFiles, updateConversion, initialActiveState } = processFiles(
-        action.payload.UploadedFiles,
-        action.payload.possibleFormat,
-        action.payload?.pageName,
-        action.payload?.type
-      );
+      const { newFiles, updateConversion, initialActiveState, randomformat } =
+        processFiles(
+          action.payload.UploadedFiles,
+          action.payload.possibleFormat,
+          action.payload?.pageName,
+          action.payload?.type,
+          action.payload?.conversionType
+        );
       state.uploadedFileList = [...state.uploadedFileList, ...newFiles];
       state.conversionFormat = [...state.conversionFormat, ...updateConversion];
       state.verticalActive = initialActiveState;
@@ -47,10 +49,7 @@ const uploadedFileSlice = createSlice({
           (ext: any) => ext === fileExtensions[0]
         );
         state.IsFileExtension = allExtensionsSame;
-        state.ExtensionName = allExtensionsSame
-          ? updateConversion[0].conversionFormat
-          : "";
-
+        state.ExtensionName = allExtensionsSame ? randomformat : "";
         state.IsErrorShow = !allExtensionsSame;
       } else {
         state.IsErrorShow = !hasConversionFormat || !allFilesConverted;
@@ -78,7 +77,7 @@ const uploadedFileSlice = createSlice({
         state.conversionFormat.push({ conversionFormat: format, fileName });
       }
       state.ExtensionName = format;
-      state.IsErrorShow = true;
+      state.IsErrorShow = false;
     },
     removeFile(
       state,

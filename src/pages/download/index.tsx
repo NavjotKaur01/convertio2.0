@@ -32,7 +32,7 @@ function Download() {
   }, [isSuccess]);
   useEffect(() => {
     if (AllConvertedFile?.length === 0 && isDelete) {
-      navigate("/");
+      navigate(-1);
     }
   }, [isDelete, AllConvertedFile]);
   useEffect(() => {
@@ -82,8 +82,13 @@ function Download() {
   }, [isConverting, AllConvertedFile, dispatch]); // Added `AllConvertedFile` and `dispatch` to the dependency array
 
   // Remove uploaded file
-  const handleRemoveRow = (fileId: string) => {
-    dispatch(convertedFileActions.deleteSingleFile({ fileId: fileId }));
+  const handleRemoveRow = (fileId: string, fileName: string) => {
+    dispatch(
+      convertedFileActions.deleteSingleFile({
+        fileId: fileId,
+        outputFileName: fileName,
+      })
+    );
   };
 
   const handleDownloadAllFiles = async () => {
@@ -185,7 +190,7 @@ function Download() {
                         <svg
                           onClick={
                             file.status
-                              ? () => handleRemoveRow(file._id)
+                              ? () => handleRemoveRow(file._id, file.fileName)
                               : undefined
                           }
                           xmlns="http://www.w3.org/2000/svg"

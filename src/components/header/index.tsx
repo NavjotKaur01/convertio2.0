@@ -6,6 +6,7 @@ import {
   selectAllConversion,
 } from "../../store/reducers/searchSlice";
 import { AllConversion } from "../../models/searchModel";
+import { encryptData } from "../../utilities/utils";
 
 function Header(): JSX.Element {
   const navigate = useNavigate();
@@ -38,14 +39,20 @@ function Header(): JSX.Element {
     setIsExpanded(!isExpanded);
   };
   const handleSelectedSearchResult = (item: AllConversion) => {
-    dispatch(searchActions.handleSelectedPage(item));
-    navigate(item.format);
+    // dispatch(searchActions.handleSelectedPage(item));
+    encryptData("currentPage", item);
+    navigate(item?.format);
     setShowSearchResults(false);
     setChooseSearchResult("");
   };
   useEffect(() => {
     dispatch(searchActions.allConversion());
   }, []);
+  // useEffect(() => {
+  //   if (currentPage && currentPage.format) {
+  //     navigate(currentPage?.format); // Navigate to the current page format
+  //   }
+  // }, [currentPage]);
   return (
     <header>
       <div className="navbar bg-white z-30">
@@ -66,7 +73,6 @@ function Header(): JSX.Element {
               <li>
                 <Link to="/image-converter">Image Converter</Link>
               </li>
-              <li onClick={() => navigate("downlaod")}>Download</li>
             </ul>
           </div>
           <div className="search-bar-main relative hidden lg:block lg:ml-10">
@@ -248,7 +254,9 @@ function Header(): JSX.Element {
                   <li
                     key={index}
                     className="py-[12px] px-[24px]"
-                    onClick={() => handleSelectedSearchResult(item)}
+                    onClick={() => {
+                      handleSelectedSearchResult(item), menuToggleHandler();
+                    }}
                   >
                     <Link to="#" className="text-decoration-none">
                       {item.format}

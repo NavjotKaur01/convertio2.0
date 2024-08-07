@@ -7,7 +7,6 @@ const initialState: any = {
   isLoading: false,
   isSuccess: false,
   allConversion: [],
-  selectedPage: {} as AllConversion,
 };
 
 // Create a Redux slice for Search File
@@ -27,9 +26,6 @@ const searchSlice = createSlice({
     //Reducer for search failure
     allConversionFailed(state, _action) {
       state.isLoading = false;
-    },
-    handleSelectedPage(state, action) {
-      state.selectedPage = action.payload;
     },
     // Reducer to reset the Search state
     resetSearchState(state) {

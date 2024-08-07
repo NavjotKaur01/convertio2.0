@@ -12,6 +12,13 @@ export const encryptDatawith1Days = (
   ).toString();
   saveCookie(name, encrypted, expiryTime ? expiryTime : 1 * 24);
 };
+export const encryptData = (name: string, data: any) => {
+  const encrypted = CryptoJS.AES.encrypt(
+    JSON.stringify(data),
+    secretKey
+  ).toString();
+  saveCookie(name, encrypted);
+};
 // Decrypt Data
 export const decryptData = (name: string) => {
   const encrypted = getCookie(name);
@@ -34,17 +41,21 @@ export const getCookie = (name: string) =>
 const saveCookie = (
   cookieName: string,
   cookieValue: string,
-  hourToExpire: number
+  hourToExpire?: number
 ) => {
-  //setting cookie with expiry time
-  const currentDate = new Date();
-  currentDate.setTime(currentDate.getTime() + hourToExpire * 3600 * 1000);
-  document.cookie =
-    cookieName +
-    " = " +
-    cookieValue +
-    "; expires = " +
-    currentDate.toUTCString();
+  if (hourToExpire) {
+    //setting cookie with expiry time
+    const currentDate = new Date();
+    currentDate.setTime(currentDate.getTime() + hourToExpire * 3600 * 1000);
+    document.cookie =
+      cookieName +
+      " = " +
+      cookieValue +
+      "; expires = " +
+      currentDate.toUTCString();
+  } else {
+    document.cookie = cookieName + " = " + cookieValue + ";";
+  }
 };
 //file converted format
 export function getConverter(format: string) {
@@ -59,11 +70,10 @@ export function getConverter(format: string) {
     default:
       return "unknownFormat";
   }
-} 
-
+}
 
 //
- // calculate file size in bytes,KB,MB,GB
+// calculate file size in bytes,KB,MB,GB
 export const formatBytes = (bytes: number, decimals = 2): string => {
   if (!+bytes) return "0 Bytes";
   const k = 1024;

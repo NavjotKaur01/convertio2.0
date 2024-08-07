@@ -36,10 +36,9 @@ import {
 import { FileExtensions } from "../../models/convertedFileModel";
 import { decryptData } from "../../utilities/utils";
 import { ConversionFormat, FileDetails } from "../../models/uploadedFileModal";
-import { selectCurrentPage } from "../../store/reducers/searchSlice";
 
 function ImageConverter(): JSX.Element {
-  const pageHeading = useAppSelector(selectCurrentPage);
+  const pageHeading = decryptData("currentPage");
   const possibleFormat: FileExtensions = useAppSelector(SelectFileExtension);
   const dispatch = useAppDispatch();
   const FileId = decryptData("files");
@@ -63,6 +62,7 @@ function ImageConverter(): JSX.Element {
   const pageName = location.pathname;
   useEffect(() => {
     setDataList(pageData);
+
     if (Object.keys(dataList).includes(location.pathname)) {
       setPageTitle(dataList[location.pathname].title);
     } else {
@@ -72,7 +72,9 @@ function ImageConverter(): JSX.Element {
       }
     }
   }, [dataList, pageTitle, location.pathname, pageHeading]);
-
+  useEffect(() => {
+    dispatch(uploadedFileActions.resetUploadFileState());
+  }, [location.pathname]);
   useEffect(() => {
     if (searchResults.length) {
       let s = searchResults.find(
@@ -143,11 +145,17 @@ function ImageConverter(): JSX.Element {
       setErrorMsg(`Cannot upload more than 10 files.`);
       return;
     }
+
     const payload = {
       UploadedFiles,
       possibleFormat,
       pageName,
-      type: "image",
+      type: Object.keys(dataList).includes(location.pathname)
+        ? "image"
+        : pageHeading?.FileType,
+      conversionType: Object.keys(dataList).includes(location.pathname)
+        ? "jpg"
+        : pageHeading?.format?.split("-")[2],
     };
     dispatch(uploadedFileActions.uploadFileListData(payload));
     setErrorMsg("");

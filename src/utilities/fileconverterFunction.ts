@@ -1,17 +1,17 @@
 import { FileExtensions } from "../models/convertedFileModel";
 import { ConversionFormat, FileDetails } from "../models/uploadedFileModal";
 import { formatBytes, getConverter } from "./utils";
-const PageList = ["/heif-jpg-converter", "/heif-converter", "/image-converter"];
 export const processFiles = (
   files: File[],
   possibleFormat: FileExtensions,
   pageName: string,
-  FileType?: string
+  FileType?: string,
+  conversionType?: string
 ) => {
-  const specialCase = PageList.includes(pageName);
   const newFiles: FileDetails[] = [];
   const updateConversion: ConversionFormat[] = [];
   const initialActiveState: { [fileName: string]: string } = {};
+  let randomformat = "";
   files.forEach((file: any) => {
     const fileDetails = file;
     const fileName = file.name;
@@ -29,18 +29,29 @@ export const processFiles = (
       fileType: fileType,
       fileDetails: fileDetails,
     });
-    if (pageName && specialCase && type === FileType) {
+    if (pageName && type === FileType) {
       const formatProperties: any = possibleFormat[type];
-      const allFormats = formatProperties.images || [];
+      const allFormats = formatProperties.images.includes(conversionType)
+        ? formatProperties.images
+        : formatProperties.documents.includes(conversionType)
+        ? formatProperties.documents
+        : formatProperties.Audio.includes(conversionType)
+        ? formatProperties.Audio
+        : [];
       if (allFormats.length > 0) {
-        const index = allFormats.indexOf("jpg");
+        const index = allFormats.indexOf(conversionType);
+        randomformat = allFormats[index];
         updateConversion.push({
           fileName: fileName,
           conversionFormat: allFormats[index],
           fileType: fileType,
         });
       }
-      const propertyToUse = formatProperties.images ? "images" : "";
+      const propertyToUse = formatProperties.images
+        ? "images"
+        : "documents"
+        ? "Audio"
+        : [];
       initialActiveState[fileName] = `tab-${fileName}-1-${propertyToUse}`;
     } else if (possibleFormat.hasOwnProperty(type)) {
       const formatProperties: any = possibleFormat[type];
@@ -52,6 +63,7 @@ export const processFiles = (
 
       if (allFormats.length > 0) {
         const randomIndex = Math.floor(Math.random() * allFormats.length);
+        randomformat = allFormats[randomIndex];
         updateConversion.push({
           fileName: fileName,
           conversionFormat: allFormats[randomIndex],
@@ -72,6 +84,7 @@ export const processFiles = (
     newFiles,
     updateConversion,
     initialActiveState,
+    randomformat,
   };
 };
 // filter filetype function
