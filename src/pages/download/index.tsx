@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   convertedFileActions,
   SelectAllConvertedFile,
-  SelectIsConverted,
   SelectIsDelete,
   SelectIsLoading,
   SelectIsSuccess,
@@ -15,7 +14,6 @@ import {
 import { AllConvertedFiles } from "../../models/convertedFileModel";
 import Loader from "../../components/loaders";
 function Download() {
-  const isConverted = useAppSelector(SelectIsConverted);
   const dispatch = useAppDispatch();
   const isDelete = useAppSelector(SelectIsDelete);
   const isLoading = useAppSelector(SelectIsLoading);
