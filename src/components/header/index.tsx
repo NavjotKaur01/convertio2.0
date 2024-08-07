@@ -17,7 +17,14 @@ function Header(): JSX.Element {
     { code: "en", lang: "English" },
     { code: "fr", lang: "French" },
     { code: "hi", lang: "Hindi" },
+    // { code: "es", lang: "Spanish" },
+    // { code: "de", lang: "German" },
+    // { code: "et", lang: "Estonian" },
+    // { code: "it", lang: "Italian" },
+    // { code: "ja", lang: "Japanese" },
+    // { code: "nl", lang: "Dutch" },
   ];
+  const [currentCode,setCurrentCode]=useState<string>("en")
   const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
   const [searchResults, setSearchResults] = useState<AllConversion[]>([]);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -67,17 +74,19 @@ function Header(): JSX.Element {
   const handleChooseLang = (lng: string) => {
     setIsOpen(!isOpen);
     i18n.changeLanguage(lng);
+    setCurrentCode(lng)
+
   };
   return (
     <header className="h-[60px]">
       <div className="navbar bg-white z-30">
         {/* Destop design */}
-        <nav className="flex lg:container px-5 lg:px-10 mx-auto justify-between py-4">
-          <div className="flex items-center xl:gap-56 gap-10">
+        <nav className="flex lg:container px-5 lg:px-0 xl:px-9 mx-auto justify-between py-4">
+          <div className="flex items-center xl:gap-48 gap-10">
             <Link className="text-xl lg:mx-20 font-semibold m-0" to="/">
               Logo
             </Link>
-            <ul className="gap-10 items-center hidden lg:flex">
+            <ul className="gap-9 items-center hidden lg:flex">
               <li className=""></li>
               <li>
                 <Link to="/heif-jpg-converter">{t("nav.heifJpg")} </Link>
@@ -149,14 +158,16 @@ function Header(): JSX.Element {
                   }`}
                 >
                   {!!searchResults && !!searchResults.length ? (
-                    searchResults.map((item: AllConversion, index: number) => (
+                    searchResults.map((item: any, index: number) => (
                       <li
                         key={index}
                         className="py-[12px] px-[24px]"
-                        onClick={() => handleSelectedSearchResult(item)}
+                        onClick={() =>
+                          handleSelectedSearchResult(item.searchName)
+                        }
                       >
                         <Link to="#" className="text-decoration-none">
-                          {item.format}
+                          {item.searchName}
                         </Link>
                       </li>
                     ))
@@ -166,7 +177,7 @@ function Header(): JSX.Element {
                 </ul>
               </div>
             </div>
-            <div className="my-auto lg:hidden block">
+            <div className="my-auto lg:hidden block order-2 lg:order-1">
               <img
                 src="../../static/img/menu-btn.svg"
                 alt="menu-icon"
@@ -174,32 +185,71 @@ function Header(): JSX.Element {
               />
             </div>
             {/* Add dropdown for language translation */}
-            <div className="relative px-4 flex items-center">
-              <div
-                className="flex items-center cursor-pointer"
+            {/* <div className="relative px-4 flex items-center ">
+            <div
+              className="flex items-center cursor-pointer"
+              onClick={toggleDropdown}
+            >
+            EN
+
+              <span className="text-white font-semibold ml-0 hidden">Language</span>
+            </div>
+
+            {isOpen && (
+              <div className="mt-4 absolute right-0 bg-gray-800 border border-gray-600 rounded-md w-48 -translate-x-[65px] translate-y-[75px]">
+                {languages.map((lng: any, index: number) => (
+                  <div
+                    key={index}
+                    className={`block text-gray-400 hover:text-white px-4 py-2 ${
+                      lng.code === i18n.language ? "text-white" : ""
+                    }`}
+                    onClick={() => handleChooseLang(lng.code)}
+                  >+
+                    {lng.lang}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div> */}
+
+            <div className="relative px-2 flex items-center lg:order-2 order-1" data-twe-dropdown-ref>
+              <a
+                className="flex items-center rounded px-6 pb-2 pt-2.5 font-medium uppercase leading-normal  shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0   motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong text-base"
+                href="#"
+                type="button"
+                id="dropdownMenuButton2"
+                data-twe-dropdown-toggle-ref
+                aria-expanded="false"
+                data-twe-ripple-init
+                data-twe-ripple-color="light"
                 onClick={toggleDropdown}
               >
-                <img
-                  className="h-6 w-6 rounded-full object-cover"
-                  src="../../static/img/ic-world.svg"
-                  alt="Language selector"
-                />
-                <span className="text-white font-semibold ml-0 hidden">
-                  Language
+                {currentCode}
+                <span className="ms-2 w-2 [&>svg]:h-5 [&>svg]:w-5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
                 </span>
-              </div>
-
+              </a>
               {isOpen && (
-                <div className="mt-4 absolute right-0 bg-gray-800 border border-gray-600 rounded-md w-48 -translate-x-[65px] translate-y-[75px]">
+                <div className="mt-4 absolute  right-0 lg:right-[96px] xl:right-0  bg-gray-800 border border-gray-600 rounded-md w-48 -translate-x-[20px] translate-y-[87px]">
                   {languages.map((lng: any, index: number) => (
                     <div
                       key={index}
                       className={`block text-gray-400 hover:text-white px-4 py-2 ${
-                        lng.code === i18n.language ? "text-white" : ""
+                        lng.code === i18n.language ? "!text-[--primary-color] font-semibold" : ""
                       }`}
                       onClick={() => handleChooseLang(lng.code)}
                     >
-                      +{lng.lang}
+                      {lng.lang}
                     </div>
                   ))}
                 </div>

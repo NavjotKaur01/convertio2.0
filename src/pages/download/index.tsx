@@ -135,7 +135,9 @@ function Download() {
                 {AllConvertedFile.map(
                   (file: AllConvertedFiles, index: number) => (
                     <div
-                      className="flex md:grid flex-wrap sm:justify-between items-center file-list-main-download rounded-lg border-none"
+                      className={`text-white bg-[--primary-color] w-fit !h-[40px] rounded  xl:ml-[-53px] download custom-import primary-btn !justify-center !shadow-none ${
+                        isConverting ? "opacity-75" : "opacity-100"
+                      }`}
                       key={index}
                     >
                       <div className="flex items-center file-list-item w-full sm:w-fit ">
@@ -276,7 +278,7 @@ function Download() {
                         </p>
                       </div>
                       <div className="lg:col-span-8 col-span-12">
-                        <button className="flex items-center border border-[var(--primary-color)] sm:px-[7px] px-3 py-[5px] gap-3 rounded">
+                        <button className="flex items-center border border-[--primary-color] sm:px-[7px] px-3 py-[5px] gap-3 rounded">
                           <div>
                             <img
                               className=""
