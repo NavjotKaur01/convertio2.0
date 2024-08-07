@@ -190,7 +190,6 @@ function Home(): JSX.Element {
     if (conversionFormat.length) {
       const formData = new FormData();
       uploadedFileList.forEach((fileObj: any, index: number) => {
-        console.log(fileObj.fileDetails);
         formData.append("files", fileObj.fileDetails);
         formData.append("formats", conversionFormat[index].conversionFormat);
       });
@@ -257,15 +256,23 @@ function Home(): JSX.Element {
                                   {!!conversionFormat &&
                                   conversionFormat.length > 0 &&
                                   conversionFormat.some(
-                                    (e: ConversionFormat) =>
-                                      e.fileName === file.fileName
+                                    (
+                                      e: ConversionFormat,
+                                      FormatIndex: number
+                                    ) =>
+                                      e.fileName === file.fileName &&
+                                      FormatIndex === fileIndex
                                   )
                                     ? (() => {
                                         const conversionResult =
                                           conversionFormat
                                             .find(
-                                              (e: ConversionFormat) =>
-                                                e.fileName === file.fileName
+                                              (
+                                                e: ConversionFormat,
+                                                FormatIndex: number
+                                              ) =>
+                                                e.fileName === file.fileName &&
+                                                FormatIndex === fileIndex
                                             )
                                             ?.conversionFormat.toUpperCase() ??
                                           "select";
@@ -361,7 +368,8 @@ function Home(): JSX.Element {
                                                 onClick={() =>
                                                   handleChooseConversion(
                                                     item,
-                                                    file.fileName
+                                                    file.fileName,
+                                                    fileIndex
                                                   )
                                                 }
                                               >
@@ -497,7 +505,6 @@ function Home(): JSX.Element {
                                                             }
                                                           >
                                                             {fileExtension.toUpperCase()}{" "}
-                                                            Hello
                                                           </button>
                                                         )
                                                       )}
@@ -684,7 +691,7 @@ function Home(): JSX.Element {
                                                 item,
                                                 uploadedFileList[0].fileName,
                                                 0,
-                                                true
+                                                false
                                               )
                                             }
                                           >

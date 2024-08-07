@@ -70,6 +70,7 @@ const uploadedFileSlice = createSlice({
         (item: ConversionFormat, idx: number) =>
           item.fileName === fileName && indexN === idx
       );
+
       if (fileIndex !== -1) {
         state.conversionFormat[fileIndex] = {
           ...state.conversionFormat[fileIndex],
