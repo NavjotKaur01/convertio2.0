@@ -16,6 +16,7 @@ const RouteSpecificMeta = ({ title, description, children }: any) => (
 );
 
 function App() {
+  console.log("hh");
   return (
     <>
       <div className="flex min-h-screen flex-col justify-between">
