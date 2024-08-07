@@ -11,6 +11,7 @@ import { RootState } from "../store";
 
 // Define the initial state for the Converted File slice
 const initialState: ConvertedFileStateModel = {
+  isConverted: false,
   isLoading: false,
   isSuccess: false,
   FileExtension: {} as FileExtensions,
@@ -25,11 +26,13 @@ const convertedFileSlice = createSlice({
   reducers: {
     //Reducer to convert files
     FilesToConvert(state, _action: PayloadAction<any>) {
+      state.isConverted = false;
       state.isLoading = true;
       state.isSuccess = false;
     },
     //Reducer to handle convert files success
     FilesToConvertSuccess(state) {
+      state.isConverted = true;
       state.isLoading = false;
       state.isSuccess = true;
     },
@@ -127,6 +130,9 @@ export const SelectIsDelete = (state: RootState) => {
 };
 export const SelectIsLoading = (state: RootState) => {
   return state.convertedFileData.isLoading;
+};
+export const SelectIsConverted = (state: RootState) => {
+  return state.convertedFileData.isConverted;
 };
 
 // Export the reducer

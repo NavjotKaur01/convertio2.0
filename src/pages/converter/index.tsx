@@ -33,7 +33,7 @@ import {
   SelectFileExtension,
 } from "../../store/reducers/convertedFileSlice";
 import { FileExtensions } from "../../models/convertedFileModel";
-import { decryptData } from "../../utilities/utils";
+import { decryptData, encryptData } from "../../utilities/utils";
 import { ConversionFormat, FileDetails } from "../../models/uploadedFileModal";
 
 function ImageConverter(): JSX.Element {
@@ -209,6 +209,7 @@ function ImageConverter(): JSX.Element {
 
   // handle convert file
   const handleConvert = async () => {
+    encryptData("isClicked", true);
     if (uploadedFileList.length === 0) {
       setErrorMsg("No files uploaded.");
       return;

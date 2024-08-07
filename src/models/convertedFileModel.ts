@@ -1,4 +1,5 @@
 export interface ConvertedFileStateModel {
+  isConverted: boolean;
   isLoading: boolean;
   isSuccess: boolean;
   FileExtension: FileExtensions;

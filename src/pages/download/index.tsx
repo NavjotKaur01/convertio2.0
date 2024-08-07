@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { decryptData } from "../../utilities/utils";
+import { decryptData, encryptData } from "../../utilities/utils";
 import { rootUrl } from "../../utilities/services/convertFileAPI.services";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   convertedFileActions,
   SelectAllConvertedFile,
+  SelectIsConverted,
   SelectIsDelete,
   SelectIsLoading,
   SelectIsSuccess,
@@ -14,6 +15,7 @@ import {
 import { AllConvertedFiles } from "../../models/convertedFileModel";
 import Loader from "../../components/loaders";
 function Download() {
+  const isConverted = useAppSelector(SelectIsConverted);
   const dispatch = useAppDispatch();
   const isDelete = useAppSelector(SelectIsDelete);
   const isLoading = useAppSelector(SelectIsLoading);
@@ -23,15 +25,22 @@ function Download() {
   const navigate = useNavigate();
   const [isConverting, setIsConverting] = useState<boolean>(true);
   const [progress, setProgress] = useState<number>(0);
+  const isClicked = decryptData("isClicked");
 
+  useEffect(() => {
+    encryptData("isClicked", false);
+  }, []);
+  useEffect(() => {
+    if (!isClicked) {
+      dispatch(convertedFileActions.getFiles({ _id: storedFiles?._id }));
+    }
+  }, [isClicked]);
   useEffect(() => {
     if (isSuccess) {
       dispatch(convertedFileActions.getFiles({ _id: storedFiles?._id }));
     }
   }, [isSuccess]);
-  useEffect(() => {
-    dispatch(convertedFileActions.getFiles({ _id: storedFiles?._id }));
-  }, []);
+
   useEffect(() => {
     if (AllConvertedFile?.length === 0 && isDelete) {
       navigate(-1);
