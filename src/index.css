@@ -88,7 +88,7 @@ header .search-bar-main .search-bar-view input:focus-visible,
 }
 
 header .search-bar-main {
-  width: 360px;
+  width: 310px;
 }
 
 @media screen and (max-width: 500px) {
@@ -317,6 +317,13 @@ header .site-search ul li,
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #888;
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1161px) {
+  header .search-bar-main {
+    width: 250px;
+  }
+  
 }
 
 @media only screen and (min-width: 1280px) and (max-width: 1534px) {

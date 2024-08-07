@@ -1,0 +1,12 @@
+{
+    "faqList": [
+        {
+            "question": "How many colors should I choose?",
+            "answer": "This is the first item's accordion body. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu rhoncus purus, vitae tincidunt nibh. Vivamus elementum egestas ligula in varius. Proin ac erat pretium, ultricies leo at, cursus ante. Pellentesque at odio euismod, mattis urna ac, accumsan metus. Nam nisi leo, malesuada vitae pretium et, laoreet at lorem. Curabitur non sollicitudin neque."
+        },
+        {
+            "question": "How does the contrast checker work?",
+            "answer": "This is the second item's accordion body. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu rhoncus purus, vitae tincidunt nibh. Vivamus elementum egestas ligula in varius. Proin ac erat pretium, ultricies leo at, cursus ante. Pellentesque at odio euismod, mattis urna ac, accumsan metus. Nam nisi leo, malesuada vitae pretium et, laoreet at lorem. Curabitur non sollicitudin neque."
+        }
+    ]
+}

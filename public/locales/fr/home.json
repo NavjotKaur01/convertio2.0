@@ -1,0 +1,22 @@
+{
+    "pageTitle": "Convertisseur de fichiers",
+    "description": "Convertissez facilement des fichiers d'un format à un autre, en ligne.",
+    "inputLabel": "Choisir des fichiers",
+    "cards": [
+        {
+            "title": "Convertir n'importe quel fichier",
+            "description": "FreeConvert prend en charge plus de 1 500 conversions de fichiers. Vous pouvez convertir des vidéos, des images, des fichiers audio ou des livres électroniques. Il existe des tonnes d'options avancées pour affiner vos conversions.",
+            "imgName": "1"
+        },
+        {
+            "title": "Fonctionne partout",
+            "description": "FreeConvert prend en charge plus de 1 500 conversions de fichiers. Vous pouvez convertir des vidéos, des images, des fichiers audio ou des livres électroniques. Il existe des tonnes d'options avancées pour affiner vos conversions.",
+            "imgName": "2"
+        },
+        {
+            "title": "Fonctionne partout",
+            "description": "FreeConvert prend en charge plus de 1 500 conversions de fichiers. Vous pouvez convertir des vidéos, des images, des fichiers audio ou des livres électroniques. Il existe des tonnes d'options avancées pour affiner vos conversions.",
+            "imgName": "3"
+        }
+    ]
+}

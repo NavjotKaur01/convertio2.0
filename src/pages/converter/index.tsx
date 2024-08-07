@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import {
   TEDropdown,
   TEDropdownToggle,
@@ -9,10 +10,8 @@ import {
   TETabsContent,
   TETabsItem,
   TETabsPane,
-  TECollapse,
 } from "tw-elements-react";
 import pageData from "../../utilities/pageData.json";
-import imageFormat from "../../utilities/imageFormat.json";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import FAQ from "../../components/faq";
 import {
@@ -57,6 +56,16 @@ function ImageConverter(): JSX.Element {
   const [hoveredTab, setHoveredTab] = useState<any>(null);
   const [dataList, setDataList] = useState<any>({});
   const [pageTitle, setPageTitle] = useState<string>("");
+  const { t } = useTranslation("imageConverter");
+  const how = t("how", { returnObjects: true }) as Array<{
+    id: number;
+    line1: string;
+  }>;
+  const cards = t("cards", { returnObjects: true }) as Array<{
+    title: string;
+    description: string;
+  }>;
+  const formats = (t("formats") as unknown as string[]) || [];
   const navigate = useNavigate();
   const location = useLocation();
   const pageName = location.pathname;
@@ -231,10 +240,10 @@ function ImageConverter(): JSX.Element {
         <div className="bg-gray-50 h-36 lg:h-full mx-5 rounded-lg"></div>
         <div className="lg:col-span-3 py-2 px-5">
           <div className="mb-12 text-center">
-            <h1 className="text-4xl font-bold">{pageTitle} Converter</h1>
-            <p className="text-sm pt-2">
-              Convert {pageTitle} online, for free.
-            </p>
+            <h1 className="text-4xl font-bold">
+              {t("pageTitle", { pageTitle })}
+            </h1>
+            <p className="text-sm pt-2">{t("description", { pageTitle })}</p>
           </div>
           {!!uploadedFileList && !!uploadedFileList.length ? (
             <>
@@ -869,7 +878,7 @@ function ImageConverter(): JSX.Element {
                           style={{ marginBottom: "4px" }}
                         />
                       </span>{" "}
-                      Choose Files
+                      {t("inputLabel")}
                     </span>
                     <span className="label-file"></span>
 
@@ -894,168 +903,55 @@ function ImageConverter(): JSX.Element {
             </>
           )}
 
-          {/* get-it on-mobile */}
-          {/* <div className="card-box md:p-6 p-3 my-6 rounded-lg">
-            <div>
-              <h2 className="font-bold text-center text-xl">
-                Get it on Mobile
-              </h2>
-              <p className="text-base">
-                {" "}
-                Convert images directly on your mobile device using our{" "}
-                <span className="text-[var(--primary-color)]">
-                  <a href="#"> Android image Converter</a>
-                </span>
-                &nbsp;
-                <span className="font-bold">or</span>
-                <span className="text-[var(--primary-color)]">
-                  <a href="#"> iOS image Converter</a>
-                </span>
-              </p>
-            </div>
-          </div> */}
-
           {/* how-to-convert-image */}
           <div className="card-box md:p-6 p-3 my-6 rounded-lg">
             <div className="mb-3">
               <h2 className="text-[23px] font-bold md:px-5 px-3 py-4">
-                How to Convert {pageTitle}
+                {t("howTitle", { pageTitle })}
               </h2>
               <ol className="text-base mt-1 list-decimal px-5 py-4 md:ml-10 ml-1">
-                <li className="leading-8">
-                  Click the <span className="font-bold">"Choose Files"</span>{" "}
-                  button to upload your files.
-                </li>
-
-                <li className="leading-8">
-                  Select a target {pageTitle} format from the{" "}
-                  <span className="font-bold">“Convert to"</span>{" "}
-                  drop-down-list.
-                </li>
-                <li className="leading-8">
-                  Click on the green{" "}
-                  <span className="font-bold">"Convert"</span> button to start
-                  the conversion.
-                </li>
+                {!!how &&
+                  !!how.length &&
+                  how.map((item) => (
+                    <li className="leading-8" key={item.id}>
+                      <Trans
+                        i18nKey={item.line1}
+                        values={{ pageTitle }}
+                        components={{ b: <b /> }}
+                      />
+                    </li>
+                  ))}
               </ol>
             </div>
             <div className="grid xl:grid-cols-3 sm:grid-cols-2 mt-10">
-              {/* card-1 */}
-              <div>
-                <div>
-                  <img
-                    src="/static/img/happy-user/converto.png"
-                    className="mx-auto"
-                    style={{}}
-                  />
-                </div>
-                <div className="md:px-5 px-3">
-                  <h2 className="text-center mb-[16px] mt-5 text-[23px] font-bold min-h-[52px]">
-                    Convert Any {pageTitle}
-                  </h2>
-                  <p className="leading-relaxed text-base py-4">
-                    {" "}
-                    Convert more than 500+ {pageTitle} formats into popular
-                    formats like JPG, PNG, WebP, and more. You can also convert
-                    camera RAW {pageTitle} files.
-                  </p>
-                </div>
-              </div>
-
-              {/* card-2 */}
-              <div>
-                <div>
-                  <img
-                    src="/static/img/happy-user/image-converter.png"
-                    className="mx-auto"
-                    style={{}}
-                  />
-                </div>
-                <div className="md:px-5 px-3">
-                  <h2 className="text-center mb-[16px] mt-4 text-[23px] font-bold min-h-[52px]">
-                    Best {pageTitle} Converter
-                  </h2>
-                  <p className="leading-relaxed text-base">
-                    Convert your {pageTitle} with perfect quality, size, and
-                    compression. Plus, you can also batch convert {pageTitle}{" "}
-                    using this tool.
-                  </p>
-                </div>
-              </div>
-
-              {/* card-3*/}
-              <div className="xl:mt-0 mt-3">
-                <div>
-                  <img
-                    src="/static/img/happy-user/free&secure.png"
-                    className="mx-auto"
-                    style={{}}
-                  />
-                </div>
-                <div className="md:px-5 px-3">
-                  <h2 className="text-center mb-[16px] mt-4 text-[23px] font-bold min-h-[52px]">
-                    Free & Secure
-                  </h2>
-                  <p className="leading-relaxed text-base py-4">
-                    Our {pageTitle} Converter is free and works on any web
-                    browser. We guarantee file security and privacy. Files are
-                    protected with 256-bit SSL encryption and automatically
-                    delete after a few hours.
-                  </p>
-                </div>
-              </div>
+              {!!cards &&
+                !!cards.length &&
+                cards.map((card, idx) => (
+                  <div key={idx} className="p-4">
+                    <div>
+                      <img
+                        src={`/static/img/happy-user/${
+                          idx === 0
+                            ? "converto.png"
+                            : idx === 1
+                            ? "image-converter.png"
+                            : "free&secure.png"
+                        }`}
+                        className="mx-auto h-[34px]"
+                      />
+                    </div>
+                    <div className="md:px-5 px-3">
+                      <h2 className="text-center mb-[16px] mt-5 text-[23px] font-bold min-h-[69px]">
+                        {t(card.title, { pageTitle })}
+                      </h2>
+                      <p className="leading-relaxed text-base">
+                        {t(card.description, { pageTitle })}
+                      </p>
+                    </div>
+                  </div>
+                ))}
             </div>
           </div>
-
-          {/*valueable-image-tool*/}
-          {/* <div className="card-box md:p-6 p-3 my-6 rounded-lg">
-            <div>
-              <div>
-                <h2 className="text-[23px] font-bold px-5 py-4 ">
-                  Valuable Image Tools
-                </h2>
-                <div className="px-5 py-4">
-                  <p className="text-base">
-                    Here is a list of image tools to further edit your images.
-                  </p>
-                  <ol className="text-base mt-2 list-decimal px-5 py-4 md:ml-5 ml-1">
-                    <li className="leading-8">
-                      <a href="#" className="text-[var(--primary-color)]">
-                        Image-Resizer-
-                      </a>
-                      &nbsp;Use this tool to crop unwanted areas from your image
-                    </li>
-                    <li className="leading-8">
-                      <a href="#" className="text-[var(--primary-color)]">
-                        Crop Image-
-                      </a>
-                      &nbsp;Quick and easy way to resize an image to any size
-                    </li>
-                    <li className="leading-8">
-                      <a href="#" className="text-[var(--primary-color)]">
-                        Image-Compressor-
-                      </a>
-                      &nbsp;Reduce image files size by up to 80 to 90% using
-                      this tool
-                    </li>
-                    <li className="leading-8">
-                      <a href="#" className="text-[var(--primary-color)]">
-                        Color-Picker-
-                      </a>
-                      &nbsp;Quickly pick a color from the color wheel or from
-                      your image online
-                    </li>
-                    <li className="leading-8">
-                      <a href="#" className="text-[var(--primary-color)]">
-                        Image-Enlarger-
-                      </a>
-                      &nbsp;A fast way to make your images bigger
-                    </li>
-                  </ol>
-                </div>
-              </div>
-            </div>
-          </div> */}
 
           <div className="card-box md:p-6 p-3 my-6 rounded-lg">
             <div>
@@ -1064,15 +960,15 @@ function ImageConverter(): JSX.Element {
                   <button
                     className={`${
                       activeElement === "section1" &&
-                      `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)]  primary-text `
+                      `bg-[#afd5d5]  dark:[box-shadow:inset_0_-1px_0_rgba(75,85,99)]`
                     } group relative flex w-full items-center rounded-sm  border-none bg-white px-5 py-4 text-left font-bold text-[23px] transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white text-xl `}
                     type="button"
                     onClick={() => handleClick("section1")}
                     aria-expanded="true"
                     aria-controls="collapseOne1"
                   >
-                    Specific {pageTitle} converters
-                    <span
+                    {t("formatTitle", { pageTitle })}
+                    {/* <span
                       className={`${
                         activeElement === "section1"
                           ? `rotate-[-180deg] -mr-1`
@@ -1093,31 +989,44 @@ function ImageConverter(): JSX.Element {
                           d="M19.5 8.25l-7.5 7.5-7.5-7.5"
                         />
                       </svg>
-                    </span>
+                    </span> */}
                   </button>
                 </h2>
-                <TECollapse
+
+                <div className="my-4">
+                  <ul className="grid md:grid-cols-3 sm:grid-cols-2">
+                    {!!formats &&
+                      !!formats.length &&
+                      formats.map((format: string, indx: number) => (
+                        <li
+                          key={indx}
+                          className="text-[var(--primary-color)] text-base px-5 py-4"
+                        >
+                          <Link to="#">{format}</Link>
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+                {/* </TECollapse> */}
+                {/* <TECollapse
                   show={activeElement === "section1"}
                   className="!mt-0 !rounded-b-none !shadow-none"
                 >
                   <div className="my-4">
                     <ul className="grid md:grid-cols-3 sm:grid-cols-2">
-                      {imageFormat &&
-                        imageFormat.formats.map(
-                          (format: string, indx: number) => (
-                            <li
-                              key={indx}
-                              className="text-[var(--primary-color)] text-base px-5 py-4"
-                            >
-                              <Link to="#">
-                                {format.toUpperCase()} Converter
-                              </Link>
-                            </li>
-                          )
-                        )}
+                      {!!formats &&
+                        !!formats.length &&
+                        formats.map((format: string, indx: number) => (
+                          <li
+                            key={indx}
+                            className="text-[var(--primary-color)] text-base px-5 py-4"
+                          >
+                            <Link to="#">{format}</Link>
+                          </li>
+                        ))}
                     </ul>
                   </div>
-                </TECollapse>
+                </TECollapse> */}
               </div>
             </div>
           </div>

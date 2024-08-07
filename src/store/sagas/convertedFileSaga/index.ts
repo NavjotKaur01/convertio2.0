@@ -43,7 +43,7 @@ export function* handleGetFiles(action: PayloadAction<{ _id: string }>) {
   try {
     const response: AxiosResponse = yield call(
       ApiServices.getData,
-      `/getFiles/${action.payload._id}`
+      `getFiles/${action.payload._id}`
     );
     if (response.status === 200) {
       yield put(convertedFileActions.getFilesSuccess(response?.data?.data));

@@ -4,6 +4,16 @@ import Header from "./components/header";
 import Footer from "./components/footer";
 import ImageConverter from "./pages/converter";
 import Download from "./pages/download";
+import { Helmet } from "react-helmet";
+const RouteSpecificMeta = ({ title, description, children }: any) => (
+  <>
+    <Helmet>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+    </Helmet>
+    {children}
+  </>
+);
 
 function App() {
   return (
@@ -12,10 +22,16 @@ function App() {
         <div>
           <Header />
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/image-converter" element={<ImageConverter />} />
-            <Route path="/heif-jpg-converter" element={<ImageConverter />} />
-            <Route path="/heif-converter" element={<ImageConverter />} />
+            <Route
+              path="/"
+              element={
+                <RouteSpecificMeta title="Home" description="Learn more home.">
+                  <Home />
+                </RouteSpecificMeta>
+              }
+            />
+            <Route path="/:converterType" element={<ImageConverter />} />
+            <Route path="/:converterType/download" element={<Download />} />
             <Route path="/download" element={<Download />} />
             <Route path={"/:pageName/download"} element={<Download />} />
             <Route path={"/:search"} element={<ImageConverter />} />

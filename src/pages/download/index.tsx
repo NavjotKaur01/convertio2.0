@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { decryptData } from "../../utilities/utils";
 import { rootUrl } from "../../utilities/services/convertFileAPI.services";
-
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
@@ -31,18 +30,19 @@ function Download() {
     }
   }, [isSuccess]);
   useEffect(() => {
+    dispatch(convertedFileActions.getFiles({ _id: storedFiles?._id }));
+  }, []);
+  useEffect(() => {
     if (AllConvertedFile?.length === 0 && isDelete) {
       navigate(-1);
     }
   }, [isDelete, AllConvertedFile]);
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
-
     // Check if any file is still converting
     const filesInProgress = AllConvertedFile.filter(
       (file: AllConvertedFiles) => !file.status
     );
-
     if (filesInProgress.length > 0) {
       if (isConverting) {
         // Start the progress interval for files still being converted
@@ -150,7 +150,7 @@ function Download() {
                           </div>
                         </>
                       ) : file.converted ? (
-                        <div className="border border-[#1add72] text-[#1add72] px-7 py-1 w-fit rounded mx-5 sm:m-auto">
+                        <div className="border border-[#1add72] text-[#1add72] px-7 py-1 w-fit rounded mx-5 sm:m-auto ">
                           Done
                         </div>
                       ) : (
@@ -166,7 +166,7 @@ function Download() {
                       )}
 
                       <div
-                        className={`text-white bg-[var(--primary-color)] px-5 py-3 w-28 rounded  xl:ml-[-53px] download ${
+                        className={`text-white bg-[var(--primary-color)] px-5 py-3 w-28 rounded  xl:ml-[-53px] download custom-import primary-btn !h-[40px] !justify-center !shadow-none ${
                           !file.status ? "opacity-75" : "opacity-100"
                         }`}
                       >
@@ -174,10 +174,10 @@ function Download() {
                           disabled={file.status}
                           className={`${
                             file.status && file.status ? "cursor-no-drop" : ""
-                          }`}
+                          }  `}
                         >
                           <a
-                            className="text-decoration-none"
+                            className="text-decoration-none "
                             {...(file.status && file.converted
                               ? { href: `${rootUrl}/jobs/${file.fileName}` }
                               : {})}
@@ -214,9 +214,9 @@ function Download() {
                 )}
               </div>
 
-              <div className="flex justify-between items-center added-files flex-wrap">
+              <div className="flex justify-between items-center added-files flex-wrap py-3">
                 <div className="add-more-btn flex items-center">
-                  <div className="custom-import border-2 px-1 py-1 primary-border rounded-lg ms-3 ">
+                  <div className="custom-import border-2 px-1 py-1 primary-border rounded-lg ms-3">
                     <span
                       className="label px-4 text-nowrap flex items-center text-sm font-semibold primary-text"
                       onClick={() => navigate(-1)}
@@ -236,7 +236,7 @@ function Download() {
 
                 <div className="me-3">
                   <button
-                    className={`text-white bg-[var(--primary-color)] px-5 py-3 rounded download  text-nowrap ${
+                    className={`text-white bg-[var(--primary-color)] px-5 py-3 rounded download  text-nowrap  custom-import primary-btn  !h-[50px] shodow-none${
                       AllConvertedFile[AllConvertedFile.length - 1].status
                         ? "opacity-100"
                         : "opacity-75"
@@ -322,7 +322,7 @@ function Download() {
                           <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3 rounded">
                             <img
                               className=""
-                              src="/static/img/happy-user/diamond.svg"
+                              src="/static/img/happy-user/fb.svg"
                               style={{}}
                             />
 
@@ -335,7 +335,7 @@ function Download() {
                           <button className="flex items-center border border-[var(--primary-color)] px-[7px] py-[5px] gap-3 rounded">
                             <img
                               className=""
-                              src="/static/img/happy-user/offer.svg"
+                              src="/static/img/happy-user/twitter.svg"
                               style={{}}
                             />
 
