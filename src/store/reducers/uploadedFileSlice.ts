@@ -62,11 +62,13 @@ const uploadedFileSlice = createSlice({
         format: string;
         fileName: string;
         isComman?: boolean;
+        indexN?: number;
       }>
     ) {
-      const { format, fileName } = action.payload;
+      const { format, fileName, indexN } = action.payload;
       const fileIndex = state.conversionFormat.findIndex(
-        (item: ConversionFormat) => item.fileName === fileName
+        (item: ConversionFormat, idx: number) =>
+          item.fileName === fileName && indexN === idx
       );
       if (fileIndex !== -1) {
         state.conversionFormat[fileIndex] = {
