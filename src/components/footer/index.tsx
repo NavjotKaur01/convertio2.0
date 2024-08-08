@@ -1,4 +1,7 @@
 const Footer = () => {
+  const handleScroll = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   return (
     <>
       <footer className="w-full">
@@ -23,37 +26,25 @@ const Footer = () => {
                   <nav className="mt-8">
                     <ul className="space-y-4 text-sm">
                       <li>
-                        <a
-                          className="text-white transition"
-                          href="/"
-                        >
+                        <a className="text-white transition" href="/">
                           Email Marketing
                         </a>
                       </li>
 
                       <li>
-                        <a
-                          className="text-white transition"
-                          href="/"
-                        >
+                        <a className="text-white transition" href="/">
                           Campaigns
                         </a>
                       </li>
 
                       <li>
-                        <a
-                          className="text-white transition"
-                          href="/"
-                        >
+                        <a className="text-white transition" href="/">
                           Branding
                         </a>
                       </li>
 
                       <li>
-                        <a
-                          className="text-white transition"
-                          href="/"
-                        >
+                        <a className="text-white transition" href="/">
                           Offline
                         </a>
                       </li>
@@ -69,37 +60,25 @@ const Footer = () => {
                   <nav className="mt-8">
                     <ul className="space-y-4 text-sm">
                       <li>
-                        <a
-                          className="text-white transition "
-                          href="/"
-                        >
+                        <a className="text-white transition " href="/">
                           Our Story
                         </a>
                       </li>
 
                       <li>
-                        <a
-                          className="text-white transition"
-                          href="/"
-                        >
+                        <a className="text-white transition" href="/">
                           Benefits
                         </a>
                       </li>
 
                       <li>
-                        <a
-                          className="text-white transition"
-                          href="/"
-                        >
+                        <a className="text-white transition" href="/">
                           Teams
                         </a>
                       </li>
 
                       <li>
-                        <a
-                          className="text-white transition"
-                          href="/"
-                        >
+                        <a className="text-white transition" href="/">
                           Careers
                         </a>
                       </li>
@@ -108,7 +87,10 @@ const Footer = () => {
                 </div>
 
                 <div className="!text-center md:text-left col-span-2 sm:col-span-2 flex sm:justify-end justify-center">
-                  <div className="bg-[--primary-color] w-14 h-14 rounded-full flex justify-center items-center">
+                  <div
+                    className="bg-[--primary-color] w-14 h-14 rounded-full flex justify-center items-center"
+                    onClick={() => handleScroll()}
+                  >
                     <img
                       className=""
                       src="/static/img/happy-user/footer-icon.svg"

@@ -1,0 +1,15 @@
+# choose the proper node image .... https://hub.docker.com
+FROM node:18-alpine
+WORKDIR /app
+
+# copy package.json
+COPY package*.json .
+
+# Install our all packages
+RUN npm install 
+
+# copy all our remaining files
+COPY . .
+
+EXPOSE 5173
+CMD ["npm","run","dev"]
