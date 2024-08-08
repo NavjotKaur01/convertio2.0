@@ -240,11 +240,11 @@ function Header(): JSX.Element {
                 </span>
               </a>
               {isOpen && (
-                <div className="mt-4 absolute  right-0 lg:right-[96px] xl:right-0  bg-gray-800 border border-gray-600 rounded-md w-48 -translate-x-[20px] translate-y-[87px]">
+                <div className="mt-4 absolute  right-0 lg:right-[96px] xl:right-0  bg-white  rounded-md w-48 -translate-x-[20px] translate-y-[87px] shadow-lg">
                   {languages.map((lng: any, index: number) => (
                     <div
                       key={index}
-                      className={`block text-gray-400 hover:text-white px-4 py-2 ${
+                      className={`block text-black hover:text- px-4 py-2 ${
                         lng.code === i18n.language ? "!text-[--primary-color] font-semibold" : ""
                       }`}
                       onClick={() => handleChooseLang(lng.code)}
