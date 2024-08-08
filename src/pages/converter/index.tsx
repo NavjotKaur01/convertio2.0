@@ -181,7 +181,8 @@ function ImageConverter(): JSX.Element {
     format: string,
     fileName: string,
     indexN?: number,
-    isComman?: boolean
+    isComman?: boolean,
+    selectAllType?: boolean
   ) => {
     dispatch(
       uploadedFileActions.chooseConversionFormat({
@@ -189,6 +190,7 @@ function ImageConverter(): JSX.Element {
         fileName,
         isComman,
         indexN,
+        selectAllType,
       })
     );
     if (isComman) {
@@ -542,6 +544,7 @@ function ImageConverter(): JSX.Element {
                                                                 fileExtension,
                                                                 file.fileName,
                                                                 FileIndex,
+                                                                false,
                                                                 false
                                                               )
                                                             }
@@ -733,7 +736,8 @@ function ImageConverter(): JSX.Element {
                                                 item,
                                                 uploadedFileList[0].fileName,
                                                 0,
-                                                false
+                                                false,
+                                                true
                                               )
                                             }
                                           >

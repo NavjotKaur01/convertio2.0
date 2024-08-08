@@ -24,7 +24,7 @@ function Header(): JSX.Element {
     // { code: "ja", lang: "Japanese" },
     // { code: "nl", lang: "Dutch" },
   ];
-  const [currentCode,setCurrentCode]=useState<string>("en")
+  const [currentCode, setCurrentCode] = useState<string>("en");
   const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
   const [searchResults, setSearchResults] = useState<AllConversion[]>([]);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -74,8 +74,7 @@ function Header(): JSX.Element {
   const handleChooseLang = (lng: string) => {
     setIsOpen(!isOpen);
     i18n.changeLanguage(lng);
-    setCurrentCode(lng)
-
+    setCurrentCode(lng);
   };
   return (
     <header className="h-[60px]">
@@ -161,14 +160,10 @@ function Header(): JSX.Element {
                     searchResults.map((item: any, index: number) => (
                       <li
                         key={index}
-                        className="py-[12px] px-[24px]"
-                        onClick={() =>
-                          handleSelectedSearchResult(item.searchName)
-                        }
+                        className="py-[12px] px-[24px] cursor-pointer"
+                        onClick={() => handleSelectedSearchResult(item)}
                       >
-                        <Link to="#" className="text-decoration-none">
-                          {item.searchName}
-                        </Link>
+                        {item?.format}
                       </li>
                     ))
                   ) : (
@@ -212,7 +207,10 @@ function Header(): JSX.Element {
             )}
           </div> */}
 
-            <div className="relative px-2 flex items-center lg:order-2 order-1" data-twe-dropdown-ref>
+            <div
+              className="relative px-2 flex items-center lg:order-2 order-1"
+              data-twe-dropdown-ref
+            >
               <a
                 className="flex items-center rounded px-6 pb-2 pt-2.5 font-medium uppercase leading-normal  shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0   motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong text-base"
                 href="#"
@@ -232,9 +230,9 @@ function Header(): JSX.Element {
                     fill="currentColor"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     />
                   </svg>
                 </span>
@@ -244,8 +242,10 @@ function Header(): JSX.Element {
                   {languages.map((lng: any, index: number) => (
                     <div
                       key={index}
-                      className={`block text-black hover:text- px-4 py-2 ${
-                        lng.code === i18n.language ? "!text-[--primary-color] font-semibold" : ""
+                      className={`block text-gray-400 hover:!text-[--primary-color] px-4 py-2 ${
+                        lng.code === i18n.language
+                          ? "!text-[--primary-color] font-semibold"
+                          : ""
                       }`}
                       onClick={() => handleChooseLang(lng.code)}
                     >

@@ -142,7 +142,8 @@ function Home(): JSX.Element {
     format: string,
     fileName: string,
     indexN?: number,
-    isComman?: boolean
+    isComman?: boolean,
+    selectAllType?: boolean
   ) => {
     dispatch(
       uploadedFileActions.chooseConversionFormat({
@@ -150,6 +151,7 @@ function Home(): JSX.Element {
         fileName,
         isComman,
         indexN,
+        selectAllType,
       })
     );
     if (isComman) {
@@ -369,7 +371,9 @@ function Home(): JSX.Element {
                                                   handleChooseConversion(
                                                     item,
                                                     file.fileName,
-                                                    fileIndex
+                                                    fileIndex,
+                                                    false,
+                                                    false
                                                   )
                                                 }
                                               >
@@ -500,6 +504,7 @@ function Home(): JSX.Element {
                                                                 fileExtension,
                                                                 file.fileName,
                                                                 fileIndex,
+                                                                false,
                                                                 false
                                                               )
                                                             }
@@ -691,7 +696,8 @@ function Home(): JSX.Element {
                                                 item,
                                                 uploadedFileList[0].fileName,
                                                 0,
-                                                false
+                                                false,
+                                                true
                                               )
                                             }
                                           >
