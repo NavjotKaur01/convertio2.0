@@ -575,19 +575,20 @@ function Home(): JSX.Element {
                         className="grid grid-cols-12 file-list-main rounded-lg border-none"
                         key={fileIndex}
                       >
-                        {/* <img
+                     
+                          {/* <img
                           src="../../static/img/picture.svg"
                           className="me-1"
                         /> */}
-                        <div className="file-list-item col-span-12 xs:col-span-5 sm:col-span-7 break-all">
-                          {file.fileName}
-                        </div>
-                        <div className="file-list-item col-span-4 xs:col-span-3 sm:col-span-2">
-                          {file.size}
-                        </div>
+                          <div className="file-list-item col-span-12 xs:col-span-5 sm:col-span-7 break-all">
+                            {file.fileName}
+                          </div>
+                          <div className="file-list-item col-span-4 xs:col-span-3 sm:col-span-2">{file.size}</div>
+                   
 
                         {/* dropdown start */}
 
+                       
                         <div className="file-list-item col-span-4 xs:col-span-2">
                           <TEDropdown className="flex justify-center">
                             <TERipple rippleColor="light">
@@ -857,49 +858,54 @@ function Home(): JSX.Element {
                             </TEDropdownMenu>
                           </TEDropdown>
                         </div>
-                        {/* dropdown end*/}
-                        {/* close button */}
-                        <div className="file-list-item col-span-4 xs:col-span-1 sm:my-auto">
-                          <svg
-                            onClick={() =>
-                              handleRemoveRow(file.fileName, fileIndex)
-                            }
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="1.5em"
-                            height="1.5em"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="#7987a1"
-                            strokeWidth="2"
-                            strokeLinejoin="round"
-                            className="cross-ic cursor-pointer"
-                            data-v-db7992bc=""
-                          >
-                            <circle
-                              cx="12"
-                              cy="12"
-                              r="10"
+
+                          {/* dropdown end*/}
+                          {/* close button */}
+                          <div className="file-list-item col-span-4 xs:col-span-1 sm:my-auto">
+                            <svg
+                              onClick={() =>
+                                handleRemoveRow(file.fileName, fileIndex)
+                              }
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="1.5em"
+                              height="1.5em"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="#7987a1"
+                              strokeWidth="2"
+                              strokeLinejoin="round"
+                              className="cross-ic cursor-pointer"
                               data-v-db7992bc=""
-                            ></circle>
-                            <line
-                              x1="15"
-                              y1="9"
-                              x2="9"
-                              y2="15"
-                              data-v-db7992bc=""
-                            ></line>
-                            <line
-                              data-v-db7992bc=""
-                              x1="9"
-                              y1="9"
-                              x2="15"
-                              y2="15"
-                            ></line>
-                          </svg>
-                        </div>
+                            >
+                              <circle
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                data-v-db7992bc=""
+                              ></circle>
+                              <line
+                                x1="15"
+                                y1="9"
+                                x2="9"
+                                y2="15"
+                                data-v-db7992bc=""
+                              ></line>
+                              <line
+                                data-v-db7992bc=""
+                                x1="9"
+                                y1="9"
+                                x2="15"
+                                y2="15"
+                              ></line>
+                            </svg>
+                          </div>
+                      
 
                         {/* close button end*/}
                       </div>
+
+
+
                     )
                   )}
                 </div>
@@ -931,7 +937,7 @@ function Home(): JSX.Element {
 
                   <div className="p-3 flex items-center conversion justify-center">
                     {isFileExtension ? (
-                      <div className="flex items-center sm:justify-between justify-center  conversion-inside">
+                      <div className="flex items-center sm:justify-between justify-center conversion-inside">
                         <p className="mb-0">
                           Convert All ({uploadedFileList.length} ) to:{" "}
                         </p>

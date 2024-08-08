@@ -208,6 +208,7 @@ header .site-search ul li,
   border-bottom: 0;
   min-height: 62px;
   /* grid-template-columns: 17fr 7fr; */
+  /* grid-template-columns: 17fr; */
 }
 .file-list-main-download {
   border-bottom: 0;
@@ -218,9 +219,7 @@ header .site-search ul li,
   border-bottom: 1px solid var(--add-file-bg-clr);
 }
 
-.file-list-item {
-  padding: 18px;
-}
+
 
 .added-files {
   background-color: var(--add-file-bg-clr);
@@ -319,7 +318,24 @@ header .site-search ul li,
 ::-webkit-scrollbar-thumb {
   background: #888;
 }
+.file-list-item-status {
+  width: 100px;
+  cursor: default;
+  text-align: center;
+  border-radius: 4px;
+  padding: 4px;
+  font-size: 14px;
+  justify-self: center;
+}
 
+
+@media only screen and (max-width: 768px) {
+  .file-list-item-status {
+      grid-column: 1 / 12;
+      width: 100%;
+      margin-bottom: 10px;
+  }
+}
 @media only screen and (min-width: 1024px) and (max-width: 1161px) {
   header .search-bar-main {
     width: 250px;

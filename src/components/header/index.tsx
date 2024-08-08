@@ -242,10 +242,8 @@ function Header(): JSX.Element {
                   {languages.map((lng: any, index: number) => (
                     <div
                       key={index}
-                      className={`block text-gray-400 hover:!text-[--primary-color] px-4 py-2 ${
-                        lng.code === i18n.language
-                          ? "!text-[--primary-color] font-semibold"
-                          : ""
+                      className={`block text-black hover:!text-[--primary-color] px-4 py-2 ${
+                        lng.code === i18n.language ? "!text-[--primary-color] font-semibold" : ""
                       }`}
                       onClick={() => handleChooseLang(lng.code)}
                     >

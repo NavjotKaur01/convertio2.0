@@ -1,0 +1,12 @@
+{
+    "faqList": [
+        {
+            "question": "¿Cuántos colores debo elegir?",
+            "answer": "Este es el cuerpo de acordeón del primer elemento. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu rhoncus purus, vitae tincidunt nibh. Vivamus elementum egestas ligula in varius. Proin ac erat pretium, ultricies leo at, cursus ante. Pellentesque at odio euismod, mattis urna ac, accumsan metus. Nam nisi leo, malesuada vitae pretium et, laoreet at lorem. Curabitur non sollicitudin neque."
+        },
+        {
+            "question": "¿Cómo funciona el verificador de contraste?",
+            "answer": "Este es el cuerpo de acordeón del segundo elemento. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu rhoncus purus, vitae tincidunt nibh. Vivamus elementum egestas ligula in varius. Proin ac erat pretium, ultricies leo at, cursus ante. Pellentesque at odio euismod, mattis urna ac, accumsan metus. Nam nisi leo, malesuada vitae pretium et, laoreet at lorem. Curabitur non sollicitudin neque."
+        }
+    ]
+}

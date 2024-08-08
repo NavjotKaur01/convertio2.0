@@ -612,22 +612,23 @@ function ImageConverter(): JSX.Element {
                       //   {/* close button end*/}
                       // </div>
                       <div
-                        className="grid grid-cols-12 file-list-main rounded-lg border-none"
-                        key={fileIndex}
-                      >
+                      className="grid grid-cols-12 file-list-main rounded-lg border-none"
+                      key={fileIndex}
+                    >
+                   
                         {/* <img
-                          src="../../static/img/picture.svg"
-                          className="me-1"
-                        /> */}
+                        src="../../static/img/picture.svg"
+                        className="me-1"
+                      /> */}
                         <div className="file-list-item col-span-12 xs:col-span-5 sm:col-span-7 break-all">
                           {file.fileName}
                         </div>
-                        <div className="file-list-item col-span-4 xs:col-span-3 sm:col-span-2">
-                          {file.size}
-                        </div>
+                        <div className="file-list-item col-span-4 xs:col-span-3 sm:col-span-2">{file.size}</div>
+                 
 
-                        {/* dropdown start */}
+                      {/* dropdown start */}
 
+                     
                         <div className="file-list-item col-span-4 xs:col-span-2">
                           <TEDropdown className="flex justify-center">
                             <TERipple rippleColor="light">
@@ -720,7 +721,11 @@ function ImageConverter(): JSX.Element {
                                         stroke="currentColor"
                                         className="cursor-pointer"
                                       >
-                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <circle
+                                          cx="11"
+                                          cy="11"
+                                          r="8"
+                                        ></circle>
                                         <line
                                           x1="21"
                                           y1="21"
@@ -803,7 +808,9 @@ function ImageConverter(): JSX.Element {
                                                             );
                                                           }}
                                                           onMouseLeave={() =>
-                                                            setHoveredTab(null)
+                                                            setHoveredTab(
+                                                              null
+                                                            )
                                                           }
                                                         >
                                                           {keyName}
@@ -835,10 +842,10 @@ function ImageConverter(): JSX.Element {
                                               file.fileType === key &&
                                               Object.entries(formats).map(
                                                 (
-                                                  [keyName, possibleFormats]: [
-                                                    string,
-                                                    any
-                                                  ],
+                                                  [
+                                                    keyName,
+                                                    possibleFormats,
+                                                  ]: [string, any],
                                                   idx
                                                 ) => (
                                                   <TETabsPane
@@ -937,16 +944,57 @@ function ImageConverter(): JSX.Element {
                             ></line>
                           </svg>
                         </div>
+                        {/* dropdown end*/}
+                        {/* close button */}
+                        <div className="file-list-item col-span-4 xs:col-span-1 sm:my-auto">
+                          <svg
+                            onClick={() =>
+                              handleRemoveRow(file.fileName, fileIndex)
+                            }
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1.5em"
+                            height="1.5em"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#7987a1"
+                            strokeWidth="2"
+                            strokeLinejoin="round"
+                            className="cross-ic cursor-pointer"
+                            data-v-db7992bc=""
+                          >
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              data-v-db7992bc=""
+                            ></circle>
+                            <line
+                              x1="15"
+                              y1="9"
+                              x2="9"
+                              y2="15"
+                              data-v-db7992bc=""
+                            ></line>
+                            <line
+                              data-v-db7992bc=""
+                              x1="9"
+                              y1="9"
+                              x2="15"
+                              y2="15"
+                            ></line>
+                          </svg>
+                        </div>
+                    
 
-                        {/* close button end*/}
-                      </div>
+                      {/* close button end*/}
+                    </div>
                     )
                   )}
                 </div>
 
                 <div className="flex justify-between  items-center added-files flex-wrap">
                   <div className="add-more-btn flex">
-                    <div className="custom-import border-2 px-1 py-1 primary-border rounded-lg ms-3 sm:my-0 my-2">
+                    <div className="custom-import border-2 sm:my-0 my-2 px-1 py-1 primary-border rounded-lg ms-3 ">
                       <span className="label px-4 text-nowrap flex items-center text-sm font-semibold primary-text ">
                         {" "}
                         <span>
@@ -971,7 +1019,7 @@ function ImageConverter(): JSX.Element {
 
                   <div className="p-3 flex items-center conversion justify-center">
                     {isFileExtension ? (
-                      <div className="flex items-center sm:justify-between justify-center  conversion-inside">
+                      <div className="flex items-center  justify-center sm:justify-between conversion-inside">
                         <p className="mb-0">
                           Convert All ({uploadedFileList.length} ) to:{" "}
                         </p>
