@@ -76,8 +76,14 @@ function ImageConverter(): JSX.Element {
       setPageTitle(dataList[location.pathname].title);
     } else {
       if (pageHeading) {
-        const title = pageHeading?.format?.split("-").join(" ");
-        setPageTitle(title);
+        const title = pageHeading?.format?.split("-");
+        if (title.length > 0) {
+          title[0] = title[0].toUpperCase();
+          if (title.length > 1) {
+            title[title.length - 1] = title[title.length - 1].toUpperCase();
+          }
+          setPageTitle(title.join(" "));
+        }
       }
     }
   }, [dataList, pageTitle, location.pathname, pageHeading]);
@@ -174,10 +180,18 @@ function ImageConverter(): JSX.Element {
   const handleChooseConversion = (
     format: string,
     fileName: string,
-    isComman?: boolean
+    indexN?: number,
+    isComman?: boolean,
+    selectAllType?: boolean
   ) => {
     dispatch(
-      uploadedFileActions.chooseConversionFormat({ format, fileName, isComman })
+      uploadedFileActions.chooseConversionFormat({
+        format,
+        fileName,
+        isComman,
+        indexN,
+        selectAllType,
+      })
     );
     if (isComman) {
       handleSameFileExtensionConversion(format);
@@ -217,7 +231,6 @@ function ImageConverter(): JSX.Element {
     if (conversionFormat.length) {
       const formData = new FormData();
       uploadedFileList.forEach((fileObj: any, index: number) => {
-        console.log(fileObj.fileDetails);
         formData.append("files", fileObj.fileDetails);
         formData.append("formats", conversionFormat[index].conversionFormat);
       });
@@ -251,26 +264,372 @@ function ImageConverter(): JSX.Element {
               {/* UI after file upload */}
               <div className="mt-5 border rounded-lg">
                 <div>
-                  {uploadedFileList.map((file: FileDetails, index: number) => (
-                    <div
-                      className="flex md:grid flex-wrap justify-between items-center file-list-main rounded-lg border-none w-full custom-flex-nowrap-class"
-                      key={index}
+                  {uploadedFileList.map(
+                    (file: FileDetails, fileIndex: number) => (
+                      // <div
+                      //   className="flex md:grid flex-wrap justify-between items-center file-list-main rounded-lg border-none w-full custom-flex-nowrap-class"
+                      //   key={FileIndex}
+                      // >
+                      //   <div className="flex items-center justify-between file-list-item">
+                      //     {/* <img
+                      //     src="../../static/img/picture.svg"
+                      //     className="me-1"
+                      //   /> */}
+                      //     <div className="text-ellipsis overflow-hidden w-[100px] whitespace-nowrap custom-width-60">
+                      //       {file.fileName}
+                      //     </div>
+                      //     <div className="file-list-item">{file.size}</div>
+                      //   </div>
+
+                      //   {/* dropdown start */}
+
+                      //   <div className="flex items-center justify-end">
+                      //     <div className="file-list-item">
+                      //       <TEDropdown className="flex justify-center">
+                      //         <TERipple rippleColor="light">
+                      //           <TEDropdownToggle
+                      //             className={`flex items-center whitespace-nowrap px-3 pb-1 pt-1 border rounded-lg w-20 ${
+                      //               isNotPossibleFormat(
+                      //                 file.fileType,
+                      //                 possibleFormat
+                      //               )
+                      //                 ? "small-btn"
+                      //                 : "error-btn"
+                      //             }`}
+                      //           >
+                      //             {!!conversionFormat &&
+                      //             conversionFormat.length > 0 &&
+                      //             conversionFormat.some(
+                      //               (
+                      //                 e: ConversionFormat,
+                      //                 FormatIndex: number
+                      //               ) =>
+                      //                 e.fileName === file.fileName &&
+                      //                 FormatIndex === FileIndex
+                      //             )
+                      //               ? (() => {
+                      //                   const conversionResult =
+                      //                     conversionFormat
+                      //                       .find(
+                      //                         (
+                      //                           e: ConversionFormat,
+                      //                           FormatIndex: number
+                      //                         ) =>
+                      //                           e.fileName === file.fileName &&
+                      //                           FormatIndex === FileIndex
+                      //                       )
+                      //                       ?.conversionFormat.toUpperCase() ??
+                      //                     "select";
+                      //                   const length = conversionResult?.length;
+                      //                   const space =
+                      //                     length > 1
+                      //                       ? "\u00A0".repeat(6 - length)
+                      //                       : "";
+                      //                   return (
+                      //                     <span>
+                      //                       {conversionResult}
+                      //                       {space}
+                      //                     </span>
+                      //                   );
+                      //                 })()
+                      //               : "select"}
+                      //             <span className="ml-2 [&>svg]:w-5 w-2 absolute right-4">
+                      //               <svg
+                      //                 xmlns="http://www.w3.org/2000/svg"
+                      //                 viewBox="0 0 20 20"
+                      //                 fill="currentColor"
+                      //               >
+                      //                 <path
+                      //                   fillRule="evenodd"
+                      //                   d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                      //                   clipRule="evenodd"
+                      //                 />
+                      //               </svg>
+                      //             </span>
+                      //           </TEDropdownToggle>
+                      //         </TERipple>
+
+                      //         <TEDropdownMenu
+                      //           style={{
+                      //             transform: "translate3d(-120px, 31px, 0px)",
+                      //           }}
+                      //         >
+                      //           <div className="p-2 custom-drop-menu border-0 mt-2 shadow-none`">
+                      //             {/* Search Bar */}
+                      //             <div className="dropdown-searchbar">
+                      //               <div className="search-bar-main relative">
+                      //                 <div className="search-bar-view relative">
+                      //                   <input
+                      //                     type="text"
+                      //                     placeholder="Search"
+                      //                     className="w-full"
+                      //                     onChange={(e: any) =>
+                      //                       handleSearchPossibleFormat(
+                      //                         file.fileName,
+                      //                         e.target.value,
+                      //                         file.fileType
+                      //                       )
+                      //                     }
+                      //                   />
+
+                      //                   <svg
+                      //                     xmlns="http://www.w3.org/2000/svg"
+                      //                     width="1.5em"
+                      //                     height="1.5em"
+                      //                     viewBox="0 0 24 24"
+                      //                     fill="none"
+                      //                     stroke="currentColor"
+                      //                     className="cursor-pointer"
+                      //                   >
+                      //                     <circle
+                      //                       cx="11"
+                      //                       cy="11"
+                      //                       r="8"
+                      //                     ></circle>
+                      //                     <line
+                      //                       x1="21"
+                      //                       y1="21"
+                      //                       x2="16.65"
+                      //                       y2="16.65"
+                      //                     ></line>
+                      //                   </svg>
+                      //                 </div>
+                      //               </div>
+                      //             </div>
+
+                      //             <div className="flex items-start">
+                      //               {searchQuery &&
+                      //               queryObject === file.fileName ? (
+                      //                 <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none`">
+                      //                   {!!filterFormattedList &&
+                      //                     !!filterFormattedList.length &&
+                      //                     filterFormattedList.map(
+                      //                       (item: any, idx: number) => (
+                      //                         <button
+                      //                           key={`${idx}`}
+                      //                           type="button"
+                      //                           className={`btn px-3 py-1 btn-custom mx-1 my-1`}
+                      //                           onClick={() =>
+                      //                             handleChooseConversion(
+                      //                               item,
+                      //                               file.fileName,
+                      //                               FileIndex
+                      //                             )
+                      //                           }
+                      //                         >
+                      //                           {item.toUpperCase()}
+                      //                         </button>
+                      //                       )
+                      //                     )}
+                      //                 </TEDropdownItem>
+                      //               ) : (
+                      //                 <>
+                      //                   {/* tabs */}
+                      //                   <TEDropdownItem preventCloseOnClick>
+                      //                     {Object.entries(possibleFormat).map(
+                      //                       ([key, formats], index) =>
+                      //                         file.fileType === key && (
+                      //                           <React.Fragment key={index}>
+                      //                             <TETabs
+                      //                               vertical
+                      //                               className="tabs-heading file-tabs"
+                      //                             >
+                      //                               {Object.keys(formats).map(
+                      //                                 (keyName, idx) => {
+                      //                                   return (
+                      //                                     <TETabsItem
+                      //                                       className={`tab-item ${
+                      //                                         verticalActive[
+                      //                                           file.fileName
+                      //                                         ] ===
+                      //                                           `tab-${file.fileName}-1-${keyName}` ||
+                      //                                         hoveredTab ===
+                      //                                           `tab-${file.fileName}-1-${keyName}`
+                      //                                           ? "primary-active"
+                      //                                           : ""
+                      //                                       }`}
+                      //                                       key={idx}
+                      //                                       onClick={() =>
+                      //                                         handleVerticalClick(
+                      //                                           `tab-${file.fileName}-1-${keyName}`,
+                      //                                           file.fileName
+                      //                                         )
+                      //                                       }
+                      //                                       active={
+                      //                                         verticalActive ===
+                      //                                         `tab-${file.fileName}-1-${keyName}`
+                      //                                       }
+                      //                                       onMouseEnter={() => {
+                      //                                         setHoveredTab(
+                      //                                           `tab-${file.fileName}-1-${keyName}`
+                      //                                         );
+                      //                                         handleVerticalClick(
+                      //                                           `tab-${file.fileName}-1-${keyName}`,
+                      //                                           file.fileName
+                      //                                         );
+                      //                                       }}
+                      //                                       onMouseLeave={() =>
+                      //                                         setHoveredTab(
+                      //                                           null
+                      //                                         )
+                      //                                       }
+                      //                                     >
+                      //                                       {keyName}
+                      //                                       {(verticalActive[
+                      //                                         file.fileName
+                      //                                       ] ===
+                      //                                         `tab-${file.fileName}-1-${keyName}` ||
+                      //                                         hoveredTab ===
+                      //                                           `tab-${file.fileName}-1-${keyName}`) && (
+                      //                                         <img
+                      //                                           className="ms-2"
+                      //                                           src="../../static/img/right-arrow.svg"
+                      //                                           alt=""
+                      //                                         />
+                      //                                       )}
+                      //                                     </TETabsItem>
+                      //                                   );
+                      //                                 }
+                      //                               )}
+                      //                             </TETabs>
+                      //                           </React.Fragment>
+                      //                         )
+                      //                     )}
+                      //                   </TEDropdownItem>
+
+                      //                   <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none`">
+                      //                     <TETabsContent>
+                      //                       {Object.entries(possibleFormat).map(
+                      //                         ([key, formats], index) =>
+                      //                           file.fileType === key &&
+                      //                           Object.entries(formats).map(
+                      //                             (
+                      //                               [
+                      //                                 keyName,
+                      //                                 possibleFormats,
+                      //                               ]: [string, any],
+                      //                               idx
+                      //                             ) => (
+                      //                               <TETabsPane
+                      //                                 className="grid grid-cols-12"
+                      //                                 key={`${idx}`}
+                      //                                 show={
+                      //                                   verticalActive[
+                      //                                     file.fileName
+                      //                                   ] ===
+                      //                                   `tab-${file.fileName}-1-${keyName}`
+                      //                                 }
+                      //                               >
+                      //                                 {possibleFormats?.map(
+                      //                                   (
+                      //                                     fileExtension: any,
+                      //                                     innerIdx: number
+                      //                                   ) => (
+                      //                                     <button
+                      //                                       key={`${index}-${idx}-${innerIdx}`}
+                      //                                       type="button"
+                      //                                       className={`btn px-1 text-center py-1 mx-1 my-1 col-span-4 ${
+                      //                                         conversionFormat.find(
+                      //                                           (items: any) =>
+                      //                                             items.fileName ===
+                      //                                             file.fileName
+                      //                                         )
+                      //                                           ?.conversionFormat ===
+                      //                                         fileExtension
+                      //                                           ? "btn-custom-selected"
+                      //                                           : "btn-custom"
+                      //                                       }`}
+                      //                                       onClick={() =>
+                      //                                         handleChooseConversion(
+                      //                                           fileExtension,
+                      //                                           file.fileName,
+                      //                                           FileIndex,
+                      //                                           false,
+                      //                                           false
+                      //                                         )
+                      //                                       }
+                      //                                     >
+                      //                                       {fileExtension.toUpperCase()}
+                      //                                     </button>
+                      //                                   )
+                      //                                 )}
+                      //                               </TETabsPane>
+                      //                             )
+                      //                           )
+                      //                       )}
+                      //                     </TETabsContent>
+                      //                   </TEDropdownItem>
+                      //                   {/* tabs end */}
+                      //                 </>
+                      //               )}
+                      //             </div>
+                      //           </div>
+                      //         </TEDropdownMenu>
+                      //       </TEDropdown>
+                      //     </div>
+                      //     {/* dropdown end*/}
+                      //     {/* close button */}
+                      //     <div className="file-list-item">
+                      //       <svg
+                      //         onClick={() =>
+                      //           handleRemoveRow(file.fileName, FileIndex)
+                      //         }
+                      //         xmlns="http://www.w3.org/2000/svg"
+                      //         width="1.5em"
+                      //         height="1.5em"
+                      //         viewBox="0 0 24 24"
+                      //         fill="none"
+                      //         stroke="#7987a1"
+                      //         strokeWidth="2"
+                      //         strokeLinejoin="round"
+                      //         className="cross-ic cursor-pointer"
+                      //         data-v-db7992bc=""
+                      //       >
+                      //         <circle
+                      //           cx="12"
+                      //           cy="12"
+                      //           r="10"
+                      //           data-v-db7992bc=""
+                      //         ></circle>
+                      //         <line
+                      //           x1="15"
+                      //           y1="9"
+                      //           x2="9"
+                      //           y2="15"
+                      //           data-v-db7992bc=""
+                      //         ></line>
+                      //         <line
+                      //           data-v-db7992bc=""
+                      //           x1="9"
+                      //           y1="9"
+                      //           x2="15"
+                      //           y2="15"
+                      //         ></line>
+                      //       </svg>
+                      //     </div>
+                      //   </div>
+
+                      //   {/* close button end*/}
+                      // </div>
+                      <div
+                      className="grid grid-cols-12 file-list-main rounded-lg border-none"
+                      key={fileIndex}
                     >
-                      <div className="flex items-center justify-between file-list-item">
+                   
                         {/* <img
-                          src="../../static/img/picture.svg"
-                          className="me-1"
-                        /> */}
-                        <div className="text-ellipsis overflow-hidden w-[100px] whitespace-nowrap custom-width-60">
+                        src="../../static/img/picture.svg"
+                        className="me-1"
+                      /> */}
+                        <div className="file-list-item xl:col-span-7 lg:col-span-5 md:col-span-7 col-span-11 break-all">
                           {file.fileName}
                         </div>
-                        <div className="file-list-item">{file.size}</div>
-                      </div>
+                        <div className="file-list-item col-span-4 xs:col-span-3 sm:col-span-2">{file.size}</div>
+                 
 
                       {/* dropdown start */}
 
-                      <div className="flex items-center justify-end">
-                        <div className="file-list-item">
+                     
+                        <div className="file-list-item col-span-4 xs:col-span-2">
                           <TEDropdown className="flex justify-center">
                             <TERipple rippleColor="light">
                               <TEDropdownToggle
@@ -286,15 +645,20 @@ function ImageConverter(): JSX.Element {
                                 {!!conversionFormat &&
                                 conversionFormat.length > 0 &&
                                 conversionFormat.some(
-                                  (e: ConversionFormat) =>
-                                    e.fileName === file.fileName
+                                  (e: ConversionFormat, FormatIndex: number) =>
+                                    e.fileName === file.fileName &&
+                                    FormatIndex === fileIndex
                                 )
                                   ? (() => {
                                       const conversionResult =
                                         conversionFormat
                                           .find(
-                                            (e: ConversionFormat) =>
-                                              e.fileName === file.fileName
+                                            (
+                                              e: ConversionFormat,
+                                              FormatIndex: number
+                                            ) =>
+                                              e.fileName === file.fileName &&
+                                              FormatIndex === fileIndex
                                           )
                                           ?.conversionFormat.toUpperCase() ??
                                         "select";
@@ -326,7 +690,6 @@ function ImageConverter(): JSX.Element {
                                 </span>
                               </TEDropdownToggle>
                             </TERipple>
-
                             <TEDropdownMenu
                               style={{
                                 transform: "translate3d(-120px, 31px, 0px)",
@@ -349,7 +712,6 @@ function ImageConverter(): JSX.Element {
                                           )
                                         }
                                       />
-
                                       <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="1.5em"
@@ -359,7 +721,11 @@ function ImageConverter(): JSX.Element {
                                         stroke="currentColor"
                                         className="cursor-pointer"
                                       >
-                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <circle
+                                          cx="11"
+                                          cy="11"
+                                          r="8"
+                                        ></circle>
                                         <line
                                           x1="21"
                                           y1="21"
@@ -370,7 +736,6 @@ function ImageConverter(): JSX.Element {
                                     </div>
                                   </div>
                                 </div>
-
                                 <div className="flex items-start">
                                   {searchQuery &&
                                   queryObject === file.fileName ? (
@@ -386,7 +751,8 @@ function ImageConverter(): JSX.Element {
                                               onClick={() =>
                                                 handleChooseConversion(
                                                   item,
-                                                  file.fileName
+                                                  file.fileName,
+                                                  fileIndex
                                                 )
                                               }
                                             >
@@ -442,7 +808,9 @@ function ImageConverter(): JSX.Element {
                                                             );
                                                           }}
                                                           onMouseLeave={() =>
-                                                            setHoveredTab(null)
+                                                            setHoveredTab(
+                                                              null
+                                                            )
                                                           }
                                                         >
                                                           {keyName}
@@ -467,7 +835,6 @@ function ImageConverter(): JSX.Element {
                                             )
                                         )}
                                       </TEDropdownItem>
-
                                       <TEDropdownItem className="p-4 custom-drop-menu border-0 mt-2 shadow-none`">
                                         <TETabsContent>
                                           {Object.entries(possibleFormat).map(
@@ -475,10 +842,10 @@ function ImageConverter(): JSX.Element {
                                               file.fileType === key &&
                                               Object.entries(formats).map(
                                                 (
-                                                  [keyName, possibleFormats]: [
-                                                    string,
-                                                    any
-                                                  ],
+                                                  [
+                                                    keyName,
+                                                    possibleFormats,
+                                                  ]: [string, any],
                                                   idx
                                                 ) => (
                                                   <TETabsPane
@@ -513,11 +880,13 @@ function ImageConverter(): JSX.Element {
                                                           onClick={() =>
                                                             handleChooseConversion(
                                                               fileExtension,
-                                                              file.fileName
+                                                              file.fileName,
+                                                              fileIndex,
+                                                              false
                                                             )
                                                           }
                                                         >
-                                                          {fileExtension.toUpperCase()}
+                                                          {fileExtension.toUpperCase()}{" "}
                                                         </button>
                                                       )
                                                     )}
@@ -537,10 +906,10 @@ function ImageConverter(): JSX.Element {
                         </div>
                         {/* dropdown end*/}
                         {/* close button */}
-                        <div className="file-list-item">
+                        <div className="file-list-item col-span-4 xs:col-span-1 sm:my-auto">
                           <svg
                             onClick={() =>
-                              handleRemoveRow(file.fileName, index)
+                              handleRemoveRow(file.fileName, fileIndex)
                             }
                             xmlns="http://www.w3.org/2000/svg"
                             width="1.5em"
@@ -575,16 +944,57 @@ function ImageConverter(): JSX.Element {
                             ></line>
                           </svg>
                         </div>
-                      </div>
+                        {/* dropdown end*/}
+                        {/* close button */}
+                        <div className="file-list-item col-span-4 xs:col-span-1 sm:my-auto">
+                          <svg
+                            onClick={() =>
+                              handleRemoveRow(file.fileName, fileIndex)
+                            }
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1.5em"
+                            height="1.5em"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#7987a1"
+                            strokeWidth="2"
+                            strokeLinejoin="round"
+                            className="cross-ic cursor-pointer"
+                            data-v-db7992bc=""
+                          >
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              data-v-db7992bc=""
+                            ></circle>
+                            <line
+                              x1="15"
+                              y1="9"
+                              x2="9"
+                              y2="15"
+                              data-v-db7992bc=""
+                            ></line>
+                            <line
+                              data-v-db7992bc=""
+                              x1="9"
+                              y1="9"
+                              x2="15"
+                              y2="15"
+                            ></line>
+                          </svg>
+                        </div>
+                    
 
                       {/* close button end*/}
                     </div>
-                  ))}
+                    )
+                  )}
                 </div>
 
                 <div className="flex justify-between  items-center added-files flex-wrap">
                   <div className="add-more-btn flex">
-                    <div className="custom-import border-2 px-1 py-1 primary-border rounded-lg ms-3 ">
+                    <div className="custom-import border-2 sm:my-0 my-2 px-1 py-1 primary-border rounded-lg ms-3 ">
                       <span className="label px-4 text-nowrap flex items-center text-sm font-semibold primary-text ">
                         {" "}
                         <span>
@@ -609,7 +1019,7 @@ function ImageConverter(): JSX.Element {
 
                   <div className="p-3 flex items-center conversion justify-center">
                     {isFileExtension ? (
-                      <div className="flex items-center justify-between conversion-inside">
+                      <div className="flex items-center  justify-center sm:justify-between conversion-inside">
                         <p className="mb-0">
                           Convert All ({uploadedFileList.length} ) to:{" "}
                         </p>
@@ -702,6 +1112,8 @@ function ImageConverter(): JSX.Element {
                                               handleChooseConversion(
                                                 item,
                                                 uploadedFileList[0].fileName,
+                                                0,
+                                                false,
                                                 true
                                               )
                                             }

@@ -1,0 +1,22 @@
+{
+    "pageTitle": "File Converter",
+    "description": "Easily convert files from one format to another, online.",
+    "inputLabel": "Choose Files",
+    "cards": [
+        {
+            "title": "Convert Any File",
+            "description": "FreeConvert supports more than 1500 file conversions. You can convert videos, images, audio files, or e-books. There are tons of Advanced Options to fine-tune your conversions.",
+            "imgName": "1"
+        },
+        {
+            "title": "Works Anywhere",
+            "description": "FreeConvert supports more than 1500 file conversions. You can convert videos, images, audio files, or e-books. There are tons of Advanced Options to fine-tune your conversions.",
+            "imgName": "2"
+        },
+        {
+            "title": "Works Anywhere",
+            "description": "FreeConvert supports more than 1500 file conversions. You can convert videos, images, audio files, or e-books. There are tons of Advanced Options to fine-tune your conversions.",
+            "imgName": "3"
+        }
+    ]
+}

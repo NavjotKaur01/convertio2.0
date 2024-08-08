@@ -27,14 +27,13 @@ const uploadedFileSlice = createSlice({
     //store upload files
     uploadFileListData(state, action: PayloadAction<any>) {
       state.isLoading = true;
-      const { newFiles, updateConversion, initialActiveState, randomformat } =
-        processFiles(
-          action.payload.UploadedFiles,
-          action.payload.possibleFormat,
-          action.payload?.pageName,
-          action.payload?.type,
-          action.payload?.conversionType
-        );
+      const { newFiles, updateConversion, initialActiveState } = processFiles(
+        action.payload.UploadedFiles,
+        action.payload.possibleFormat,
+        action.payload?.pageName,
+        action.payload?.type,
+        action.payload?.conversionType
+      );
       state.uploadedFileList = [...state.uploadedFileList, ...newFiles];
       state.conversionFormat = [...state.conversionFormat, ...updateConversion];
       state.verticalActive = initialActiveState;
@@ -49,7 +48,8 @@ const uploadedFileSlice = createSlice({
           (ext: any) => ext === fileExtensions[0]
         );
         state.IsFileExtension = allExtensionsSame;
-        state.ExtensionName = allExtensionsSame ? randomformat : "";
+        // state.ExtensionName = allExtensionsSame ? randomformat : "";
+        state.ExtensionName = "";
         state.IsErrorShow = !allExtensionsSame;
       } else {
         state.IsErrorShow = !hasConversionFormat || !allFilesConverted;
@@ -62,12 +62,16 @@ const uploadedFileSlice = createSlice({
         format: string;
         fileName: string;
         isComman?: boolean;
+        indexN?: number;
+        selectAllType?: boolean;
       }>
     ) {
-      const { format, fileName } = action.payload;
+      const { format, fileName, indexN, selectAllType } = action.payload;
       const fileIndex = state.conversionFormat.findIndex(
-        (item: ConversionFormat) => item.fileName === fileName
+        (item: ConversionFormat, idx: number) =>
+          item.fileName === fileName && indexN === idx
       );
+
       if (fileIndex !== -1) {
         state.conversionFormat[fileIndex] = {
           ...state.conversionFormat[fileIndex],
@@ -76,7 +80,12 @@ const uploadedFileSlice = createSlice({
       } else {
         state.conversionFormat.push({ conversionFormat: format, fileName });
       }
-      state.ExtensionName = format;
+      if (selectAllType) {
+        state.ExtensionName = format;
+      } else {
+        state.ExtensionName = "";
+      }
+
       state.IsErrorShow = false;
     },
     removeFile(

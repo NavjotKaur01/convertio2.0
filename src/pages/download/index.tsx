@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   convertedFileActions,
   SelectAllConvertedFile,
-  SelectIsConverted,
   SelectIsDelete,
   SelectIsLoading,
   SelectIsSuccess,
@@ -15,7 +14,6 @@ import {
 import { AllConvertedFiles } from "../../models/convertedFileModel";
 import Loader from "../../components/loaders";
 function Download() {
-  const isConverted = useAppSelector(SelectIsConverted);
   const dispatch = useAppDispatch();
   const isDelete = useAppSelector(SelectIsDelete);
   const isLoading = useAppSelector(SelectIsLoading);
@@ -137,17 +135,16 @@ function Download() {
                 {AllConvertedFile.map(
                   (file: AllConvertedFiles, index: number) => (
                     <div
-                      className="flex md:grid flex-wrap sm:justify-between items-center file-list-main-download rounded-lg border-none"
+                      className="grid grid-cols-12 min-h-[62px] rounded-lg border-none items-center gap-2 p-[18px]"
                       key={index}
                     >
-                      <div className="flex items-center file-list-item w-full sm:w-fit ">
+                      <div className=" w-full col-span-11 md:col-span-7 lg:col-span-5 xl:col-span-7 break-all pe-3 md:pe-10">
                         <div>{file.fileName}</div>
                       </div>
-
                       {!file.status ? (
                         <>
-                          <div>
-                            <p className="text-green-500 font-semibold text-md">
+                          <div className="xl:col-span-2 lg:col-span-3 md:col-span-2 col-span-12 md:order-2 order-3">
+                            <p className="text-green-500 font-semibold text-md ">
                               Converting
                             </p>
                             <div className="relative w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -159,23 +156,24 @@ function Download() {
                           </div>
                         </>
                       ) : file.converted ? (
-                        <div className="border border-[#1add72] text-[#1add72] px-7 py-1 w-fit rounded mx-5 sm:m-auto ">
-                          Done
+                        <div className="xl:col-span-2 lg:col-span-3 md:col-span-2 col-span-12 md:order-2 order-3">
+                          <div className="border border-[#1ADD72] text-[#1ADD72] px-7 py-1 w-fit rounded sm:m-auto file-list-item-status ">
+                            Done
+                          </div>
                         </div>
                       ) : (
                         <div
                           className={`border px-5 py-1 rounded  sm:m-auto !mr-[4.25rem] w-fit  ${
                             file.converted
-                              ? "border-[#1add72] text-[#1add72]"
+                              ? "border-[#1ADD72] text-[#1ADD72]"
                               : "border-[#f36] text-[#f36]"
                           } `}
                         >
                           Not Converted
                         </div>
                       )}
-
                       <div
-                        className={`text-white bg-[var(--primary-color)] px-5 py-3 w-28 rounded  xl:ml-[-53px] download custom-import primary-btn !h-[40px] !justify-center !shadow-none ${
+                        className={`text-white file-list-item-status  !col-span-12 xl:!col-span-2 lg:!col-span-3 md:!col-span-2  order-3 mx-auto bg-[var(--primary-color)] px-5 py-3 w-28 rounded  download custom-import primary-btn !h-[40px] !justify-center !shadow-none ${
                           !file.status ? "opacity-75" : "opacity-100"
                         }`}
                       >
@@ -195,7 +193,7 @@ function Download() {
                           </a>
                         </button>
                       </div>
-                      <div className="file-list-item">
+                      <div className="col-span-1 md:order-4 order-2 mx-auto">
                         <svg
                           onClick={
                             file.status
@@ -207,7 +205,7 @@ function Download() {
                           height="1.5em"
                           viewBox="0 0 24 24"
                           fill="none"
-                          stroke="#7987a1"
+                          stroke="#7987A1"
                           strokeWidth="2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -223,7 +221,7 @@ function Download() {
                 )}
               </div>
 
-              <div className="flex justify-between items-center added-files flex-wrap py-3">
+              <div className="flex sm:justify-between justify-center gap-y-3 gap-x-52 items-center added-files flex-wrap py-3">
                 <div className="add-more-btn flex items-center">
                   <div className="custom-import border-2 px-1 py-1 primary-border rounded-lg ms-3">
                     <span
@@ -243,9 +241,9 @@ function Download() {
                   </div>
                 </div>
 
-                <div className="me-3">
+                <div className="sm:me-3">
                   <button
-                    className={`text-white bg-[var(--primary-color)] px-5 py-3 rounded download  text-nowrap  custom-import primary-btn  !h-[50px] shodow-none${
+                    className={`text-white bg-[var(--primary-color)] px-5 py-3 rounded download  text-nowrap  custom-import primary-btn  !h-[50px] !shadow-none ${
                       AllConvertedFile[AllConvertedFile.length - 1].status
                         ? "opacity-100"
                         : "opacity-75"
@@ -278,7 +276,7 @@ function Download() {
                         </p>
                       </div>
                       <div className="lg:col-span-8 col-span-12">
-                        <button className="flex items-center border border-[var(--primary-color)] sm:px-[7px] px-3 py-[5px] gap-3 rounded">
+                        <button className="flex items-center border border-[--primary-color] sm:px-[7px] px-3 py-[5px] gap-3 rounded">
                           <div>
                             <img
                               className=""
