@@ -572,7 +572,7 @@ function Home(): JSX.Element {
                       //   {/* close button end*/}
                       // </div>
                       <div
-                        className="grid grid-cols-12 file-list-main rounded-lg border-none"
+                        className="grid grid-cols-12 file-list-main rounded-lg border-none p-[18px]"
                         key={fileIndex}
                       >
                      
@@ -580,16 +580,16 @@ function Home(): JSX.Element {
                           src="../../static/img/picture.svg"
                           className="me-1"
                         /> */}
-                          <div className="file-list-item col-span-12 xs:col-span-5 sm:col-span-7 break-all">
+                          <div className="file-list-item xl:col-span-7 lg:col-span-5 sm:col-span-7 col-span-5 break-all md:pe-10 pe-3">
                             {file.fileName}
                           </div>
-                          <div className="file-list-item col-span-4 xs:col-span-3 sm:col-span-2">{file.size}</div>
+                          <div className="file-list-item xl:col-span-2 lg:col-span-3 sm:col-span-2 col-span-3">{file.size}</div>
                    
 
                         {/* dropdown start */}
 
                        
-                        <div className="file-list-item col-span-4 xs:col-span-2">
+                        <div className="file-list-item xl:col-span-2 lg:col-span-3 sm:col-span-2 col-span-3">
                           <TEDropdown className="flex justify-center">
                             <TERipple rippleColor="light">
                               <TEDropdownToggle
@@ -861,7 +861,7 @@ function Home(): JSX.Element {
 
                           {/* dropdown end*/}
                           {/* close button */}
-                          <div className="file-list-item col-span-4 xs:col-span-1 sm:my-auto">
+                          <div className="file-list-item col-span-1 sm:my-auto ms-auto">
                             <svg
                               onClick={() =>
                                 handleRemoveRow(file.fileName, fileIndex)

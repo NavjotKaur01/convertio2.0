@@ -143,7 +143,7 @@ function Download() {
                       </div>
                       {!file.status ? (
                         <>
-                          <div>
+                          <div className="xl:col-span-2 lg:col-span-3 md:col-span-2 col-span-12 md:order-2 order-3">
                             <p className="text-green-500 font-semibold text-md ">
                               Converting
                             </p>

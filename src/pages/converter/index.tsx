@@ -620,7 +620,7 @@ function ImageConverter(): JSX.Element {
                         src="../../static/img/picture.svg"
                         className="me-1"
                       /> */}
-                        <div className="file-list-item col-span-12 xs:col-span-5 sm:col-span-7 break-all">
+                        <div className="file-list-item xl:col-span-7 lg:col-span-5 md:col-span-7 col-span-11 break-all">
                           {file.fileName}
                         </div>
                         <div className="file-list-item col-span-4 xs:col-span-3 sm:col-span-2">{file.size}</div>
