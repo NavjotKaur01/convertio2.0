@@ -173,7 +173,7 @@ function Download() {
                         </div>
                       )}
                       <div
-                        className={`text-white file-list-item-status  !col-span-12 xl:!col-span-2 lg:!col-span-3 md:!col-span-2  order-3 mx-auto bg-[var(--primary-color)] px-5 py-3 w-28 rounded  download custom-import primary-btn !h-[40px] !justify-center !shadow-none ${
+                        className={`text-white file-list-item-status !col-span-12 xl:!col-span-2 lg:!col-span-3 md:!col-span-2  order-3 mx-auto bg-[var(--primary-color)] px-5 py-3 w-28 rounded  download custom-import primary-btn !h-[40px] !justify-center !shadow-none ${
                           !file.status ? "opacity-75" : "opacity-100"
                         }`}
                       >
@@ -184,7 +184,7 @@ function Download() {
                           }  `}
                         >
                           <a
-                            className="text-decoration-none "
+                            className="text-decoration-none"
                             {...(file.status && file.converted
                               ? { href: `${rootUrl}/jobs/${file.fileName}` }
                               : {})}
@@ -241,9 +241,9 @@ function Download() {
                   </div>
                 </div>
 
-                <div className="sm:me-3">
+             
                   <button
-                    className={`text-white bg-[var(--primary-color)] px-5 py-3 rounded download  text-nowrap  custom-import primary-btn  !h-[50px] !shadow-none ${
+                    className={`text-white bg-[var(--primary-color)] px-5 py-3 rounded download  text-nowrap  custom-import primary-btn  !h-[50px] !shadow-none me-2 ${
                       AllConvertedFile[AllConvertedFile.length - 1].status
                         ? "opacity-100"
                         : "opacity-75"
@@ -255,7 +255,7 @@ function Download() {
                   >
                     Download All Files
                   </button>
-                </div>
+              
               </div>
             </div>
             {
